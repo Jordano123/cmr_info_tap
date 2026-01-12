@@ -1,59 +1,102 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Tap or Scan — Your Church</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CMR Church — Tap or Scan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    * { box-sizing: border-box; margin:0; padding:0; font-family: 'Roboto', sans-serif; }
     body {
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      margin: 0;
-      background: #f2f2f2;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      padding: 20px;
     }
     .card {
       background: white;
+      border-radius: 20px;
       padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-      max-width: 420px;
-      width: 90%;
+      max-width: 400px;
+      width: 100%;
       text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      animation: fadeIn 1s ease-out;
     }
     h1 {
+      color: #333;
+      font-size: 1.8rem;
       margin-bottom: 0.5rem;
-      font-size: 1.5rem;
     }
     p {
       color: #555;
+      margin-bottom: 1.5rem;
       font-size: 0.95rem;
     }
     a.btn {
       display: block;
       margin: 10px 0;
-      padding: 12px;
-      border-radius: 8px;
+      padding: 14px;
+      border-radius: 12px;
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 700;
+      transition: 0.3s;
     }
-    .give { background: #000; color: #fff; }
-    .connect { background: #e5e5e5; color: #000; }
-    .social { background: #333; color: #fff; }
+    .paypal {
+      background: #ffc439;
+      color: #111;
+    }
+    .paypal:hover {
+      background: #e6b933;
+    }
+    .cashapp {
+      background: #00c244;
+      color: white;
+    }
+    .cashapp:hover {
+      background: #00a633;
+    }
+    .connect {
+      background: #2575fc;
+      color: white;
+    }
+    .connect:hover {
+      background: #1a5ed1;
+    }
+    .social {
+      background: #6a11cb;
+      color: white;
+    }
+    .social:hover {
+      background: #520fbf;
+    }
+    footer {
+      margin-top: 1.5rem;
+      font-size: 0.8rem;
+      color: #888;
+    }
+    @keyframes fadeIn {
+      from {opacity:0; transform: translateY(-20px);}
+      to {opacity:1; transform: translateY(0);}
+    }
   </style>
 </head>
 <body>
   <div class="card">
-    <h1>Welcome to Your Church</h1>
-    <p>Thank you for joining us this Sunday. You can give, connect, or follow us below.</p>
+    <h1>Welcome to CMR Church</h1>
+    <p>We’re so glad you joined us today! You can give, connect, or follow us below.</p>
 
-    <a class="btn give" href="https://paypal.me/YOURCHURCH" target="_blank">Give Online</a>
-    <a class="btn connect" href="https://yourchurch.org/connect" target="_blank">Connect With Us</a>
-    <a class="btn social" href="https://linktr.ee/yourchurch" target="_blank">Follow Us</a>
+    <!-- Giving Buttons -->
+    <a class="btn paypal" href="https://paypal.me/YOURCHURCH" target="_blank">Give with PayPal</a>
+    <a class="btn cashapp" href="https://cash.app/$YOURCHURCH" target="_blank">Give with CashApp</a>
 
-    <p style="font-size:12px;color:#777;">Tap or scan the code on your seat.</p>
+    <!-- Connect & Follow -->
+    <a class="btn connect" href="https://forms.gle/YOURFORMID" target="_blank">Connect With Us</a>
+    <a class="btn social" href="https://linktr.ee/YOURCHURCH" target="_blank">Follow Us</a>
+
+    <footer>Tap or scan the code on your seat. Thank you for joining us!</footer>
   </div>
 </body>
 </html>
