@@ -4,9 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CMR Church — Tap or Scan</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
-    * { box-sizing: border-box; margin:0; padding:0; font-family: 'Roboto', sans-serif; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+
     body {
       background: linear-gradient(135deg, #6a11cb, #2575fc);
       min-height: 100vh;
@@ -15,6 +23,7 @@
       align-items: center;
       padding: 20px;
     }
+
     .card {
       background: white;
       border-radius: 20px;
@@ -25,16 +34,36 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
       animation: fadeIn 1s ease-out;
     }
-    h1 {
-      color: #333;
-      font-size: 1.8rem;
-      margin-bottom: 0.5rem;
+
+    /* HEADER */
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 1.2rem;
     }
+
+    .header img {
+      width: 80px;
+      height: auto;
+      margin-bottom: 10px;
+    }
+
+    .church-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #333;
+      line-height: 1.3;
+    }
+
     p {
       color: #555;
       margin-bottom: 1.5rem;
       font-size: 0.95rem;
     }
+
     a.btn {
       display: block;
       margin: 10px 0;
@@ -44,57 +73,65 @@
       font-weight: 700;
       transition: 0.3s;
     }
+
     .paypal {
       background: #ffc439;
       color: #111;
     }
-    .paypal:hover {
-      background: #e6b933;
-    }
+    .paypal:hover { background: #e6b933; }
+
     .cashapp {
       background: #00c244;
       color: white;
     }
-    .cashapp:hover {
-      background: #00a633;
-    }
+    .cashapp:hover { background: #00a633; }
+
     .connect {
       background: #2575fc;
       color: white;
     }
-    .connect:hover {
-      background: #1a5ed1;
-    }
+    .connect:hover { background: #1a5ed1; }
+
     .social {
       background: #6a11cb;
       color: white;
     }
-    .social:hover {
-      background: #520fbf;
-    }
+    .social:hover { background: #520fbf; }
+
     footer {
       margin-top: 1.5rem;
       font-size: 0.8rem;
       color: #888;
     }
+
     @keyframes fadeIn {
-      from {opacity:0; transform: translateY(-20px);}
-      to {opacity:1; transform: translateY(0);}
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
+
 <body>
   <div class="card">
-    <h1>Welcome to CMR Church</h1>
+
+    <!-- HEADER -->
+    <div class="header">
+      <img src="logo.png" alt="Centre Missionnaire La Restauration Logo">
+      <div class="church-name">
+        Centre Missionnaire<br>
+        La Restauration
+      </div>
+    </div>
+    <h1>Welcome to CMR</h1>
     <p>We’re so glad you joined us today! You can give, connect, or follow us below.</p>
 
     <!-- Giving Buttons -->
     <a class="btn paypal" href="https://paypal.com/send?phone=16823812259" target="_blank">Give with PayPal</a>
-    <a class="btn cashapp" href=https://cash.app/$cmr8703" target="_blank">Give with CashApp</a>
+    <a class="btn cashapp" href="https://cash.app/$cmr8703" target="_blank">Give with CashApp</a>
 
     <!-- Connect & Follow -->
     <a class="btn connect" href="https://forms.gle/YOURFORMID" target="_blank">Connect With Us</a>
-    <a class="btn social" href="https://linktr.ee/cmrmediaconnect" target="_blank">Follow Us</a>
+    <a class="btn social" href="https://linktr.ee/YOURCHURCH" target="_blank">Follow Us</a>
 
     <footer>Tap or scan the code on your seat. Thank you for joining us!</footer>
   </div>
