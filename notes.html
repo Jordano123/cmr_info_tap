@@ -43,18 +43,28 @@
 
     header{
       display:flex;
-      gap:16px;
+      gap:18px;
       align-items:center;
       margin-bottom:14px;
     }
 
-    header img{width:56px; height:56px; border-radius:10px; object-fit:contain}
+    /* larger logo for more presence */
+    header img{
+      width:96px;
+      height:96px;
+      border-radius:12px;
+      object-fit:contain;
+      background:linear-gradient(180deg,#fff,#f7f7fb);
+      padding:10px;
+      box-shadow:0 6px 18px rgba(16,24,40,0.04);
+    }
+
     .title{
       display:flex;
       flex-direction:column;
     }
-    .church{font-weight:700; letter-spacing:0.4px; font-size:0.98rem}
-    .sub{font-size:0.86rem; color:var(--muted); margin-top:2px}
+    .church{font-weight:700; letter-spacing:0.4px; font-size:1.15rem; color:#111827}
+    .sub{font-size:0.86rem; color:var(--muted); margin-top:2px; display:none}
 
     .meta{
       display:flex;
@@ -135,6 +145,7 @@
       padding:0;
       border-radius:8px;
       border:1px solid rgba(0,0,0,0.06);
+      cursor:pointer;
     }
 
     .editor{
@@ -159,11 +170,12 @@
 
     .small{font-size:0.85rem; color:var(--muted)}
 
-    /* responsive */
     @media (max-width:720px){
       .meta{flex-direction:column; align-items:stretch}
       .controls{gap:6px}
       .editor{min-height:48vh}
+      header{justify-content:center; text-align:center; flex-direction:column}
+      header img{margin-bottom:6px}
     }
   </style>
 </head>
@@ -173,7 +185,6 @@
       <img src="logo.png" alt="CMR Logo">
       <div class="title">
         <div class="church">Centre Missionnaire La Restauration</div>
-        <div class="sub">Notes — clean, fast, and focused</div>
       </div>
     </header>
 
@@ -238,7 +249,7 @@
           <label class="small" style="margin-right:6px">Text</label>
           <button class="color-swatch" data-color="#111827" style="background:#111827" title="Black text"></button>
           <button class="color-swatch" data-color="#0b5cff" style="background:#0b5cff" title="Blue text"></button>
-          <button class="color-swatch" data-color="#d12b2b" style="background:#d12b2b" title="Red text"></button>
+          <button class="color-swatch" data-color="#c62828" style="background:#c62828" title="Red text"></button>
           <button class="color-swatch" data-color="#f59e0b" style="background:#f59e0b" title="Orange text"></button>
           <button class="color-swatch" data-color="#6b21a8" style="background:#6b21a8" title="Purple text"></button>
         </div>
@@ -258,17 +269,14 @@
       </div>
     </div>
 
-    <div id="editor" class="editor" contenteditable="true" spellcheck="true" aria-label="Note editor">
-      <!-- initial content populated by JS -->
-    </div>
+    <div id="editor" class="editor" contenteditable="true" spellcheck="true" aria-label="Note editor"></div>
   </div>
 
   <script>
-    // Utilities
-    const $ = sel => document.querySelector(sel);
-    const $$ = sel => Array.from(document.querySelectorAll(sel));
+    // Short helpers
+    const $ = s => document.querySelector(s);
+    const $$ = s => Array.from(document.querySelectorAll(s));
 
-    // Elements
     const editor = $('#editor');
     const dateInput = $('#note-date');
     const themeInput = $('#note-theme');
@@ -277,15 +285,18 @@
     const fontSize = $('#font-size');
     const newNoteBtn = $('#new-note');
 
-    // Initialize date
+    // Date
     function formatDate(d){
       const opts = { year:'numeric', month:'short', day:'numeric' };
       return d.toLocaleDateString(undefined, opts);
     }
-    const today = new Date();
-    dateInput.value = formatDate(today);
+    dateInput.value = formatDate(new Date());
 
-    // Insert template
+    // Template
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+    }
+
     function insertTemplate(){
       const date = dateInput.value;
       const theme = themeInput.value || '—';
@@ -299,16 +310,11 @@
         <div style="height:12px"></div>
       `;
       editor.innerHTML = template;
+      applyEditorStyles();
       placeCaretAtEnd(editor);
-      applyEditorStyles(); // ensure font settings applied
+      saveToLocal();
     }
 
-    // Escape helper for template
-    function escapeHtml(str){
-      return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
-    }
-
-    // Place caret at end
     function placeCaretAtEnd(el){
       el.focus();
       if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
@@ -321,34 +327,30 @@
       }
     }
 
-    // Formatting commands (uses execCommand for broad compatibility)
+    // execCommand wrapper
     function exec(cmd, value = null){
       document.execCommand(cmd, false, value);
       editor.focus();
     }
 
-    // Wire up icon buttons
+    // Wire formatting buttons
     $$('[data-cmd]').forEach(btn => {
       btn.addEventListener('click', () => {
-        const cmd = btn.getAttribute('data-cmd');
-        exec(cmd);
-        btn.classList.toggle('active', document.queryCommandState(cmd));
+        exec(btn.getAttribute('data-cmd'));
       });
     });
 
-    // Font family change
+    // Font family & size
     fontFamily.addEventListener('change', () => {
       editor.style.fontFamily = fontFamily.value;
       placeCaretAtEnd(editor);
+      saveToLocal();
     });
 
-    // Font size numeric (px)
     fontSize.addEventListener('change', () => {
       const size = parseInt(fontSize.value, 10) || 16;
-      // apply to selection or entire editor if no selection
       if (window.getSelection && window.getSelection().toString().length > 0) {
-        exec('fontSize', 7); // set to largest then replace with span
-        // replace font[size=7] with span style
+        exec('fontSize', 7);
         const spans = editor.querySelectorAll('font[size="7"]');
         spans.forEach(s => {
           const span = document.createElement('span');
@@ -360,22 +362,17 @@
         editor.style.fontSize = size + 'px';
       }
       placeCaretAtEnd(editor);
+      saveToLocal();
     });
 
-    // Highlight color buttons
+    // Highlights
     $$('[data-hl]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const color = btn.getAttribute('data-hl');
-        exec('hiliteColor', color);
-      });
+      btn.addEventListener('click', () => exec('hiliteColor', btn.getAttribute('data-hl')));
     });
 
-    // Text color buttons
+    // Text color
     $$('[data-color]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const color = btn.getAttribute('data-color');
-        exec('foreColor', color);
-      });
+      btn.addEventListener('click', () => exec('foreColor', btn.getAttribute('data-color')));
     });
 
     // Background toggle
@@ -383,17 +380,19 @@
       editor.style.background = '#ffffff';
       editor.style.color = '#111827';
       editor.style.borderColor = '#eef0f3';
+      saveToLocal();
     });
     $('#bg-black').addEventListener('click', () => {
       editor.style.background = '#0b1220';
       editor.style.color = '#e6eef8';
       editor.style.borderColor = '#0b1220';
+      saveToLocal();
     });
 
-    // New note button
+    // New note
     newNoteBtn.addEventListener('click', insertTemplate);
 
-    // Download functions
+    // Downloads
     function downloadFile(filename, content, mime){
       const blob = new Blob([content], { type: mime });
       const a = document.createElement('a');
@@ -406,11 +405,7 @@
     }
 
     $('#download-html').addEventListener('click', () => {
-      const html = `<!doctype html>
-<html>
-<head><meta charset="utf-8"><title>CMR Note</title></head>
-<body>${editor.innerHTML}</body>
-</html>`;
+      const html = `<!doctype html><html><head><meta charset="utf-8"><title>CMR Note</title></head><body>${editor.innerHTML}</body></html>`;
       const filename = `CMR_Note_${dateInput.value.replace(/\s+/g,'_')}.html`;
       downloadFile(filename, html, 'text/html;charset=utf-8');
     });
@@ -421,51 +416,86 @@
       downloadFile(filename, text, 'text/plain;charset=utf-8');
     });
 
-    // Send to email (mailto with plain text body)
+    // Email (mailto)
     $('#email-note').addEventListener('click', () => {
       const subject = encodeURIComponent(`CMR Note — ${dateInput.value} — ${themeInput.value || ''}`);
       const body = encodeURIComponent(editor.innerText);
-      // mailto opens user's default mail client
       window.location.href = `mailto:?subject=${subject}&body=${body}`;
     });
 
-    // Apply initial styles and template on load
-    function applyEditorStyles(){
-      editor.style.fontFamily = fontFamily.value;
-      editor.style.fontSize = fontSize.value + 'px';
+    // Auto-save to localStorage
+    const STORAGE_KEY = 'cmr_notes_v1';
+    function saveToLocal(){
+      const payload = {
+        date: dateInput.value,
+        theme: themeInput.value,
+        preacher: preacherInput.value,
+        html: editor.innerHTML,
+        fontFamily: fontFamily.value,
+        fontSize: fontSize.value,
+        bg: editor.style.background || '#ffffff',
+        color: editor.style.color || '#111827',
+        savedAt: new Date().toISOString()
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     }
 
-    // Keep template updated when theme/preacher change
-    [themeInput, preacherInput].forEach(inp => {
-      inp.addEventListener('input', () => {
-        // If editor starts with our template header, update it
-        const header = editor.querySelector('div');
-        if (header && header.innerText.startsWith('Date:')) {
-          header.innerHTML = `<strong>Date:</strong> ${dateInput.value} &nbsp; • &nbsp; <strong>Theme:</strong> ${escapeHtml(themeInput.value || '—')} &nbsp; • &nbsp; <strong>Preacher:</strong> ${escapeHtml(preacherInput.value || '—')}`;
-        }
-      });
+    function restoreFromLocal(){
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return false;
+        const p = JSON.parse(raw);
+        dateInput.value = p.date || dateInput.value;
+        themeInput.value = p.theme || '';
+        preacherInput.value = p.preacher || '';
+        editor.innerHTML = p.html || '';
+        fontFamily.value = p.fontFamily || fontFamily.value;
+        fontSize.value = p.fontSize || fontSize.value;
+        editor.style.fontFamily = fontFamily.value;
+        editor.style.fontSize = fontSize.value + 'px';
+        editor.style.background = p.bg || '#ffffff';
+        editor.style.color = p.color || '#111827';
+        return true;
+      } catch (e) { return false; }
+    }
+
+    // Save periodically and on changes
+    let saveTimer;
+    editor.addEventListener('input', () => {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(saveToLocal, 700);
     });
+    [themeInput, preacherInput, fontFamily, fontSize].forEach(el => el.addEventListener('input', () => saveToLocal()));
 
-    // Helper: ensure execCommand works for hiliteColor in some browsers
-    document.execCommand('defaultParagraphSeparator', false, 'p');
-
-    // Initialize
-    applyEditorStyles();
-    insertTemplate();
-
-    // Accessibility: keyboard shortcuts for bold/italic
+    // Keyboard shortcuts
     editor.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') { e.preventDefault(); exec('bold'); }
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'i') { e.preventDefault(); exec('italic'); }
     });
 
-    // Keep focus behavior tidy on mobile
-    editor.addEventListener('focus', () => {
-      editor.style.boxShadow = '0 6px 18px rgba(16,24,40,0.06)';
+    // Initialize
+    document.execCommand('defaultParagraphSeparator', false, 'p');
+    if (!restoreFromLocal()) insertTemplate();
+    applyEditorStyles();
+
+    function applyEditorStyles(){
+      editor.style.fontFamily = fontFamily.value;
+      editor.style.fontSize = fontSize.value + 'px';
+    }
+
+    // Update header template when theme/preacher change
+    [themeInput, preacherInput].forEach(inp => {
+      inp.addEventListener('input', () => {
+        const header = editor.querySelector('div');
+        if (header && header.innerText.startsWith('Date:')) {
+          header.innerHTML = `<strong>Date:</strong> ${dateInput.value} &nbsp; • &nbsp; <strong>Theme:</strong> ${escapeHtml(themeInput.value || '—')} &nbsp; • &nbsp; <strong>Preacher:</strong> ${escapeHtml(preacherInput.value || '—')}`;
+          saveToLocal();
+        }
+      });
     });
-    editor.addEventListener('blur', () => {
-      editor.style.boxShadow = 'none';
-    });
+
+    // Save on unload
+    window.addEventListener('beforeunload', saveToLocal);
   </script>
 </body>
 </html>
