@@ -13,9 +13,9 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/cmr32.png">
   <link rel="icon" type="image/svg+xml" href="/cmrsvg.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="/cmr180.png">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#ffffff">
 
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
     * {
@@ -26,54 +26,90 @@
     }
 
     body {
-      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      background: #f7f7f7;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      padding: 24px;
     }
 
     .card {
       background: #ffffff;
-      border-radius: 20px;
-      padding: 2rem;
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
       max-width: 420px;
       width: 100%;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
     }
 
     .header img {
-      width: 140px;
-      margin-bottom: 10px;
+      width: 120px;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
     }
 
     .church-name {
-      font-size: 1.05rem;
-      font-weight: 700;
-      letter-spacing: 1px;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
-      margin-bottom: 1.2rem;
+      color: #444;
+      margin-bottom: 1.4rem;
+    }
+
+    p {
+      font-size: 0.95rem;
+      color: #666;
+      margin-bottom: 1.8rem;
     }
 
     a.btn {
       display: block;
       margin: 10px 0;
       padding: 14px;
-      border-radius: 12px;
+      border-radius: 14px;
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 600;
       color: white;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
     }
 
-    .give { background: #00c244; }
-    .notes { background: #2575fc; }
-    .sermons { background: #6a11cb; }
-    .events { background: #444; }
-    .projects { background: #333; }
-    .website { background: #111; }
-    .social { background: #520fbf; }
+    /* Apple-like subtle gradients */
+    .give {
+      background: linear-gradient(135deg, #34c759, #2fa94f);
+    }
+
+    .notes {
+      background: linear-gradient(135deg, #007aff, #0a66d6);
+    }
+
+    .sermons {
+      background: linear-gradient(135deg, #5856d6, #4b47c2);
+    }
+
+    .events {
+      background: linear-gradient(135deg, #8e8e93, #7a7a7f);
+    }
+
+    .connect {
+      background: linear-gradient(135deg, #5e5ce6, #4a48c9);
+    }
+
+    .website {
+      background: linear-gradient(135deg, #1c1c1e, #000000);
+    }
+
+    .social {
+      background: linear-gradient(135deg, #af52de, #9c3ecb);
+    }
+
+    a.btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
   </style>
 </head>
 
@@ -87,13 +123,12 @@
     <p>Welcome to the CMR Hub</p>
 
     <a class="btn give" href="https://paypal.com/send?phone=16823812259">Give</a>
-    <a class="btn notes" href="/notes.html">Take Notes</a>
-    <a class="btn sermons" href="https://www.youtube.com/@CentreMissionnaireRestauration/streams">Sermons</a>
+    <a class="btn notes" href="notes.html">Take Notes</a>
+    <a class="btn sermons" href="https://youtube.com">Sermons</a>
     <a class="btn events" href="https://yourchurchsite.com/events">Events</a>
-    <a class="btn projects" href="/connect.html">Connect With Us</a>
-    <a class="btn website" href="https://cmrestauration.org">Visit Website</a>
+    <a class="btn connect" href="connect.html">Connect</a>
+    <a class="btn website" href="https://yourchurchsite.com">Visit Website</a>
     <a class="btn social" href="https://linktr.ee/YOURCHURCH">Follow Us</a>
-    
   </div>
 </body>
 </html>
