@@ -18,24 +18,27 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    * {
-      box-sizing: border-box;
+    /* Safe area, fluid type, responsive logo plate */
+    :root { --page-padding: 24px; --bg:#f7f7f7; --card:#ffffff; --muted:#666; --accent:#007aff; }
+    body {
       margin: 0;
-      padding: 0;
-      font-family: 'Roboto', sans-serif;
+      padding: calc(var(--page-padding) + env(safe-area-inset-top)) calc(var(--page-padding) + env(safe-area-inset-right)) calc(var(--page-padding) + env(safe-area-inset-bottom)) calc(var(--page-padding) + env(safe-area-inset-left));
+      background: var(--bg);
+      font-family: 'Roboto', system-ui, -apple-system, "Segoe UI", Arial;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      color: #111827;
+      min-height: 100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
 
-    body {
-      background: #f7f7f7;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 24px;
-    }
+    h1, .church { font-size: clamp(1.05rem, 2.6vw, 1.6rem); }
+    p, label, .small { font-size: clamp(0.88rem, 1.8vw, 1rem); }
 
     .card {
-      background: #ffffff;
+      background: var(--card);
       border-radius: 24px;
       padding: 2.5rem 2rem;
       max-width: 420px;
@@ -44,11 +47,21 @@
       box-shadow: 0 12px 40px rgba(0,0,0,0.08);
     }
 
-    .header img {
-      width: 120px;
-      margin-bottom: 12px;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    /* responsive logo plate */
+    .icon-wrap {
+      width: clamp(64px, 12vw, 120px);
+      height: auto;
+      border-radius: 18px;
+      padding: 10px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(180deg,#fff,#fbfbff);
+      box-shadow: 0 8px 24px rgba(16,24,40,0.06);
+      overflow:hidden;
+      margin: 0 auto 12px;
     }
+    .icon-wrap img { width: 70%; height: auto; display:block; }
 
     .church-name {
       font-size: 1rem;
@@ -59,11 +72,7 @@
       margin-bottom: 1.4rem;
     }
 
-    p {
-      font-size: 0.95rem;
-      color: #666;
-      margin-bottom: 1.8rem;
-    }
+    p.lead { color: var(--muted); margin-bottom: 1.8rem; }
 
     a.btn {
       display: block;
@@ -74,53 +83,36 @@
       font-weight: 600;
       color: white;
       font-size: 0.95rem;
-      transition: all 0.2s ease;
+      transition: all 0.18s ease;
     }
 
-    /* Apple-like subtle gradients */
-    .give {
-      background: linear-gradient(135deg, #34c759, #2fa94f);
-    }
+    .give { background: linear-gradient(135deg, #34c759, #2fa94f); }
+    .notes { background: linear-gradient(135deg, #007aff, #0a66d6); }
+    .sermons { background: linear-gradient(135deg, #5856d6, #4b47c2); }
+    .events { background: linear-gradient(135deg, #8e8e93, #7a7a7f); }
+    .connect { background: linear-gradient(135deg, #5e5ce6, #4a48c9); }
+    .website { background: linear-gradient(135deg, #1c1c1e, #000000); }
+    .social { background: linear-gradient(135deg, #af52de, #9c3ecb); }
 
-    .notes {
-      background: linear-gradient(135deg, #007aff, #0a66d6);
-    }
+    a.btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
 
-    .sermons {
-      background: linear-gradient(135deg, #5856d6, #4b47c2);
-    }
-
-    .events {
-      background: linear-gradient(135deg, #8e8e93, #7a7a7f);
-    }
-
-    .connect {
-      background: linear-gradient(135deg, #5e5ce6, #4a48c9);
-    }
-
-    .website {
-      background: linear-gradient(135deg, #1c1c1e, #000000);
-    }
-
-    .social {
-      background: linear-gradient(135deg, #af52de, #9c3ecb);
-    }
-
-    a.btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    @media (max-width:480px){
+      .card { padding: 1.6rem 1.2rem; border-radius: 18px; }
+      a.btn { padding: 12px; border-radius: 12px; font-size: 0.92rem; }
     }
   </style>
 </head>
 
 <body>
-  <div class="card">
-    <div class="header">
-      <img src="logo.png" alt="CMR Logo">
-      <div class="church-name">Centre Missionnaire La Restauration</div>
+  <div class="card" role="main" aria-label="CMR Hub">
+    <div class="icon-wrap" aria-hidden="false">
+      <!-- External SVG or PNG file. If using PNG, include srcset for retina: src="logo.png" srcset="logo@2x.png 2x" -->
+      <img src="logo.svg" alt="CMR Logo">
     </div>
 
-    <p>Welcome to the CMR Hub</p>
+    <div class="church-name">Centre Missionnaire La Restauration</div>
+
+    <p class="lead">Welcome to the CMR Hub</p>
 
     <a class="btn give" href="https://paypal.com/send?phone=16823812259">Give</a>
     <a class="btn notes" href="notes.html">Take Notes</a>
