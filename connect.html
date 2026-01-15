@@ -57,7 +57,18 @@
       gap:18px;
       align-items:center;
       margin-bottom:14px;
+      flex-wrap:wrap;
     }
+
+    /* copyright + tagline at top (user requested) */
+    .brand-block{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:0;
+    }
+    .brand-block .copyright { font-weight:700; font-size:1rem; color:#0b1220; }
+    .brand-block .tagline { color:var(--muted); font-size:0.92rem; }
 
     .icon-wrap{
       width: clamp(72px, 10vw, 120px);
@@ -212,7 +223,6 @@
     .thank-overlay.show{ display:block; animation:pop .18s ease both; }
     @keyframes pop { from { transform:translate(-50%,-50%) scale(0.96); opacity:0 } to { transform:translate(-50%,-50%) scale(1); opacity:1 } }
 
-    /* small responsive tweaks */
     @media (max-width:520px){
       .wrap{ padding:16px; border-radius:12px; }
       .submit{ padding:12px; border-radius:10px; }
@@ -226,9 +236,9 @@
         <img src="logo.png" srcset="logo@2x.png 2x" alt="CMR Logo">
       </div>
 
-      <div class="title">
-        <div class="church">Centre Missionnaire La Restauration</div>
-        <div class="message" id="msg-welcome">Welcome — we’re glad you’re here. Tell us how we can walk with you this week.</div>
+      <div class="brand-block">
+        <div class="copyright">Centre Missionnaire La Restauration</div>
+        <div class="tagline">We exist to love God and serve people</div>
       </div>
 
       <div class="lang-toggle" aria-hidden="false" role="toolbar" aria-label="Language toggle">
@@ -241,7 +251,7 @@
       <!-- Form -->
       <section class="form-card" aria-labelledby="connect-heading">
         <h2 id="connect-heading" data-en="Connect With Us" data-fr="Se Connecter Avec Nous">Connect With Us</h2>
-        <p id="lead-text" class="small" data-en="Share a few details and someone from our team will reach out. We respect your privacy." data-fr="Partagez quelques informations et un membre de notre équipe vous contactera. Nous respectons votre vie privée.">Share a few details and someone from our team will reach out. We respect your privacy.</p>
+        <p id="lead-text" class="small" data-en="Share a few details and someone from our team will reach out." data-fr="Partagez quelques informations et un membre de notre équipe vous contactera.">Share a few details and someone from our team will reach out.</p>
 
         <!-- Netlify form -->
         <form id="connect-form" name="connect" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="connect-form" novalidate>
@@ -276,16 +286,24 @@
               <option value="">—</option>
               <option data-en="First Time Visitor" data-fr="Visiteur pour la première fois">First Time Visitor</option>
               <option data-en="Regular Attendee" data-fr="Participant régulier">Regular Attendee</option>
-              <option data-en="Member" data-fr="Membre">Member</option>
             </select>
           </div>
 
+          <!-- "I am interested in" simplified to Serve only (optional) -->
           <div style="margin-top:12px">
             <label data-en="I am interested in" data-fr="Je suis intéressé par :">I am interested in</label>
             <div class="checkbox-row" role="group" aria-label="Interests">
-              <label><input type="checkbox" name="interest" value="Baptism"> <span class="small" data-en="Baptism" data-fr="Baptême">Baptism</span></label>
-              <label><input type="checkbox" name="interest" value="Serving"> <span class="small" data-en="Serving" data-fr="Service">Serving</span></label>
-              <label><input type="checkbox" name="interest" value="Membership"> <span class="small" data-en="Membership" data-fr="Adhésion">Membership</span></label>
+              <label><input id="interest-serve" type="checkbox" name="interest" value="Serving"> <span class="small" data-en="Serve (optional)" data-fr="Service (facultatif)">Serve (optional)</span></label>
+            </div>
+
+            <!-- Serve sub-options (optional, only for those who check Serve) -->
+            <div id="serve-suboptions" style="margin-top:10px; display:none; padding-left:6px;">
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <label style="display:flex; align-items:center; gap:8px"><input type="checkbox" name="serve_hospitality" value="Hospitality"> <span class="small">Hospitality (Usher)</span></label>
+                <label style="display:flex; align-items:center; gap:8px"><input type="checkbox" name="serve_production" value="Production"> <span class="small">Production</span></label>
+                <label style="display:flex; align-items:center; gap:8px"><input type="checkbox" name="serve_choir" value="Choir"> <span class="small">Choir</span></label>
+                <label style="display:flex; align-items:center; gap:8px"><input type="checkbox" name="serve_band" value="Band"> <span class="small">Band</span></label>
+              </div>
             </div>
           </div>
 
@@ -296,11 +314,6 @@
 
           <!-- Hidden container for right-column options to be included in submission if selected -->
           <div id="right-options-hidden" style="display:none"></div>
-
-          <div style="margin-top:12px; display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap">
-            <label style="display:flex; align-items:center; gap:8px"><input type="checkbox" name="subscribe" value="yes"> <span class="small" data-en="Subscribe to weekly updates" data-fr="S'abonner aux mises à jour hebdomadaires">Subscribe to weekly updates</span></label>
-            <div class="small" style="color:var(--muted)" data-en="We will never sell your information" data-fr="Nous ne vendrons jamais vos informations">We will never sell your information</div>
-          </div>
 
           <button class="submit" type="submit" id="submit-btn" data-en="Submit" data-fr="Envoyer">Submit</button>
         </form>
@@ -327,7 +340,7 @@
       </aside>
     </div>
 
-    <div class="foot">© <strong>Centre Missionnaire La Restauration</strong> — <span data-en="We exist to love God and serve people" data-fr="Nous existons pour aimer Dieu et servir les gens">We exist to love God and serve people</span></div>
+    <div class="foot" style="display:none">© <strong>Centre Missionnaire La Restauration</strong> — We exist to love God and serve people</div>
   </main>
 
   <!-- Thank you overlay -->
@@ -343,6 +356,8 @@
     const overlay = document.getElementById('thankOverlay');
     const btnEn = document.getElementById('btn-en');
     const btnFr = document.getElementById('btn-fr');
+    const serveCheckbox = document.getElementById('interest-serve');
+    const serveSub = document.getElementById('serve-suboptions');
 
     // Language helpers
     function setLanguage(lang) {
@@ -350,30 +365,29 @@
         const key = 'data-' + lang;
         if (el.hasAttribute(key)) el.innerText = el.getAttribute(key);
       });
-      // update placeholders separately
       const prayer = document.getElementById('prayer_request');
-      if (lang === 'fr') {
-        prayer.placeholder = prayer.getAttribute('data-fr') || '';
-      } else {
-        prayer.placeholder = prayer.getAttribute('data-en') || '';
-      }
-      // toggle active state
+      prayer.placeholder = (lang === 'fr') ? prayer.getAttribute('data-fr') || '' : prayer.getAttribute('data-en') || '';
       btnEn.classList.toggle('active', lang === 'en');
       btnFr.classList.toggle('active', lang === 'fr');
       btnEn.setAttribute('aria-pressed', lang === 'en');
       btnFr.setAttribute('aria-pressed', lang === 'fr');
       localStorage.setItem('cmr_lang', lang);
     }
-
     btnEn.addEventListener('click', () => setLanguage('en'));
     btnFr.addEventListener('click', () => setLanguage('fr'));
     setLanguage(localStorage.getItem('cmr_lang') || 'en');
 
+    // Show/hide serve suboptions
+    serveCheckbox.addEventListener('change', () => {
+      serveSub.style.display = serveCheckbox.checked ? 'block' : 'none';
+    });
+
     // Ensure option checkboxes are included in form submission
     function appendOptionsToForm() {
-      // remove previous hidden inputs
       const hiddenContainer = document.getElementById('right-options-hidden');
       hiddenContainer.innerHTML = '';
+
+      // right-column options
       document.querySelectorAll('.opt-checkbox').forEach(cb => {
         if (cb.checked) {
           const name = cb.getAttribute('data-name') || ('opt_' + cb.value.replace(/\s+/g,'_'));
@@ -384,11 +398,24 @@
           hiddenContainer.appendChild(input);
         }
       });
+
+      // serve suboptions (if serve checked)
+      if (serveCheckbox.checked) {
+        ['serve_hospitality','serve_production','serve_choir','serve_band'].forEach(n => {
+          const el = document.querySelector(`[name="${n}"]`);
+          if (el && el.checked) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = n;
+            input.value = el.value;
+            hiddenContainer.appendChild(input);
+          }
+        });
+      }
     }
 
     // Show thank you overlay then submit
     form.addEventListener('submit', (e) => {
-      // client-side validation for required fields
       const first = document.getElementById('first_name');
       const last = document.getElementById('last_name');
       if (!first.value.trim() || !last.value.trim()) {
@@ -407,17 +434,12 @@
         return;
       }
 
-      // include right-column options
       appendOptionsToForm();
 
-      // show overlay
-      overlay.classList.add('show');
-
-      // allow the overlay to be seen briefly, then submit normally
-      // do not prevent default Netlify submission — submit after a short delay
+      // show overlay briefly then submit
       e.preventDefault();
+      overlay.classList.add('show');
       setTimeout(() => {
-        // remove overlay after a short delay to avoid abrupt navigation
         overlay.classList.remove('show');
         form.submit();
       }, 900);
@@ -426,26 +448,16 @@
     // Make option items toggle visually when clicked
     document.querySelectorAll('.option-item').forEach(item => {
       item.addEventListener('click', (e) => {
-        // toggle the checkbox inside
         const cb = item.querySelector('input[type="checkbox"]');
         cb.checked = !cb.checked;
-        // brief highlight
         item.style.background = cb.checked ? '#f0f7ff' : '#fff';
         setTimeout(()=> item.style.background = '#fff', 260);
       });
     });
 
-    // Improve keyboard flow: Enter in last name moves to phone
+    // keyboard flow
     document.getElementById('last_name').addEventListener('keydown', (ev) => {
       if (ev.key === 'Enter') { ev.preventDefault(); document.getElementById('phone').focus(); }
-    });
-
-    // Friendly placeholder for prayer field
-    const prayer = document.getElementById('prayer_request');
-    prayer.addEventListener('focus', () => {
-      if (!prayer.value.trim()) {
-        prayer.placeholder = (localStorage.getItem('cmr_lang') === 'fr') ? 'ex. : Priez pour ma famille, guérison, ou direction...' : 'e.g., Please pray for my family, healing, or guidance...';
-      }
     });
   </script>
 </body>
