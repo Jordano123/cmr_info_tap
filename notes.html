@@ -1,99 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="color-scheme" content="light">
-  <title>CMR HUB</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMR Notes</title>
 
-  <!-- PWA + ICONS -->
-  <link rel="manifest" href="/manifest.json">
-  <link rel="icon" type="image/png" sizes="512x512" href="/cmr512.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/cmr192.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/cmr32.png">
-  <link rel="icon" type="image/svg+xml" href="/cmrsvg.svg">
-  <link rel="apple-touch-icon" sizes="180x180" href="/cmr180.png">
-  <meta name="theme-color" content="#000000">
+<link href="https://fonts.googleapis.com/css2?family=Roboto&family=Georgia&family=Courier+Prime&display=swap" rel="stylesheet">
 
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body {
+  margin: 0;
+  font-family: Roboto, sans-serif;
+  background: #ffffff;
+}
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Roboto', sans-serif;
-    }
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px;
+  background: #f1f1f1;
+  position: sticky;
+  top: 0;
+}
 
-    body {
-      background: linear-gradient(135deg, #6a11cb, #2575fc);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+.toolbar button, .toolbar select {
+  padding: 6px 8px;
+  font-size: 14px;
+}
 
-    .card {
-      background: #ffffff;
-      border-radius: 20px;
-      padding: 2rem;
-      max-width: 420px;
-      width: 100%;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
+.editor {
+  padding: 20px;
+  min-height: 75vh;
+}
 
-    .header img {
-      width: 140px;
-      margin-bottom: 10px;
-    }
+.editor:focus {
+  outline: none;
+}
+</style>
 
-    .church-name {
-      font-size: 1.05rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 1.2rem;
-    }
+<script>
+function format(cmd, value=null) {
+  document.execCommand(cmd, false, value);
+}
 
-    a.btn {
-      display: block;
-      margin: 10px 0;
-      padding: 14px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: 700;
-      color: white;
-    }
+function setBg(color) {
+  document.body.style.background = color;
+}
 
-    .give { background: #00c244; }
-    .notes { background: #2575fc; }
-    .sermons { background: #6a11cb; }
-    .events { background: #444; }
-    .projects { background: #333; }
-    .website { background: #111; }
-    .social { background: #520fbf; }
-  </style>
+function downloadNote() {
+  const content = document.querySelector('.editor').innerHTML;
+  const blob = new Blob([content], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'CMR_Notes.html';
+  a.click();
+}
+</script>
 </head>
 
 <body>
-  <div class="card">
-    <div class="header">
-      <img src="logo.png" alt="CMR Logo">
-      <div class="church-name">Centre Missionnaire La Restauration</div>
-    </div>
 
-    <p>Welcome to the CMR Hub</p>
+<div class="toolbar">
+  <button onclick="format('bold')">B</button>
+  <button onclick="format('italic')">I</button>
+  <button onclick="format('underline')">U</button>
+  <button onclick="format('strikeThrough')">S</button>
 
-    <a class="btn give" href="https://paypal.com/send?phone=16823812259">Give</a>
-    <a class="btn notes" href="notes.html">Take Notes</a>
-    <a class="btn sermons" href="https://www.youtube.com/@CentreMissionnaireRestauration/streams">Sermons</a>
-    <a class="btn events" href="https://yourchurchsite.com/events">Events</a>
-    <a class="btn projects" href="connect.html">Connect With Us</a>
-    <a class="btn website" href="https://cmrestauration.org">Visit Website</a>
-    <a class="btn social" href="https://linktr.ee/YOURCHURCH">Follow Us</a>
-    
-  </div>
+  <select onchange="format('fontSize', this.value)">
+    <option value="">Size</option>
+    <option value="2">Small</option>
+    <option value="3">Normal</option>
+    <option value="5">Large</option>
+    <option value="7">X-Large</option>
+  </select>
+
+  <select onchange="format('fontName', this.value)">
+    <option value="">Font</option>
+    <option value="Roboto">Roboto</option>
+    <option value="Georgia">Georgia</option>
+    <option value="Courier Prime">Courier</option>
+  </select>
+
+  <button onclick="format('hiliteColor','yellow')">Yellow</button>
+  <button onclick="format('hiliteColor','red')">Red</button>
+  <button onclick="format('hiliteColor','blue')">Blue</button>
+  <button onclick="format('hiliteColor','purple')">Purple</button>
+  <button onclick="format('hiliteColor','gray')">Gray</button>
+
+  <button onclick="setBg('#ffffff')">White</button>
+  <button onclick="setBg('#000000')">Black</button>
+
+  <button onclick="downloadNote()">Download</button>
+</div>
+
+<div class="editor" contenteditable="true">
+  <h2>Date:</h2>
+  <h3>Theme:</h3>
+  <h4>Preacher:</h4>
+  <p>Write your sermon notes here…</p>
+</div>
+
 </body>
 </html>
