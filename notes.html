@@ -201,23 +201,18 @@
 
     function escapeHtml(str){ return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s])); }
 
-    function insertTemplate(){
-      const date = dateInput.value;
-      const theme = themeInput.value || '—';
-      const preacher = preacherInput.value || '—';
-      const template = `
-        <div style="margin-bottom:8px; color:#6b7280; font-size:0.95rem;">
-          <strong>Date:</strong> ${date} &nbsp; • &nbsp; <strong>Theme:</strong> ${escapeHtml(theme)} &nbsp; • &nbsp; <strong>Preacher:</strong> ${escapeHtml(preacher)}
-        </div>
-        <h2 style="margin:8px 0 6px; font-size:1.15rem;">Notes</h2>
-        <div><p style="margin:0 0 8px;">Write your sermon notes here…</p></div>
-        <div style="height:12px"></div>
-      `;
-      editor.innerHTML = template;
-      applyEditorStyles();
-      placeCaretAtEnd(editor);
-      saveToLocal();
-    }
+  function insertTemplate(){
+  const template = `
+    <h2 style="margin:8px 0 6px; font-size:1.15rem;">Notes</h2>
+    <div><p style="margin:0 0 8px;">Write your sermon notes here…</p></div>
+    <div style="height:12px"></div>
+  `;
+  editor.innerHTML = template;
+  applyEditorStyles();
+  placeCaretAtEnd(editor);
+  saveToLocal();
+}
+
 
     function placeCaretAtEnd(el){
       el.focus();
