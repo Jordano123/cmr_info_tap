@@ -3,33 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name= "color-scheme" content="light">
+  <meta name="color-scheme" content="light">
   <title>CMR HUB</title>
-  <!-- Essential for all desktop browsers -->
-<link rel="manifest" href="/manifest.json">
-<link rel="icon" type="image/x-icon" href="/cmr512.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/cmr32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/cmr32.png">
 
-<!-- Modern browsers: SVG support -->
-<link rel="icon" type="image/svg+xml" href="/cmrsvg.svg">
-<!-- iPhone/iPad home screen icons -->
-<link rel="apple-touch-icon" sizes="180x180" href="/cmr180.png">
-
-<!-- iPad-specific (optional) -->
-<link rel="apple-touch-icon" sizes="152x152" href="/cmr180.png">
-
-<!-- iOS Safari configuration -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<!-- Android home screen icons -->
-<link rel="icon" type="image/png" sizes="192x192" href="/cmr192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/cmr512.png">
-
-<!-- Android theme integration -->
-<meta name="theme-color" content="#000000">
-
-  <!-- <link rel="icon" type="image/png" href="favicon.png"> -->
+  <!-- PWA + ICONS -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" sizes="512x512" href="/cmr512.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/cmr192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cmr32.png">
+  <link rel="icon" type="image/svg+xml" href="/cmrsvg.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/cmr180.png">
+  <meta name="theme-color" content="#000000">
 
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
@@ -51,57 +35,26 @@
     }
 
     .card {
-      background: #ffffff !important;
-      color: #000000;
+      background: #ffffff;
       border-radius: 20px;
       padding: 2rem;
-      max-width: 400px;
+      max-width: 420px;
       width: 100%;
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      animation: fadeIn 1s ease-out;
     }
 
-    html, body {
-      background-color: transparent;
-    }
-    
-
-    /* HEADER */
-    .header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 1.2rem;
-    }
-
-     .header img {
+    .header img {
       width: 140px;
-      height: auto;
       margin-bottom: 10px;
-    } 
+    }
 
     .church-name {
       font-size: 1.05rem;
       font-weight: 700;
       letter-spacing: 1px;
       text-transform: uppercase;
-      color: #333;
-      white-space: nowrap;
-      text-align: center;
-      /*line-height: 1.3;*/
-    }
-
-    @media (min-width: 480px) {
-      .church-name {
-        white-space: nowrap;
-      }
-    }
-
-    p {
-      color: #555;
-      margin-bottom: 1.5rem;
-      font-size: 0.95rem;
+      margin-bottom: 1.2rem;
     }
 
     a.btn {
@@ -111,67 +64,35 @@
       border-radius: 12px;
       text-decoration: none;
       font-weight: 700;
-      transition: 0.3s;
-    }
-
-    .paypal {
-      background: #ffc439;
-      color: #111;
-    }
-    .paypal:hover { background: #e6b933; }
-
-    .cashapp {
-      background: #00c244;
       color: white;
     }
-    .cashapp:hover { background: #00a633; }
 
-    .connect {
-      background: #2575fc;
-      color: white;
-    }
-    .connect:hover { background: #1a5ed1; }
-
-    .social {
-      background: #6a11cb;
-      color: white;
-    }
-    .social:hover { background: #520fbf; }
-
-    footer {
-      margin-top: 1.5rem;
-      font-size: 0.8rem;
-      color: #888;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .give { background: #00c244; }
+    .notes { background: #2575fc; }
+    .sermons { background: #6a11cb; }
+    .events { background: #444; }
+    .projects { background: #333; }
+    .website { background: #111; }
+    .social { background: #520fbf; }
   </style>
 </head>
 
 <body>
   <div class="card">
-
-    <!-- HEADER -->
     <div class="header">
-      <img src="logo.png" alt="Centre Missionnaire La Restauration Logo">
-      <div class="church-name">
-        Centre Missionnaire La Restauration
-      </div>
+      <img src="logo.png" alt="CMR Logo">
+      <div class="church-name">Centre Missionnaire La Restauration</div>
     </div>
-    <p>We’re so glad you joined us today! You can give, connect, or follow us below.</p>
 
-    <!-- Giving Buttons -->
-    <a class="btn paypal" href="https://paypal.com/send?phone=16823812259" target="_blank">Give with PayPal</a>
-    <a class="btn cashapp" href="https://cash.app/$cmr8703" target="_blank">Give with CashApp</a>
+    <p>Welcome to the CMR Hub</p>
 
-    <!-- Connect & Follow -->
-    <a class="btn connect" href="https://forms.gle/YOURFORMID" target="_blank">Connect With Us</a>
-    <a class="btn social" href="https://linktr.ee/YOURCHURCH" target="_blank">Follow Us</a>
-
-    <footer>Tap or scan the code on your seat. Thank you for joining us!</footer>
+    <a class="btn give" href="https://paypal.com/send?phone=16823812259">Give</a>
+    <a class="btn notes" href="notes.html">Take Notes</a>
+    <a class="btn sermons" href="https://youtube.com">Sermons</a>
+    <a class="btn events" href="https://yourchurchsite.com/events">Events</a>
+    <a class="btn projects" href="https://yourchurchsite.com/projects">CMR Projects</a>
+    <a class="btn website" href="https://yourchurchsite.com">Visit Website</a>
+    <a class="btn social" href="https://linktr.ee/YOURCHURCH">Follow Us</a>
   </div>
 </body>
 </html>
