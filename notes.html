@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <title>CMR HUB</title>
+
+  <!-- PWA + ICONS -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" sizes="512x512" href="/cmr512.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/cmr192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cmr32.png">
+  <link rel="icon" type="image/svg+xml" href="/cmrsvg.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/cmr180.png">
+  <meta name="theme-color" content="#000000">
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .header img {
+      width: 140px;
+      margin-bottom: 10px;
+    }
+
+    .church-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+
+    a.btn {
+      display: block;
+      margin: 10px 0;
+      padding: 14px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      color: white;
+    }
+
+    .give { background: #00c244; }
+    .notes { background: #2575fc; }
+    .sermons { background: #6a11cb; }
+    .events { background: #444; }
+    .projects { background: #333; }
+    .website { background: #111; }
+    .social { background: #520fbf; }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="header">
+      <img src="logo.png" alt="CMR Logo">
+      <div class="church-name">Centre Missionnaire La Restauration</div>
+    </div>
+
+    <p>Welcome to the CMR Hub</p>
+
+    <a class="btn give" href="https://paypal.com/send?phone=16823812259">Give</a>
+    <a class="btn notes" href="notes.html">Take Notes</a>
+    <a class="btn sermons" href="https://www.youtube.com/@CentreMissionnaireRestauration/streams">Sermons</a>
+    <a class="btn events" href="https://yourchurchsite.com/events">Events</a>
+    <a class="btn projects" href="connect.html">Connect With Us</a>
+    <a class="btn website" href="https://cmrestauration.org">Visit Website</a>
+    <a class="btn social" href="https://linktr.ee/YOURCHURCH">Follow Us</a>
+    
+  </div>
+</body>
+</html>
