@@ -1,19 +1,42 @@
-{
-  "enabled": true,
-  "date": "2026-04-12",
-  "title": "Easter Celebration Service",
-  "thumbnail": "https://yourdomain.com/images/easter-thumb.jpg",
-  "theme": "Rising Hope",
-  "pastor": "Pastor John Doe",
-  "description": "Join us this Sunday for a special Easter celebration. Worship starts at 10:00 AM followed by a community lunch.",
-  "type": "event",
-  "extra": {
-    "location": "CMR Main Campus",
-    "time": "10:00 AM",
-    "funeralInfo": {
-      "enabled": false,
-      "details": ""
-    }
+[
+  {
+    "enabled": true,
+    "date": "2026-04-12",
+    "title": "Easter Celebration Service",
+    "thumbnail": "https://example.com/images/easter-thumb.jpg",
+    "theme": "Rising Hope",
+    "pastor": "Pastor John Doe",
+    "description": "Join us this Sunday for a special Easter celebration. Worship starts at 10:00 AM followed by a community lunch.",
+    "type": "event",
+    "extra": {
+      "location": "CMR Main Campus",
+      "time": "10:00 AM",
+      "funeralInfo": {
+        "enabled": false,
+        "details": ""
+      }
+    },
+    "expireDate": "2026-04-13",
+    "learnMoreUrl": "https://example.com/events/easter"
   },
-  "expireDate": "2026-04-13"
-}
+  {
+    "enabled": true,
+    "date": "2026-05-01",
+    "title": "Prayer Night",
+    "thumbnail": "",
+    "theme": "Seeking His Presence",
+    "pastor": "Pastor Jane Smith",
+    "description": "An evening of worship and prayer for our city and families.",
+    "type": "event",
+    "extra": {
+      "location": "CMR Main Campus",
+      "time": "7:00 PM",
+      "funeralInfo": {
+        "enabled": false,
+        "details": ""
+      }
+    },
+    "expireDate": "2026-05-02",
+    "learnMoreUrl": "https://example.com/events/prayer-night"
+  }
+]
