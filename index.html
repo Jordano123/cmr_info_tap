@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>CMR Hub</title>
 
   <!-- Base styles -->
@@ -18,12 +18,43 @@
       --container-padding:20px;
       font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
-    html, body { max-width:100%; overflow-x:hidden; box-sizing:border-box; }
-    *, *::before, *::after { box-sizing:inherit; }
-    img, video { max-width:100%; height:auto; display:block; }
 
-    body{ margin:0; background:var(--page-bg); color:#111827; padding:30px; display:flex; justify-content:center; }
-    .wrap{ width:100%; max-width:var(--max-width); padding:var(--container-padding); box-sizing:border-box; position:relative; }
+    /* Reset and robust centering for foldables and all devices */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      -webkit-text-size-adjust: 100%;
+      -webkit-font-smoothing: antialiased;
+      background: var(--page-bg);
+      color: #111827;
+      min-height: 100vh;
+    }
+    *, *::before, *::after { box-sizing: inherit; }
+
+    /* Centering container: margin auto is robust across devices */
+    .wrap {
+      width: 100%;
+      max-width: var(--max-width);
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: calc(var(--container-padding) + env(safe-area-inset-left));
+      padding-right: calc(var(--container-padding) + env(safe-area-inset-right));
+      padding-top: var(--container-padding);
+      padding-bottom: var(--container-padding);
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    /* Fallback for browsers without env() support */
+    @supports not (padding: env(safe-area-inset-left)) {
+      .wrap {
+        padding-left: var(--container-padding);
+        padding-right: var(--container-padding);
+      }
+    }
 
     /* Layout: left column + right column stacked */
     .layout-fixed{
@@ -33,6 +64,7 @@
       align-items:start;
       width:100%;
       margin:0 auto;
+      box-sizing: border-box;
     }
     .left-col{ display:flex; flex-direction:column; gap:18px; }
     .right-col{ display:flex; flex-direction:column; gap:16px; }
@@ -79,15 +111,18 @@
     .serve-card .serve-header { display:flex; align-items:center; gap:10px; }
     .serve-card .serve-badge { width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; }
 
+    /* Announcement accent when data-accent is set */
+    #announcementsCard[data-accent="true"] { border-left: 4px solid var(--accent); padding-left: 12px; }
+    #announcementsCard2[data-accent="true"] { border-left: 4px solid var(--accent); padding-left: 12px; }
+
     /* small responsive tweaks */
     @media (max-width:420px){
-      .wrap{ padding:12px; }
+      .wrap{ padding-left: calc(12px + env(safe-area-inset-left)); padding-right: calc(12px + env(safe-area-inset-right)); }
       .card{ padding:14px; }
     }
   </style>
 
   <!-- Brand stylesheet (after base styles) -->
-  <!-- Make sure cmr-brand.css includes the serveCard hide rule and the serve-card styling you want -->
   <link rel="stylesheet" href="cmr-brand.css">
 
   <!-- Feather icons -->
@@ -109,37 +144,31 @@
           </div>
 
           <div class="hub-grid" role="navigation" aria-label="Main actions">
-            <!-- Give: attempts app deep link first (configure data-app-href) then falls back to web href -->
             <a class="hub-button" href="https://example.com/give" id="giveBtn" title="Give" data-app-href="paypal://send?recipient=YOUR_PAYPAL_ID">
               <div class="hub-icon"><i data-feather="heart"></i></div>
               <div><div class="hub-label" id="giveLabel">Give</div><div class="hub-sub" id="giveSub">Support online</div></div>
             </a>
 
-            <!-- YouTube: replace VIDEO_ID with your sermon video id -->
             <a class="hub-button" href="https://www.youtube.com/watch?v=VIDEO_ID" id="sermonsBtn" title="Sermons" data-app-href="youtube://watch?v=VIDEO_ID" data-android-intent="intent://www.youtube.com/watch?v=VIDEO_ID#Intent;package=com.google.android.youtube;scheme=https;end">
               <div class="hub-icon"><i data-feather="video"></i></div>
               <div><div class="hub-label" id="sermonsLabel">Sermons</div><div class="hub-sub" id="sermonsSub">Watch on YouTube</div></div>
             </a>
 
-            <!-- Listen: opens listen page (audio) -->
             <a class="hub-button" href="listen.html" id="listenBtn" title="Listen">
               <div class="hub-icon"><i data-feather="headphones"></i></div>
               <div><div class="hub-label" id="listenLabel">Listen</div><div class="hub-sub" id="listenSub">Audio highlights</div></div>
             </a>
 
-            <!-- Connect -->
             <a class="hub-button" href="connect.html" id="connectBtn" title="Connect">
               <div class="hub-icon"><i data-feather="user-plus"></i></div>
               <div><div class="hub-label" id="connectLabel">Connect</div><div class="hub-sub" id="connectSub">Fill out the form</div></div>
             </a>
 
-            <!-- Visit website -->
             <a class="hub-button" href="https://example.com" id="visitBtn" title="Visit Website">
               <div class="hub-icon"><i data-feather="globe"></i></div>
               <div><div class="hub-label" id="visitLabel">Visit Website</div><div class="hub-sub" id="visitSub">More info online</div></div>
             </a>
 
-            <!-- Follow / Social -->
             <a class="hub-button" href="https://linktr.ee" id="followBtn" title="Follow Us">
               <div class="hub-icon"><i data-feather="share-2"></i></div>
               <div><div class="hub-label" id="followLabel">Follow Us</div><div class="hub-sub" id="followSub">Social links</div></div>
@@ -147,7 +176,7 @@
           </div>
         </div>
 
-        <!-- HOW TO SERVE (under Hub) - no logo/badge next to title per request -->
+        <!-- HOW TO SERVE (under Hub) -->
         <div class="card serve-card" id="serveCard" data-accent="true" aria-label="How to Serve">
           <div class="serve-header" style="align-items:flex-start;">
             <div style="flex:1;">
@@ -208,13 +237,11 @@
 
       <!-- RIGHT COLUMN: Announcements -->
       <aside class="right-col" aria-label="Right column">
-        <!-- Primary announcement slot -->
         <div class="card" id="announcementsCard" aria-live="polite" data-accent="true">
           <h3 id="announcementsTitle" style="margin:0 0 12px 0;">Announcements</h3>
           <div id="announcementContainer"></div>
         </div>
 
-        <!-- Secondary announcement slot (toggleable) -->
         <div class="card" id="announcementsCard2" aria-live="polite" style="display:none;">
           <h3 style="margin:0 0 12px 0;">More Announcements</h3>
           <div id="announcementContainer2"></div>
@@ -366,7 +393,6 @@
         // mark accent if thumbnail exists
         markSecondaryAccentIfThumbnail();
       } else {
-        // ensure accent removed if no second announcement
         if (secondaryCard) secondaryCard.removeAttribute('data-accent');
       }
 
