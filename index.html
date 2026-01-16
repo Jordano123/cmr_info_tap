@@ -16,409 +16,264 @@
       --container-padding:20px;
       font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
-    body{
-      margin:0;
-      background:var(--page-bg);
-      color:#111827;
-      padding:30px;
-      display:flex;
-      justify-content:center;
-    }
-    .wrap{
-      width:100%;
-      max-width:var(--max-width);
-      padding:var(--container-padding);
-      box-sizing:border-box;
-    }
-    .layout{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:var(--gap);
-      align-items:start;
-    }
-    @media(min-width:900px){
-      .layout{
-        grid-template-columns: 1fr 380px;
-      }
-    }
-    .card{
-      background:var(--card-bg);
-      border-radius:var(--radius);
-      padding:20px;
-      box-shadow:0 6px 18px rgba(15,23,42,0.06);
-    }
-    .hub-header{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      margin-bottom:12px;
-    }
-    .hub-logo{
-      width:32px;
-      height:32px;
-      border-radius:8px;
-      background:#111827;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#fff;
-      font-weight:700;
-      font-size:16px;
-    }
-    .hub-title{
-      font-size:20px;
-      font-weight:700;
-      margin:0;
-    }
-    .hub-subtitle{
-      font-size:13px;
-      color:var(--muted);
-      margin:0;
-    }
-    .hub-grid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:12px;
-    }
-    @media(max-width:640px){
-      .hub-grid{ grid-template-columns:repeat(2,1fr); }
-    }
-    .hub-button{
-      background:#f8fafc;
-      border-radius:10px;
-      padding:14px;
-      display:flex;
-      gap:12px;
-      align-items:center;
-      cursor:pointer;
-      border:1px solid transparent;
-      transition:all .12s ease;
-      text-decoration:none;
-      color:inherit;
-    }
-    .hub-button:hover{
-      transform:translateY(-2px);
-      box-shadow:0 6px 18px rgba(15,23,42,0.04);
-    }
-    .hub-icon{
-      width:44px;
-      height:44px;
-      border-radius:8px;
-      background:linear-gradient(135deg,var(--accent),#4c9bd6);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:white;
-    }
-    .hub-icon svg{
-      width:22px;
-      height:22px;
-      stroke-width:2.2;
-    }
+    body{ margin:0; background:var(--page-bg); color:#111827; padding:30px; display:flex; justify-content:center; }
+    .wrap{ width:100%; max-width:var(--max-width); padding:var(--container-padding); box-sizing:border-box; position:relative; }
+    .lang-switcher{ position:fixed; top:18px; right:18px; z-index:1200; display:flex; gap:8px; align-items:center; }
+    .lang-btn{ background:#fff; border:1px solid #e6eef9; padding:8px 10px; border-radius:8px; cursor:pointer; font-weight:600; color:#111827; }
+    .layout{ display:grid; grid-template-columns:1fr; gap:var(--gap); align-items:start; }
+    @media(min-width:900px){ .layout{ grid-template-columns: 1fr 380px; } }
+    .card{ background:var(--card-bg); border-radius:var(--radius); padding:20px; box-shadow:0 6px 18px rgba(15,23,42,0.06); }
+    .hub-header{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+    .hub-logo{ width:32px; height:32px; border-radius:8px; background:#111827; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:16px; }
+    .hub-title{ font-size:20px; font-weight:700; margin:0; }
+    .hub-subtitle{ font-size:13px; color:var(--muted); margin:0; }
+    .hub-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    @media(max-width:640px){ .hub-grid{ grid-template-columns:repeat(2,1fr); } }
+    .hub-button{ background:#f8fafc; border-radius:10px; padding:14px; display:flex; gap:12px; align-items:center; cursor:pointer; border:1px solid transparent; transition:all .12s ease; text-decoration:none; color:inherit; }
+    .hub-button:hover{ transform:translateY(-2px); box-shadow:0 6px 18px rgba(15,23,42,0.04); }
+    .hub-icon{ width:44px; height:44px; border-radius:8px; background:linear-gradient(135deg,var(--accent),#4c9bd6); display:flex; align-items:center; justify-content:center; color:white; }
+    .hub-icon svg{ width:22px; height:22px; stroke-width:2.2; }
     .hub-label{ font-weight:600; font-size:15px; }
     .hub-sub{ font-size:13px; color:var(--muted); }
-
-    .connect-list{ margin-top:18px; display:flex; flex-direction:column; gap:10px; }
-    .connect-item{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:10px;
-      border-radius:8px;
-      background:#fff;
-      border:1px solid #eef2f7;
-    }
-    .connect-item input[type="checkbox"]{
-      width:18px;
-      height:18px;
-      margin:0;
-      flex:0 0 18px;
-      accent-color:var(--accent);
-    }
-    .connect-item label{
-      display:block;
-      margin:0;
-      font-size:14px;
-      color:#111827;
-      line-height:1.2;
-      word-break:break-word;
-    }
-    .note{ margin-top:14px; font-size:13px; color:var(--muted); }
-
-    .announcement-list{
-      display:flex;
-      flex-direction:column;
-      gap:16px;
-    }
-    .announcement{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      border-radius:10px;
-      padding:14px;
-      background:#f9fafb;
-      border:1px solid #e5e7eb;
-    }
-    .announcement .thumb{
-      width:100%;
-      height:160px;
-      border-radius:8px;
-      object-fit:cover;
-      background:#e6eef9;
-    }
-    .meta-row{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
-      font-size:13px;
-      color:var(--muted);
-    }
+    .announcement-list{ display:flex; flex-direction:column; gap:16px; }
+    .announcement{ display:flex; flex-direction:column; gap:12px; border-radius:10px; padding:14px; background:#f9fafb; border:1px solid #e5e7eb; }
+    .announcement .thumb{ width:100%; height:160px; border-radius:8px; object-fit:cover; background:#e6eef9; }
+    .meta-row{ display:flex; justify-content:space-between; gap:10px; align-items:center; font-size:13px; color:var(--muted); }
     .announce-title{ font-size:18px; font-weight:700; margin:0; }
-    .announce-theme{ font-size:14px; color:var(--muted); }
     .announce-desc{ font-size:14px; color:#111827; line-height:1.45; }
     .small-muted{ font-size:13px; color:var(--muted); }
     .cta-row{ display:flex; gap:10px; margin-top:8px; }
-    .btn{
-      padding:10px 12px;
-      border-radius:8px;
-      border:1px solid transparent;
-      cursor:pointer;
-      font-weight:600;
-      font-size:14px;
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-    }
+    .btn{ padding:10px 12px; border-radius:8px; border:1px solid transparent; cursor:pointer; font-weight:600; font-size:14px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
     .btn-primary{ background:var(--accent); color:white; }
-    .btn-outline{ background:white; border:1px solid #e6eef9; color:#111827; }
-    .announcement-placeholder{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      min-height:120px;
-      color:var(--muted);
-      font-size:14px;
-      text-align:center;
-      padding:18px;
-    }
+    .announcement-placeholder{ display:flex; align-items:center; justify-content:center; min-height:120px; color:var(--muted); font-size:14px; text-align:center; padding:18px; }
+    .serve-section{ display:flex; flex-direction:column; gap:14px; }
+    .serve-group{ display:flex; flex-direction:column; gap:4px; }
+    .serve-title{ font-weight:700; font-size:15px; margin:0; }
+    .serve-item{ font-size:14px; color:#111827; margin-left:8px; }
   </style>
-  <!-- Feather Icons -->
   <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <body>
-  <div class="wrap">
-    <div class="layout">
-      <!-- Hub Card -->
-      <div class="card" id="hubCard" aria-label="CMR Hub">
+  <div class="wrap" id="pageWrap">
+    <div class="layout" id="mainLayout">
+      <!-- CMR HUB CARD -->
+      <div class="card" id="hubCard">
         <div class="hub-header">
-          <!-- Logo placeholder: replace src with your logo path -->
-          <div class="hub-logo">CMR</div>
+          <div class="hub-logo" id="logoText">CMR</div>
           <div>
-            <h1 class="hub-title">CMR Hub</h1>
-            <p class="hub-subtitle">One place for everything happening at CMR.</p>
+            <h1 class="hub-title" id="hubTitle">CMR Hub</h1>
+            <p class="hub-subtitle" id="hubSubtitle">One place for everything happening at CMR.</p>
           </div>
         </div>
 
-        <div class="hub-grid" role="navigation" aria-label="Main actions">
-          <a class="hub-button" href="https://example.com/give">
+        <div class="hub-grid">
+          <a class="hub-button" href="give.html" id="giveBtn">
             <div class="hub-icon"><i data-feather="heart"></i></div>
-            <div>
-              <div class="hub-label">Give</div>
-              <div class="hub-sub">Support online</div>
-            </div>
+            <div><div class="hub-label" id="giveLabel">Give</div><div class="hub-sub" id="giveSub">Support online</div></div>
           </a>
 
-          <a class="hub-button" href="https://youtube.com" target="_blank" rel="noopener">
+          <a class="hub-button" href="listen.html" id="sermonsBtn">
             <div class="hub-icon"><i data-feather="video"></i></div>
-            <div>
-              <div class="hub-label">Sermons</div>
-              <div class="hub-sub">Watch on YouTube</div>
-            </div>
+            <div><div class="hub-label" id="sermonsLabel">Sermons</div><div class="hub-sub" id="sermonsSub">Watch on YouTube</div></div>
           </a>
 
-          <a class="hub-button" href="listen.html">
+          <a class="hub-button" href="listen.html" id="listenBtn">
             <div class="hub-icon"><i data-feather="headphones"></i></div>
-            <div>
-              <div class="hub-label">Listen</div>
-              <div class="hub-sub">Audio highlights</div>
-            </div>
+            <div><div class="hub-label" id="listenLabel">Listen</div><div class="hub-sub" id="listenSub">Audio highlights</div></div>
           </a>
 
-          <a class="hub-button" href="connect.html">
+          <a class="hub-button" href="connect.html" id="connectBtn">
             <div class="hub-icon"><i data-feather="user-plus"></i></div>
-            <div>
-              <div class="hub-label">Connect</div>
-              <div class="hub-sub">Fill out the form</div>
-            </div>
+            <div><div class="hub-label" id="connectLabel">Connect</div><div class="hub-sub" id="connectSub">Fill out the form</div></div>
           </a>
 
-          <a class="hub-button" href="https://example.com">
+          <a class="hub-button" href="https://example.com" id="visitBtn">
             <div class="hub-icon"><i data-feather="globe"></i></div>
-            <div>
-              <div class="hub-label">Visit Website</div>
-              <div class="hub-sub">More info online</div>
-            </div>
+            <div><div class="hub-label" id="visitLabel">Visit Website</div><div class="hub-sub" id="visitSub">More info online</div></div>
           </a>
 
-          <a class="hub-button" href="https://linktr.ee" target="_blank" rel="noopener">
+          <a class="hub-button" href="https://linktr.ee" id="followBtn">
             <div class="hub-icon"><i data-feather="share-2"></i></div>
-            <div>
-              <div class="hub-label">Follow Us</div>
-              <div class="hub-sub">Social links</div>
-            </div>
+            <div><div class="hub-label" id="followLabel">Follow Us</div><div class="hub-sub" id="followSub">Social links</div></div>
           </a>
-        </div>
-
-        <!-- Connect list -->
-        <div style="margin-top:18px">
-          <h3 style="margin:0 0 8px 0">What I'm interested in</h3>
-          <div class="connect-list" id="connectList">
-            <div class="connect-item">
-              <input type="checkbox" id="interest1" disabled />
-              <label for="interest1">Receive weekly updates by email</label>
-            </div>
-            <div class="connect-item">
-              <input type="checkbox" id="interest2" disabled />
-              <label for="interest2">Volunteer for children's ministry</label>
-            </div>
-            <div class="connect-item">
-              <input type="checkbox" id="interest3" disabled />
-              <label for="interest3">Join a small group</label>
-            </div>
-            <div class="connect-item">
-              <input type="checkbox" id="interest4" disabled />
-              <label for="interest4">Baptism or membership info</label>
-            </div>
-          </div>
-          <div class="note">
-            Use these as a guide when you fill out the Connect form so we know how to serve you best.
-          </div>
         </div>
       </div>
 
-      <!-- Announcement Card -->
-      <div class="card" id="announcementCard" aria-label="Announcements">
-        <h3 style="margin:0 0 12px 0;">Announcements</h3>
+      <!-- ANNOUNCEMENTS -->
+      <div class="card">
+        <h3 id="announcementsTitle" style="margin:0 0 12px 0;">Announcements</h3>
         <div id="announcementContainer"></div>
+      </div>
+
+      <!-- HOW TO SERVE -->
+      <div class="card">
+        <h3 id="serveTitle" style="margin:0 0 12px 0;">How to Serve</h3>
+        <div class="serve-section">
+          <div class="serve-group">
+            <div class="serve-title">Choir</div>
+            <div class="serve-item">• Singing (Soprano, Alto, Tenor, Bass)</div>
+          </div>
+          <div class="serve-group">
+            <div class="serve-title">Band</div>
+            <div class="serve-item">• Acoustic Guitar</div>
+            <div class="serve-item">• Electric Guitar</div>
+            <div class="serve-item">• Bass Guitar</div>
+            <div class="serve-item">• Drums</div>
+            <div class="serve-item">• Tam‑Tam / Percussion</div>
+          </div>
+          <div class="serve-group">
+            <div class="serve-title">Production Team</div>
+            <div class="serve-item">• Sound Engineer</div>
+            <div class="serve-item">• Video Switcher</div>
+            <div class="serve-item">• Slide Operator</div>
+            <div class="serve-item">• Camera Operator</div>
+          </div>
+          <div class="serve-group">
+            <div class="serve-title">Creative & Media</div>
+            <div class="serve-item">• Photography</div>
+            <div class="serve-item">• Social Media</div>
+            <div class="serve-item">• Graphic Support</div>
+          </div>
+          <div class="serve-group">
+            <div class="serve-title">Kids Ministry</div>
+            <div class="serve-item">• Classroom Helper</div>
+            <div class="serve-item">• Check‑In Support</div>
+          </div>
+          <div class="serve-group">
+            <div class="serve-title">Guest Experience</div>
+            <div class="serve-item">• Usher / Greeter</div>
+            <div class="serve-item">• Welcome Team</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    const ANNOUNCEMENT_JSON_URL = '/announcement.json'; // adjust if needed
+    // Toggle this to hide/show the language switcher
+    const ENABLE_LANGUAGE_SWITCHER = true;
 
-    function isExpired(expireDateStr) {
-      if (!expireDateStr) return false;
-      const now = new Date();
-      const expire = new Date(expireDateStr + 'T23:59:59');
-      return now > expire;
+    // Translations (English + French)
+    const translations = {
+      en: {
+        hub_title: "CMR Hub",
+        hub_sub: "One place for everything happening at CMR.",
+        give: "Give",
+        give_sub: "Support online",
+        sermons: "Sermons",
+        sermons_sub: "Watch on YouTube",
+        listen: "Listen",
+        listen_sub: "Audio highlights",
+        connect: "Connect",
+        connect_sub: "Fill out the form",
+        visit: "Visit Website",
+        visit_sub: "More info online",
+        follow: "Follow Us",
+        follow_sub: "Social links",
+        announcements: "Announcements",
+        how_to_serve: "How to Serve"
+      },
+      fr: {
+        hub_title: "Centre Missionnaire la Restauration",
+        hub_sub: "Un endroit pour tout ce qui se passe au CMR.",
+        give: "Donner",
+        give_sub: "Soutenir en ligne",
+        sermons: "Sermons",
+        sermons_sub: "Regarder sur YouTube",
+        listen: "Écouter",
+        listen_sub: "Extraits audio",
+        connect: "Connexion",
+        connect_sub: "Remplir le formulaire",
+        visit: "Visiter le site",
+        visit_sub: "Plus d'informations en ligne",
+        follow: "Suivez-nous",
+        follow_sub: "Liens sociaux",
+        announcements: "Annonces",
+        how_to_serve: "Comment Servir"
+      }
+    };
+
+    // Language utilities
+    function getSavedLang(){ return localStorage.getItem('cmr_lang') || 'en'; }
+    function saveLang(lang){ localStorage.setItem('cmr_lang', lang); applyTranslations(lang); }
+    function applyTranslations(lang){
+      const t = translations[lang] || translations.en;
+      document.getElementById('hubTitle').textContent = t.hub_title;
+      document.getElementById('hubSubtitle').textContent = t.hub_sub;
+      document.getElementById('giveLabel').textContent = t.give;
+      document.getElementById('giveSub').textContent = t.give_sub;
+      document.getElementById('sermonsLabel').textContent = t.sermons;
+      document.getElementById('sermonsSub').textContent = t.sermons_sub;
+      document.getElementById('listenLabel').textContent = t.listen;
+      document.getElementById('listenSub').textContent = t.listen_sub;
+      document.getElementById('connectLabel').textContent = t.connect;
+      document.getElementById('connectSub').textContent = t.connect_sub;
+      document.getElementById('visitLabel').textContent = t.visit;
+      document.getElementById('visitSub').textContent = t.visit_sub;
+      document.getElementById('followLabel').textContent = t.follow;
+      document.getElementById('followSub').textContent = t.follow_sub;
+      document.getElementById('announcementsTitle').textContent = t.announcements;
+      document.getElementById('serveTitle').textContent = t.how_to_serve;
     }
 
-    function renderAnnouncements(containerId, announcements) {
+    // Language switcher UI
+    function createLangSwitcher(){
+      if(!ENABLE_LANGUAGE_SWITCHER) return;
+      const wrap = document.createElement('div');
+      wrap.className = 'lang-switcher';
+      const enBtn = document.createElement('button');
+      enBtn.className = 'lang-btn';
+      enBtn.textContent = 'EN';
+      enBtn.onclick = () => saveLang('en');
+      const frBtn = document.createElement('button');
+      frBtn.className = 'lang-btn';
+      frBtn.textContent = 'FR';
+      frBtn.onclick = () => saveLang('fr');
+      wrap.appendChild(enBtn);
+      wrap.appendChild(frBtn);
+      document.body.appendChild(wrap);
+    }
+
+    // Announcements loader (reads /announcement.json)
+    const ANNOUNCEMENT_JSON_URL = '/announcement.json';
+    function isExpired(expireDateStr){ if(!expireDateStr) return false; const now = new Date(); const expire = new Date(expireDateStr + 'T23:59:59'); return now > expire; }
+    function renderAnnouncements(containerId, announcements){
       const container = document.getElementById(containerId);
       container.innerHTML = '';
-
       const active = (announcements || []).filter(a => a.enabled && !isExpired(a.expireDate));
-
-      if (!active.length) {
+      if(!active.length){
         const placeholder = document.createElement('div');
         placeholder.className = 'announcement-placeholder';
         placeholder.textContent = 'No current announcements';
         container.appendChild(placeholder);
         return;
       }
-
       const list = document.createElement('div');
       list.className = 'announcement-list';
-
       active.forEach(data => {
-        const ann = document.createElement('div');
-        ann.className = 'announcement';
-
-        const meta = document.createElement('div');
-        meta.className = 'meta-row';
-        const dateSpan = document.createElement('div');
-        dateSpan.className = 'small-muted';
-        dateSpan.textContent = data.date || new Date().toLocaleDateString();
-        const typeSpan = document.createElement('div');
-        typeSpan.className = 'small-muted';
-        typeSpan.textContent = (data.type || 'announcement').toUpperCase();
-        meta.appendChild(dateSpan);
-        meta.appendChild(typeSpan);
-        ann.appendChild(meta);
-
-        if (data.thumbnail) {
-          const img = document.createElement('img');
-          img.className = 'thumb';
-          img.src = data.thumbnail;
-          img.alt = data.title || 'Announcement image';
-          ann.appendChild(img);
-        }
-
-        const title = document.createElement('h3');
-        title.className = 'announce-title';
-        title.textContent = data.title || 'Announcement';
-        ann.appendChild(title);
-
-        const themeRow = document.createElement('div');
-        themeRow.className = 'meta-row';
-        const theme = document.createElement('div');
-        theme.className = 'announce-theme';
-        theme.textContent = data.theme ? `Theme: ${data.theme}` : '';
-        const pastor = document.createElement('div');
-        pastor.className = 'announce-theme';
-        pastor.textContent = data.pastor ? `Pastor: ${data.pastor}` : '';
-        themeRow.appendChild(theme);
-        themeRow.appendChild(pastor);
-        ann.appendChild(themeRow);
-
-        if (data.description) {
-          const desc = document.createElement('div');
-          desc.className = 'announce-desc';
-          desc.textContent = data.description;
-          ann.appendChild(desc);
-        }
-
-        if (data.extra && (data.extra.location || data.extra.time)) {
-          const info = document.createElement('div');
-          info.className = 'small-muted';
-          info.textContent = `${data.extra.location ? data.extra.location + ' • ' : ''}${data.extra.time ? data.extra.time : ''}`.trim();
-          ann.appendChild(info);
-        }
-
-        if (data.extra && data.extra.funeralInfo && data.extra.funeralInfo.enabled) {
-          const funeral = document.createElement('div');
-          funeral.style.marginTop = '8px';
-          funeral.innerHTML = `<strong>Funeral Info</strong><div class="small-muted">${data.extra.funeralInfo.details}</div>`;
-          ann.appendChild(funeral);
-        }
-
-        const ctaRow = document.createElement('div');
-        ctaRow.className = 'cta-row';
-        const learn = document.createElement('a');
-        learn.className = 'btn btn-primary';
-        learn.href = data.learnMoreUrl || 'https://example.com/events';
-        learn.target = '_blank';
-        learn.rel = 'noopener';
-        learn.textContent = 'Learn more';
-        ctaRow.appendChild(learn);
-        ann.appendChild(ctaRow);
-
+        const ann = document.createElement('div'); ann.className = 'announcement';
+        const meta = document.createElement('div'); meta.className = 'meta-row';
+        const dateSpan = document.createElement('div'); dateSpan.className = 'small-muted'; dateSpan.textContent = data.date || new Date().toLocaleDateString();
+        const typeSpan = document.createElement('div'); typeSpan.className = 'small-muted'; typeSpan.textContent = (data.type || 'announcement').toUpperCase();
+        meta.appendChild(dateSpan); meta.appendChild(typeSpan); ann.appendChild(meta);
+        if(data.thumbnail){ const img = document.createElement('img'); img.className = 'thumb'; img.src = data.thumbnail; img.alt = data.title || 'Announcement image'; ann.appendChild(img); }
+        const title = document.createElement('h3'); title.className = 'announce-title'; title.textContent = data.title || 'Announcement'; ann.appendChild(title);
+        if(data.description){ const desc = document.createElement('div'); desc.className = 'announce-desc'; desc.textContent = data.description; ann.appendChild(desc); }
+        if(data.extra && (data.extra.location || data.extra.time)){ const info = document.createElement('div'); info.className = 'small-muted'; info.textContent = `${data.extra.location ? data.extra.location + ' • ' : ''}${data.extra.time ? data.extra.time : ''}`.trim(); ann.appendChild(info); }
+        const ctaRow = document.createElement('div'); ctaRow.className = 'cta-row';
+        const learn = document.createElement('a'); learn.className = 'btn btn-primary'; learn.href = data.learnMoreUrl || 'https://example.com/events'; learn.target = '_blank'; learn.rel = 'noopener'; learn.textContent = 'Learn more';
+        ctaRow.appendChild(learn); ann.appendChild(ctaRow);
         list.appendChild(ann);
       });
-
       container.appendChild(list);
     }
-
-    async function loadAndRenderAnnouncements() {
-      try {
+    async function loadAndRenderAnnouncements(){
+      try{
         const res = await fetch(ANNOUNCEMENT_JSON_URL, { cache: 'no-store' });
-        if (!res.ok) throw new Error('Announcement not found');
+        if(!res.ok) throw new Error('Announcement not found');
         const data = await res.json();
         renderAnnouncements('announcementContainer', Array.isArray(data) ? data : [data]);
-      } catch (e) {
+      }catch(e){
         console.warn('Failed to load announcement.json', e);
         renderAnnouncements('announcementContainer', []);
       }
@@ -426,6 +281,8 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       feather.replace();
+      createLangSwitcher();
+      applyTranslations(getSavedLang());
       loadAndRenderAnnouncements();
       setInterval(loadAndRenderAnnouncements, 5 * 60 * 1000);
     });
