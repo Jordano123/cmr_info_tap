@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>CMR Hub</title>
 
-  <!-- Base styles (existing) -->
+  <!-- Base styles (keeps layout and spacing) -->
   <style>
     :root{
       --accent:#2b6cb0;
@@ -18,30 +18,46 @@
       --container-padding:20px;
       font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
-    /* Safety and box sizing */
     html, body { max-width:100%; overflow-x:hidden; box-sizing:border-box; }
     *, *::before, *::after { box-sizing:inherit; }
     img, video { max-width:100%; height:auto; display:block; }
 
     body{ margin:0; background:var(--page-bg); color:#111827; padding:30px; display:flex; justify-content:center; }
     .wrap{ width:100%; max-width:var(--max-width); padding:var(--container-padding); box-sizing:border-box; position:relative; }
-    .lang-switcher{ position:fixed; top:18px; right:18px; z-index:1200; display:flex; gap:8px; align-items:center; }
-    .lang-btn{ background:#fff; border:1px solid #e6eef9; padding:8px 10px; border-radius:8px; cursor:pointer; font-weight:600; color:#111827; }
-    .layout{ display:grid; grid-template-columns:1fr; gap:var(--gap); align-items:start; }
-    @media(min-width:900px){ .layout{ grid-template-columns: 1fr 380px; } }
-    .card{ background:var(--card-bg); border-radius:var(--radius); padding:20px; box-shadow:0 6px 18px rgba(15,23,42,0.06); }
+
+    /* Layout: left column + right column stacked */
+    .layout-fixed{
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:18px;
+      align-items:start;
+      width:100%;
+      margin:0 auto;
+    }
+    .left-col{ display:flex; flex-direction:column; gap:18px; }
+    .right-col{ display:flex; flex-direction:column; gap:16px; }
+
+    @media (max-width:980px){
+      .layout-fixed{ grid-template-columns: 1fr; }
+      .right-col{ order:2; }
+      .left-col{ order:1; }
+    }
+
+    .card{ background:var(--card-bg); border-radius:var(--radius); padding:20px; box-shadow:0 6px 18px rgba(15,23,42,0.06); border:1px solid rgba(15,23,42,0.04); }
     .hub-header{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
     .hub-logo{ width:32px; height:32px; border-radius:8px; background:#111827; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:16px; }
     .hub-title{ font-size:20px; font-weight:700; margin:0; }
     .hub-subtitle{ font-size:13px; color:var(--muted); margin:0; }
+
     .hub-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
     @media(max-width:640px){ .hub-grid{ grid-template-columns:repeat(2,1fr); } }
+
     .hub-button{ background:#f8fafc; border-radius:10px; padding:14px; display:flex; gap:12px; align-items:center; cursor:pointer; border:1px solid transparent; transition:all .12s ease; text-decoration:none; color:inherit; }
     .hub-button:hover{ transform:translateY(-2px); box-shadow:0 6px 18px rgba(15,23,42,0.04); }
     .hub-icon{ width:44px; height:44px; border-radius:8px; background:linear-gradient(135deg,var(--accent),#4c9bd6); display:flex; align-items:center; justify-content:center; color:white; }
-    .hub-icon svg{ width:22px; height:22px; stroke-width:2.2; }
     .hub-label{ font-weight:600; font-size:15px; }
     .hub-sub{ font-size:13px; color:var(--muted); }
+
     .announcement-list{ display:flex; flex-direction:column; gap:16px; }
     .announcement{ display:flex; flex-direction:column; gap:12px; border-radius:10px; padding:14px; background:#f9fafb; border:1px solid #e5e7eb; }
     .announcement .thumb{ width:100%; height:160px; border-radius:8px; object-fit:cover; background:#e6eef9; }
@@ -52,24 +68,34 @@
     .cta-row{ display:flex; gap:10px; margin-top:8px; }
     .btn{ padding:10px 12px; border-radius:8px; border:1px solid transparent; cursor:pointer; font-weight:600; font-size:14px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
     .btn-primary{ background:var(--accent); color:white; }
-    .announcement-placeholder{ display:flex; align-items:center; justify-content:center; min-height:120px; color:var(--muted); font-size:14px; text-align:center; padding:18px; }
-    .serve-section{ display:flex; flex-direction:column; gap:14px; }
+
+    .serve-section{ display:flex; flex-direction:column; gap:12px; }
     .serve-group{ display:flex; flex-direction:column; gap:4px; }
     .serve-title{ font-weight:700; font-size:15px; margin:0; }
     .serve-item{ font-size:14px; color:#111827; margin-left:8px; }
+
+    /* Serve card custom class for brand styling (kept minimal here; cmr-brand.css will enhance) */
+    .serve-card { border-radius:12px; padding:18px; display:flex; flex-direction:column; gap:10px; }
+    .serve-card .serve-header { display:flex; align-items:center; gap:10px; }
+    .serve-card .serve-badge { width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; }
+
+    /* small responsive tweaks */
+    @media (max-width:420px){
+      .wrap{ padding:12px; }
+      .card{ padding:14px; }
+    }
   </style>
 
-  <!-- Brand stylesheet (place after base styles so brand rules override defaults) -->
+  <!-- Brand stylesheet (after base styles) -->
   <link rel="stylesheet" href="cmr-brand.css">
 
   <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <body>
   <div class="wrap" id="pageWrap">
-    <!-- New grid: left column + stacked right column -->
-    <div class="layout-fixed" id="mainLayout" style="width:100%; display:grid; grid-template-columns:1fr 360px; gap:18px; align-items:start;">
-      <!-- Left column -->
-      <div class="left-col" style="display:flex; flex-direction:column; gap:18px;">
+    <div class="layout-fixed" id="mainLayout">
+      <!-- LEFT COLUMN: Hub + How to Serve (moved under Hub) -->
+      <div class="left-col">
         <!-- CMR HUB CARD -->
         <div class="card" id="hubCard" aria-label="CMR Hub">
           <div class="hub-header">
@@ -112,24 +138,23 @@
             </a>
           </div>
         </div>
-      </div>
 
-      <!-- Right column (stacked) -->
-      <aside class="right-col" aria-label="Right column" style="display:flex; flex-direction:column; gap:16px;">
-        <!-- ANNOUNCEMENTS (accented) -->
-        <div class="card" id="announcementsCard" data-accent="true">
-          <h3 id="announcementsTitle" style="margin:0 0 12px 0;">Announcements</h3>
-          <div id="announcementContainer"></div>
-        </div>
+        <!-- HOW TO SERVE (moved under Hub, styled with brand) -->
+        <div class="card serve-card" id="serveCard" data-accent="true" aria-label="How to Serve">
+          <div class="serve-header">
+            <div class="serve-badge" style="background:linear-gradient(90deg,#73b3cf,#4c9bd6);">CMR</div>
+            <div>
+              <div style="font-weight:700; font-size:16px;">How to Serve</div>
+              <div class="small-muted" style="font-size:13px;">Join a team that fits your gifts</div>
+            </div>
+          </div>
 
-        <!-- HOW TO SERVE -->
-        <div class="card" id="serveCard">
-          <h3 id="serveTitle" style="margin:0 0 12px 0;">How to Serve</h3>
-          <div class="serve-section">
+          <div class="serve-section" aria-hidden="false">
             <div class="serve-group">
               <div class="serve-title">Choir</div>
               <div class="serve-item">• Singing (Soprano, Alto, Tenor, Bass)</div>
             </div>
+
             <div class="serve-group">
               <div class="serve-title">Band</div>
               <div class="serve-item">• Acoustic Guitar</div>
@@ -138,6 +163,7 @@
               <div class="serve-item">• Drums</div>
               <div class="serve-item">• Tam‑Tam / Percussion</div>
             </div>
+
             <div class="serve-group">
               <div class="serve-title">Production Team</div>
               <div class="serve-item">• Sound Engineer</div>
@@ -145,17 +171,20 @@
               <div class="serve-item">• Slide Operator</div>
               <div class="serve-item">• Camera Operator</div>
             </div>
+
             <div class="serve-group">
               <div class="serve-title">Creative & Media</div>
               <div class="serve-item">• Photography</div>
               <div class="serve-item">• Social Media</div>
               <div class="serve-item">• Graphic Support</div>
             </div>
+
             <div class="serve-group">
               <div class="serve-title">Kids Ministry</div>
               <div class="serve-item">• Classroom Helper</div>
               <div class="serve-item">• Check‑In Support</div>
             </div>
+
             <div class="serve-group">
               <div class="serve-title">Guest Experience</div>
               <div class="serve-item">• Usher / Greeter</div>
@@ -163,177 +192,203 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Announcements (slot 1 and optional slot 2) -->
+      <aside class="right-col" aria-label="Right column">
+        <!-- Primary announcement slot -->
+        <div class="card" id="announcementsCard" aria-live="polite" data-accent="true">
+          <h3 id="announcementsTitle" style="margin:0 0 12px 0;">Announcements</h3>
+          <div id="announcementContainer"></div>
+        </div>
+
+        <!-- Secondary announcement slot (toggleable) -->
+        <div class="card" id="announcementsCard2" aria-live="polite" style="display:none;">
+          <h3 style="margin:0 0 12px 0;">More Announcements</h3>
+          <div id="announcementContainer2"></div>
+        </div>
       </aside>
     </div>
   </div>
 
   <script>
-    // Toggle this to hide/show the language switcher
-    const ENABLE_LANGUAGE_SWITCHER = true;
+    // ---------- CONFIGURATION ----------
+    // Manual control flags:
+    // SHOW_ANNOUNCEMENTS: true = force show; false = force hide; null = auto (based on data)
+    // SHOW_SECOND_ANNOUNCEMENT: true = force show; false = force hide; null = auto (show only when 2+ active)
+    const SHOW_ANNOUNCEMENTS = null;
+    const SHOW_SECOND_ANNOUNCEMENT = null;
 
-    // Translations (English + French)
+    // Announcement JSON URL (can include showAnnouncements flag and items array)
+    const ANNOUNCEMENT_JSON_URL = '/announcement.json';
+
+    // ---------- TRANSLATIONS (keeps language switcher working) ----------
     const translations = {
-      en: {
-        hub_title: "CMR Hub",
-        hub_sub: "One place for everything happening at CMR.",
-        give: "Give",
-        give_sub: "Support online",
-        sermons: "Sermons",
-        sermons_sub: "Watch on YouTube",
-        listen: "Listen",
-        listen_sub: "Audio highlights",
-        connect: "Connect",
-        connect_sub: "Fill out the form",
-        visit: "Visit Website",
-        visit_sub: "More info online",
-        follow: "Follow Us",
-        follow_sub: "Social links",
-        announcements: "Announcements",
-        how_to_serve: "How to Serve",
-        learn_more: "Learn more",
-        no_announcements: "No current announcements"
-      },
-      fr: {
-        hub_title: "Centre Missionnaire la Restauration",
-        hub_sub: "Un endroit pour tout ce qui se passe au CMR.",
-        give: "Donner",
-        give_sub: "Soutenir en ligne",
-        sermons: "Sermons",
-        sermons_sub: "Regarder sur YouTube",
-        listen: "Écouter",
-        listen_sub: "Extraits audio",
-        connect: "Connexion",
-        connect_sub: "Remplir le formulaire",
-        visit: "Visiter le site",
-        visit_sub: "Plus d'informations en ligne",
-        follow: "Suivez-nous",
-        follow_sub: "Liens sociaux",
-        announcements: "Annonces",
-        how_to_serve: "Comment Servir",
-        learn_more: "En savoir plus",
-        no_announcements: "Aucune annonce en cours"
-      }
+      en: { announcements: "Announcements", more_announcements: "More Announcements", learn_more: "Learn more", no_announcements: "No current announcements" },
+      fr: { announcements: "Annonces", more_announcements: "Plus d'annonces", learn_more: "En savoir plus", no_announcements: "Aucune annonce en cours" }
     };
-
-    // Language utilities
     function getSavedLang(){ return localStorage.getItem('cmr_lang') || 'en'; }
-    function saveLang(lang){ localStorage.setItem('cmr_lang', lang); applyTranslations(lang); }
-    function applyTranslations(lang){
-      const t = translations[lang] || translations.en;
-      document.getElementById('hubTitle').textContent = t.hub_title;
-      document.getElementById('hubSubtitle').textContent = t.hub_sub;
-      document.getElementById('giveLabel').textContent = t.give;
-      document.getElementById('giveSub').textContent = t.give_sub;
-      document.getElementById('sermonsLabel').textContent = t.sermons;
-      document.getElementById('sermonsSub').textContent = t.sermons_sub;
-      document.getElementById('listenLabel').textContent = t.listen;
-      document.getElementById('listenSub').textContent = t.listen_sub;
-      document.getElementById('connectLabel').textContent = t.connect;
-      document.getElementById('connectSub').textContent = t.connect_sub;
-      document.getElementById('visitLabel').textContent = t.visit;
-      document.getElementById('visitSub').textContent = t.visit_sub;
-      document.getElementById('followLabel').textContent = t.follow;
-      document.getElementById('followSub').textContent = t.follow_sub;
-      document.getElementById('announcementsTitle').textContent = t.announcements;
-      document.getElementById('serveTitle').textContent = t.how_to_serve;
-    }
 
-    // Language switcher UI
+    // ---------- LANGUAGE SWITCHER (existing) ----------
+    const ENABLE_LANGUAGE_SWITCHER = true;
     function createLangSwitcher(){
       if(!ENABLE_LANGUAGE_SWITCHER) return;
       const wrap = document.createElement('div');
       wrap.className = 'lang-switcher';
-      const enBtn = document.createElement('button');
-      enBtn.className = 'lang-btn';
-      enBtn.textContent = 'EN';
-      enBtn.onclick = () => saveLang('en');
-      const frBtn = document.createElement('button');
-      frBtn.className = 'lang-btn';
-      frBtn.textContent = 'FR';
-      frBtn.onclick = () => saveLang('fr');
-      wrap.appendChild(enBtn);
-      wrap.appendChild(frBtn);
-      document.body.appendChild(wrap);
+      const enBtn = document.createElement('button'); enBtn.className = 'lang-btn'; enBtn.textContent = 'EN'; enBtn.onclick = () => { localStorage.setItem('cmr_lang','en'); applyTranslations(); renderAnnouncementsFromData(lastAnnouncementData); };
+      const frBtn = document.createElement('button'); frBtn.className = 'lang-btn'; frBtn.textContent = 'FR'; frBtn.onclick = () => { localStorage.setItem('cmr_lang','fr'); applyTranslations(); renderAnnouncementsFromData(lastAnnouncementData); };
+      wrap.appendChild(enBtn); wrap.appendChild(frBtn); document.body.appendChild(wrap);
+    }
+    function applyTranslations(){
+      const lang = getSavedLang();
+      const t = translations[lang] || translations.en;
+      document.getElementById('announcementsTitle').textContent = t.announcements;
+      document.querySelector('#announcementsCard2 h3')?.textContent = t.more_announcements;
     }
 
-    // Announcements loader (reads /announcement.json)
-    const ANNOUNCEMENT_JSON_URL = '/announcement.json';
+    // ---------- ANNOUNCEMENT RENDERING & TOGGLE LOGIC ----------
+    let lastAnnouncementData = null;
+
     function isExpired(expireDateStr){ if(!expireDateStr) return false; const now = new Date(); const expire = new Date(expireDateStr + 'T23:59:59'); return now > expire; }
 
-    function renderAnnouncements(containerId, announcements){
-      const container = document.getElementById(containerId);
-      container.innerHTML = '';
-      const lang = getSavedLang();
-      const active = (announcements || []).filter(a => a.enabled && !isExpired(a.expireDate));
-      if(!active.length){
-        const placeholder = document.createElement('div');
-        placeholder.className = 'announcement-placeholder';
-        placeholder.textContent = translations[lang].no_announcements;
-        container.appendChild(placeholder);
-        return;
+    // Render a single announcement into a container element
+    function renderSingleAnnouncement(containerEl, data, lang){
+      if(!containerEl) return;
+      containerEl.innerHTML = ''; // clear
+      const wrapper = document.createElement('div'); wrapper.className = 'announcement';
+      const meta = document.createElement('div'); meta.className = 'meta-row';
+      const dateSpan = document.createElement('div'); dateSpan.className = 'small-muted'; dateSpan.textContent = data.date || new Date().toLocaleDateString();
+      const typeSpan = document.createElement('div'); typeSpan.className = 'small-muted'; typeSpan.textContent = (data.type || 'announcement').toUpperCase();
+      meta.appendChild(dateSpan); meta.appendChild(typeSpan); wrapper.appendChild(meta);
+
+      if(data.thumbnail){
+        const img = document.createElement('img'); img.className = 'thumb'; img.src = data.thumbnail; img.alt = data.title || 'Announcement image';
+        wrapper.appendChild(img);
       }
-      const list = document.createElement('div');
-      list.className = 'announcement-list';
-      active.forEach(data => {
-        const ann = document.createElement('div'); ann.className = 'announcement';
 
-        const meta = document.createElement('div'); meta.className = 'meta-row';
-        const dateSpan = document.createElement('div'); dateSpan.className = 'small-muted'; dateSpan.textContent = data.date || new Date().toLocaleDateString();
-        const typeSpan = document.createElement('div'); typeSpan.className = 'small-muted'; typeSpan.textContent = (data.type || 'announcement').toUpperCase();
-        meta.appendChild(dateSpan); meta.appendChild(typeSpan); ann.appendChild(meta);
+      const title = document.createElement('h3'); title.className = 'announce-title';
+      const titleText = (lang === 'fr' && data.title_fr) ? data.title_fr : data.title || '';
+      title.textContent = titleText;
+      wrapper.appendChild(title);
 
-        if(data.thumbnail){
-          const img = document.createElement('img'); img.className = 'thumb'; img.src = data.thumbnail; img.alt = data.title || 'Announcement image';
-          ann.appendChild(img);
-        }
+      const descText = (lang === 'fr' && data.description_fr) ? data.description_fr : data.description || '';
+      if(descText){
+        const desc = document.createElement('div'); desc.className = 'announce-desc'; desc.textContent = descText; wrapper.appendChild(desc);
+      }
 
-        const title = document.createElement('h3'); title.className = 'announce-title';
-        const titleText = (lang === 'fr' && data.title_fr) ? data.title_fr : data.title || 'Announcement';
-        title.textContent = titleText;
-        ann.appendChild(title);
+      if(data.extra && (data.extra.location || data.extra.time)){
+        const info = document.createElement('div'); info.className = 'small-muted';
+        info.textContent = `${data.extra.location ? data.extra.location + ' • ' : ''}${data.extra.time ? data.extra.time : ''}`.trim();
+        wrapper.appendChild(info);
+      }
 
-        if(data.description || data.description_fr){
-          const desc = document.createElement('div'); desc.className = 'announce-desc';
-          const descText = (lang === 'fr' && data.description_fr) ? data.description_fr : data.description || '';
-          desc.textContent = descText;
-          ann.appendChild(desc);
-        }
+      const ctaRow = document.createElement('div'); ctaRow.className = 'cta-row';
+      const learn = document.createElement('a'); learn.className = 'btn btn-primary'; learn.href = data.learnMoreUrl || '#'; learn.target = '_blank'; learn.rel = 'noopener';
+      learn.textContent = translations[lang].learn_more;
+      ctaRow.appendChild(learn); wrapper.appendChild(ctaRow);
 
-        if(data.extra && (data.extra.location || data.extra.time)){
-          const info = document.createElement('div'); info.className = 'small-muted';
-          info.textContent = `${data.extra.location ? data.extra.location + ' • ' : ''}${data.extra.time ? data.extra.time : ''}`.trim();
-          ann.appendChild(info);
-        }
-
-        const ctaRow = document.createElement('div'); ctaRow.className = 'cta-row';
-        const learn = document.createElement('a'); learn.className = 'btn btn-primary';
-        learn.href = data.learnMoreUrl || 'https://example.com/events';
-        learn.target = '_blank'; learn.rel = 'noopener';
-        learn.textContent = translations[lang].learn_more;
-        ctaRow.appendChild(learn); ann.appendChild(ctaRow);
-
-        list.appendChild(ann);
-      });
-      container.appendChild(list);
+      containerEl.appendChild(wrapper);
     }
 
+    // Main renderer that decides visibility of slots
+    function renderAnnouncementsFromData(rawData){
+      lastAnnouncementData = rawData;
+      const lang = getSavedLang();
+      // Support two shapes:
+      // 1) { showAnnouncements: false, items: [...] }
+      // 2) [ {enabled:true, ...}, ... ]
+      let showAnnouncementsFlag = undefined;
+      let items = [];
+
+      if(!rawData){
+        items = [];
+      } else if(Array.isArray(rawData)){
+        items = rawData;
+      } else if(typeof rawData === 'object'){
+        if(Array.isArray(rawData.items)) items = rawData.items;
+        if(rawData.showAnnouncements === false) showAnnouncementsFlag = false;
+        if(rawData.showAnnouncements === true) showAnnouncementsFlag = true;
+      }
+
+      // filter active announcements
+      const active = (items || []).filter(a => a.enabled !== false && !isExpired(a.expireDate));
+
+      // Decide visibility for primary and secondary
+      const primaryCard = document.getElementById('announcementsCard');
+      const secondaryCard = document.getElementById('announcementsCard2');
+
+      // If admin JSON explicitly disables announcements, hide both
+      if (showAnnouncementsFlag === false) {
+        if(primaryCard) primaryCard.style.display = 'none';
+        if(secondaryCard) secondaryCard.style.display = 'none';
+        return;
+      }
+
+      // Manual override flags take precedence
+      if (SHOW_ANNOUNCEMENTS === false) {
+        if(primaryCard) primaryCard.style.display = 'none';
+      } else if (SHOW_ANNOUNCEMENTS === true) {
+        if(primaryCard) primaryCard.style.display = '';
+      } else {
+        // auto: hide primary if no active items
+        if(primaryCard) primaryCard.style.display = (active.length > 0) ? '' : 'none';
+      }
+
+      if (secondaryCard) {
+        if (SHOW_SECOND_ANNOUNCEMENT === true) {
+          secondaryCard.style.display = '';
+        } else if (SHOW_SECOND_ANNOUNCEMENT === false) {
+          secondaryCard.style.display = 'none';
+        } else {
+          // auto: show secondary only when there are 2+ active items
+          secondaryCard.style.display = (active.length >= 2) ? '' : 'none';
+        }
+      }
+
+      // Populate slots: first active -> primary, second active -> secondary
+      const primaryContainer = document.getElementById('announcementContainer');
+      const secondaryContainer = document.getElementById('announcementContainer2');
+      if(primaryContainer) primaryContainer.innerHTML = '';
+      if(secondaryContainer) secondaryContainer.innerHTML = '';
+
+      if(active[0] && primaryContainer) renderSingleAnnouncement(primaryContainer, active[0], lang);
+      if(active[1] && secondaryContainer) renderSingleAnnouncement(secondaryContainer, active[1], lang);
+
+      // If there are more than 2 active items, you can choose to show them inside primary or provide a link to "All announcements"
+      if(active.length > 2 && primaryContainer){
+        const more = document.createElement('div'); more.className = 'small-muted'; more.style.marginTop = '8px';
+        more.textContent = `${active.length - 2} more announcement(s) available.`;
+        primaryContainer.appendChild(more);
+      }
+
+      // If no active and no manual show, show placeholder in primary (if visible)
+      if(active.length === 0 && primaryCard && primaryCard.style.display !== 'none' && primaryContainer){
+        const placeholder = document.createElement('div'); placeholder.className = 'announcement-placeholder';
+        placeholder.textContent = translations[lang].no_announcements;
+        primaryContainer.appendChild(placeholder);
+      }
+    }
+
+    // Fetch announcement.json and render
     async function loadAndRenderAnnouncements(){
       try{
         const res = await fetch(ANNOUNCEMENT_JSON_URL, { cache: 'no-store' });
         if(!res.ok) throw new Error('Announcement not found');
         const data = await res.json();
-        renderAnnouncements('announcementContainer', Array.isArray(data) ? data : [data]);
+        renderAnnouncementsFromData(data);
       }catch(e){
         console.warn('Failed to load announcement.json', e);
-        renderAnnouncements('announcementContainer', []);
+        renderAnnouncementsFromData(null);
       }
     }
 
+    // ---------- INIT ----------
     document.addEventListener('DOMContentLoaded', () => {
       feather.replace();
       createLangSwitcher();
-      applyTranslations(getSavedLang());
+      applyTranslations();
       loadAndRenderAnnouncements();
+      // refresh periodically
       setInterval(loadAndRenderAnnouncements, 5 * 60 * 1000);
     });
   </script>
