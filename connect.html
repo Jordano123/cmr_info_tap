@@ -2,342 +2,111 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Connect — Centre Missionnaire La Restauration</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="color-scheme" content="light">
-  <meta name="theme-color" content="#ffffff">
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
+  <title>Connect — CMR</title>
   <style>
     :root{
-      --page-padding:20px;
-      --bg:#f3f4f6;
-      --card:#ffffff;
-      --muted:#6b7280;
-      --accent:#0b1220;
-      --accent-2:#d4a017;
-      --radius:16px;
-      --shadow:0 18px 48px rgba(16,24,40,0.08);
-      --max-width:1100px;
+      --accent:#2b6cb0; --muted:#6b7280; --card-bg:#ffffff; --page-bg:#f3f4f6; --radius:10px; --max-width:900px; --pad:20px;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
-
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      padding: calc(var(--page-padding) + env(safe-area-inset-top)) calc(var(--page-padding) + env(safe-area-inset-right)) calc(var(--page-padding) + env(safe-area-inset-bottom)) calc(var(--page-padding) + env(safe-area-inset-left));
-      background:var(--bg);
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-      color:#0b1220;
-      display:flex;
-      justify-content:center;
-      align-items:flex-start;
+    body{ margin:0; background:var(--page-bg); color:#111827; display:flex; justify-content:center; padding:28px; }
+    .wrap{ width:100%; max-width:var(--max-width); }
+    .card{ background:var(--card-bg); border-radius:var(--radius); padding:var(--pad); box-shadow:0 6px 18px rgba(15,23,42,0.06); }
+    .header{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+    .logo{ width:36px; height:36px; border-radius:8px; background:#111827; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; }
+    h1{ margin:0; font-size:20px; }
+    p.sub{ margin:6px 0 18px 0; color:var(--muted); }
+    form{ display:grid; grid-template-columns:1fr; gap:12px; }
+    @media(min-width:760px){ form{ grid-template-columns:1fr 1fr; } .full{ grid-column:1 / -1; } }
+    label{ font-size:13px; color:var(--muted); display:block; margin-bottom:6px; }
+    input[type="text"], input[type="email"], input[type="tel"], textarea, select{
+      width:100%; padding:10px 12px; border-radius:8px; border:1px solid #e6eef9; font-size:14px; box-sizing:border-box;
     }
-
-    .wrap{
-      width:100%;
-      max-width:var(--max-width);
-      background:var(--card);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:28px;
-      overflow:visible;
-      margin-top:12px;
-    }
-
-    header{
-      display:flex;
-      gap:18px;
-      align-items:center;
-      margin-bottom:18px;
-      flex-wrap:wrap;
-    }
-
-    .logo-wrap{
-      width: clamp(64px, 10vw, 120px);
-      border-radius:14px;
-      padding:8px;
-      background:linear-gradient(180deg,#fff,#fbfbff);
-      box-shadow:0 8px 24px rgba(16,24,40,0.06);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex-shrink:0;
-    }
-    .logo-wrap img{ width:70%; height:auto; display:block; }
-
-    .brand{
-      display:flex;
-      flex-direction:column;
-      min-width:0;
-    }
-    .brand .name{ font-weight:700; font-size:1.05rem; line-height:1; }
-    .brand .tag{ color:var(--muted); font-size:0.92rem; margin-top:4px; }
-
-    .lang-toggle{ margin-left:auto; display:flex; gap:8px; align-items:center; }
-    .lang-toggle button{
-      border:0; background:#f3f4f6; padding:8px 10px; border-radius:10px; font-weight:700; cursor:pointer;
-    }
-    .lang-toggle button.active{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; box-shadow:0 8px 20px rgba(16,24,40,0.08); }
-
-    /* Main layout: single column but card stretches horizontally on wide screens */
-    .hero{
-      margin-bottom:18px;
-    }
-    .hero h1{ margin:0; font-size:clamp(1.4rem,2.6vw,2rem); }
-    .hero p{ margin:8px 0 0; color:var(--muted); }
-
-    .form-card{
-      background:var(--card);
-      border-radius:12px;
-      padding:18px;
-      border:1px solid #eef0f3;
-      box-shadow:0 8px 24px rgba(16,24,40,0.04);
-      width:100%;
-    }
-
-    form .row{ display:flex; gap:12px; }
-    form .row .col{ flex:1; min-width:0; }
-
-    label{ display:block; font-weight:600; font-size:0.92rem; color:#0b1220; margin-bottom:6px; }
-    input, select, textarea{
-      width:100%;
-      padding:10px 12px;
-      border-radius:10px;
-      border:1px solid #e6e7ea;
-      background:#fff;
-      font-size:0.95rem;
-      color:#0b1220;
-      outline:none;
-      transition:box-shadow .12s ease, border-color .12s ease;
-    }
-    input:focus, textarea:focus, select:focus{ box-shadow:0 8px 28px rgba(11,17,32,0.06); border-color:var(--accent); }
-    textarea{ min-height:110px; resize:vertical; padding-top:12px }
-
-    .checkbox-row{ display:flex; gap:12px; align-items:center; margin-top:6px; flex-wrap:wrap; }
-    .checkbox-row label{ display:flex; align-items:center; gap:8px; font-weight:600; color:#0b1220; }
-
-    .submit{ margin-top:16px; width:100%; padding:12px 14px; border-radius:12px; border:0; color:#fff; font-weight:700; font-size:1rem; cursor:pointer; background:linear-gradient(90deg,var(--accent),var(--accent-2)); box-shadow:0 10px 30px rgba(11,17,32,0.08); }
-
-    .quick-enc{ margin-top:14px; padding-top:12px; border-top:1px dashed #f0f1f4; color:var(--muted); font-size:0.95rem; }
-
-    .socials{ margin-top:12px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
-    .socials a{ display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:10px; background:#fff; border:1px solid #eef0f3; text-decoration:none; color:var(--accent); font-weight:700; }
-
-    /* Serve suboptions box */
-    .serve-box{ margin-top:10px; padding:10px; border-radius:10px; background:#fbfdff; border:1px solid #eef6ff; display:none; }
-
-    /* Responsive */
-    @media (max-width:880px){
-      .row{ flex-direction:column; }
-      .lang-toggle{ margin-left:0; width:100%; justify-content:flex-end; }
-    }
+    textarea{ min-height:120px; resize:vertical; }
+    .actions{ display:flex; gap:10px; align-items:center; margin-top:6px; }
+    .btn{ padding:10px 14px; border-radius:8px; border:0; cursor:pointer; font-weight:700; color:#fff; background:var(--accent); }
+    .btn-ghost{ background:#fff; border:1px solid #e6eef9; color:#111827; font-weight:700; padding:10px 14px; border-radius:8px; }
+    .note{ font-size:13px; color:var(--muted); margin-top:8px; }
+    .back{ text-decoration:none; color:var(--accent); font-weight:700; display:inline-block; margin-bottom:12px; }
   </style>
 </head>
 <body>
-  <main class="wrap" role="main" aria-labelledby="connect-heading">
-    <header>
-      <div class="logo-wrap" aria-hidden="false">
-        <img src="logo.png" srcset="logo@2x.png 2x" alt="CMR Logo">
+  <div class="wrap">
+    <a class="back" href="index.html">← Back to CMR Hub</a>
+    <div class="card" role="main" aria-labelledby="connectHeading">
+      <div class="header">
+        <div class="logo">CMR</div>
+        <div>
+          <h1 id="connectHeading">Connect</h1>
+          <p class="sub">Tell us about yourself so we can serve you better.</p>
+        </div>
       </div>
 
-      <div class="brand">
-        <div class="name">Centre Missionnaire La Restauration</div>
-        <div class="tag">We exist to love God and serve people</div>
-      </div>
+      <!-- Netlify-ready form (replace or adapt action if you use another backend) -->
+      <form name="connect" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="connect" />
+        <p style="display:none"><label>Don’t fill this out: <input name="bot-field" /></label></p>
 
-      <div class="lang-toggle" role="toolbar" aria-label="Language toggle">
-        <button id="btn-en" class="active" aria-pressed="true">EN</button>
-        <button id="btn-fr" aria-pressed="false">FR</button>
-      </div>
-    </header>
-
-    <section class="hero">
-      <h1 id="connect-heading" data-en="Connect With Us" data-fr="Se Connecter Avec Nous">Connect With Us</h1>
-      <p id="lead" data-en="Share a few details and someone from our team will reach out." data-fr="Partagez quelques informations et un membre de notre équipe vous contactera.">Share a few details and someone from our team will reach out.</p>
-    </section>
-
-    <section class="form-card" aria-labelledby="connect-heading">
-      <form id="connect-form" name="connect" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
-        <input type="hidden" name="form-name" value="connect">
-        <input type="hidden" name="bot-field">
-
-        <div class="row">
-          <div class="col">
-            <label for="first_name" data-en="First Name" data-fr="Prénom">First Name</label>
-            <input id="first_name" name="first_name" type="text" required autocomplete="given-name">
-          </div>
-          <div class="col">
-            <label for="last_name" data-en="Last Name" data-fr="Nom">Last Name</label>
-            <input id="last_name" name="last_name" type="text" required autocomplete="family-name">
-          </div>
+        <div>
+          <label for="first">First name</label>
+          <input id="first" name="first" type="text" placeholder="First name" required />
         </div>
 
-        <div class="row" style="margin-top:12px">
-          <div class="col">
-            <label for="phone" data-en="Phone Number" data-fr="Numéro de téléphone">Phone Number</label>
-            <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel">
-          </div>
-          <div class="col">
-            <label for="email" data-en="Email (optional)" data-fr="Email (facultatif)">Email (optional)</label>
-            <input id="email" name="email" type="email" autocomplete="email">
-          </div>
+        <div>
+          <label for="last">Last name</label>
+          <input id="last" name="last" type="text" placeholder="Last name" required />
         </div>
 
-        <div style="margin-top:12px">
-          <label for="address" data-en="Home Address (optional)" data-fr="Adresse (facultatif)">Home Address (optional)</label>
-          <input id="address" name="address" type="text" autocomplete="street-address" placeholder="">
+        <div>
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" required />
         </div>
 
-        <div style="margin-top:12px">
-          <label for="status" data-en="Your Status" data-fr="Votre situation">Your Status</label>
-          <select id="status" name="status" aria-label="Your status">
-            <option value="">—</option>
-            <option value="first_visit" data-en="First Visit" data-fr="Première visite">First Visit</option>
-            <option value="second_visit" data-en="Second Visit" data-fr="Deuxième visite">Second Visit</option>
-            <option value="regular" data-en="Regular Attendee" data-fr="Participant régulier">Regular Attendee</option>
-            <option value="member" data-en="Member" data-fr="Membre">Member</option>
-            <option value="other" data-en="Other" data-fr="Autre">Other</option>
+        <div>
+          <label for="phone">Phone</label>
+          <input id="phone" name="phone" type="tel" placeholder="+1 (555) 555-5555" />
+        </div>
+
+        <div class="full">
+          <label for="address">Address (optional)</label>
+          <input id="address" name="address" type="text" placeholder="Street, City, State" />
+        </div>
+
+        <div>
+          <label for="status">Status</label>
+          <select id="status" name="status">
+            <option value="">Select</option>
+            <option>First visit</option>
+            <option>Second visit</option>
+            <option>Regular</option>
+            <option>Member</option>
           </select>
         </div>
 
-        <div style="margin-top:12px">
-          <label data-en="I am interested in" data-fr="Je suis intéressé par">I am interested in</label>
-          <div class="checkbox-row" role="group" aria-label="Interests">
-            <label><input type="checkbox" name="interest" value="Baptism"> <span class="small" data-en="Baptism" data-fr="Baptême">Baptism</span></label>
-            <label><input id="interest-serving" type="checkbox" name="interest" value="Serving"> <span class="small" data-en="Serving" data-fr="Service">Serving</span></label>
-            <label><input type="checkbox" name="interest" value="Other"> <span class="small" data-en="Other" data-fr="Autre">Other</span></label>
-          </div>
-
-          <!-- Serve suboptions appear only if Serving is checked -->
-          <div id="serve-suboptions" class="serve-box" aria-hidden="true">
-            <div style="font-weight:700; margin-bottom:8px" data-en="If you choose Serving, select a department" data-fr="Si vous choisissez Service, sélectionnez un département">If you choose Serving, select a department</div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-              <label style="display:flex; align-items:center; gap:8px"><input type="checkbox" name="serve_hospitality" value="Hospitality"> Hospitality</label>
-              <label style="display:flex; align-items:center; gap:8px"><input type="checkbox" name="serve_production" value="Production"> Production</label>
-              <label style="display:flex; align-items:center; gap:8px"><input type="checkbox" name="serve_choir" value="Choir"> Choir</label>
-              <label style="display:flex; align-items:center; gap:8px"><input type="checkbox" name="serve_band" value="Band"> Band</label>
-              <label style="display:flex; align-items:center; gap:8px"><input type="checkbox" name="serve_children" value="Children"> Children</label>
-            </div>
+        <div class="full">
+          <label>Interests (check all that apply)</label>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <label style="display:inline-flex;align-items:center;gap:8px;"><input type="checkbox" name="interests" value="Baptism" /> Baptism</label>
+            <label style="display:inline-flex;align-items:center;gap:8px;"><input type="checkbox" name="interests" value="Serving" /> Serving</label>
+            <label style="display:inline-flex;align-items:center;gap:8px;"><input type="checkbox" name="interests" value="Small Groups" /> Small Groups</label>
+            <label style="display:inline-flex;align-items:center;gap:8px;"><input type="checkbox" name="interests" value="Kids Ministry" /> Kids Ministry</label>
+            <label style="display:inline-flex;align-items:center;gap:8px;"><input type="checkbox" name="interests" value="Choir/Band" /> Choir/Band</label>
           </div>
         </div>
 
-        <div style="margin-top:12px">
-          <label for="prayer_request" data-en="Prayer Request / Comments" data-fr="Demande de prière / Commentaires">Prayer Request / Comments</label>
-          <textarea id="prayer_request" name="prayer_request" rows="4" placeholder="" data-en="Share a prayer need or comment" data-fr="Partagez un besoin de prière ou un commentaire">Share a prayer need or comment</textarea>
+        <div class="full">
+          <label for="prayer">Prayer request / Comments</label>
+          <textarea id="prayer" name="prayer" placeholder="How can we pray for you?"></textarea>
         </div>
 
-        <!-- Hidden container for any extra options (kept for compatibility) -->
-        <div id="hidden-fields" style="display:none"></div>
-
-        <button class="submit" type="submit" id="submit-btn" data-en="Submit" data-fr="Envoyer">Submit</button>
-
-        <div class="quick-enc" id="quickEnc" data-en="Quick encouragement: You are welcome here. If you need prayer, a ride, or someone to talk to, we’re here to help." data-fr="Petit encouragement : Vous êtes le bienvenu ici. Si vous avez besoin de prière, d'un trajet ou de quelqu'un à qui parler, nous sommes là pour vous aider.">Quick encouragement: You are welcome here. If you need prayer, a ride, or someone to talk to, we’re here to help.</div>
-
-        <div class="socials" aria-label="Follow us">
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
-          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">YouTube</a>
-          <a href="https://athlexic.wixsite.com/website-1" target="_blank" rel="noopener noreferrer">Website</a>
+        <div class="full actions">
+          <button class="btn" type="submit">Submit</button>
+          <a class="btn-ghost" href="index.html">Cancel</a>
         </div>
+
+        <div class="note">By submitting, you agree to be contacted by Centre Missionnaire la Restauration for ministry purposes.</div>
       </form>
-    </section>
-  </main>
-
-  <!-- Thank you overlay -->
-  <div id="thankOverlay" style="position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;padding:18px 22px;border-radius:12px;box-shadow:0 20px 60px rgba(16,24,40,0.18);display:none;z-index:1200" role="status" aria-live="polite">
-    <div style="font-weight:700;margin-bottom:8px" id="thankTitle" data-en="Thank you" data-fr="Merci">Thank you</div>
-    <div id="thankText" data-en="Thanks for your submission. We’ll be in touch soon." data-fr="Merci pour votre soumission. Nous vous contacterons bientôt.">Thanks for your submission. We’ll be in touch soon.</div>
+    </div>
   </div>
-
-  <script>
-    // Language toggle
-    const btnEn = document.getElementById('btn-en');
-    const btnFr = document.getElementById('btn-fr');
-    function setLanguage(lang){
-      document.querySelectorAll('[data-en]').forEach(el=>{
-        const key = 'data-' + lang;
-        if (el.hasAttribute(key)) el.innerText = el.getAttribute(key);
-      });
-      btnEn.classList.toggle('active', lang === 'en');
-      btnFr.classList.toggle('active', lang === 'fr');
-      btnEn.setAttribute('aria-pressed', lang === 'en');
-      btnFr.setAttribute('aria-pressed', lang === 'fr');
-      localStorage.setItem('cmr_lang', lang);
-    }
-    btnEn.addEventListener('click', ()=> setLanguage('en'));
-    btnFr.addEventListener('click', ()=> setLanguage('fr'));
-    setLanguage(localStorage.getItem('cmr_lang') || 'en');
-
-    // Serve suboptions toggle
-    const serveCheckbox = document.getElementById('interest-serving');
-    const serveBox = document.getElementById('serve-suboptions');
-    serveCheckbox.addEventListener('change', () => {
-      serveBox.style.display = serveCheckbox.checked ? 'block' : 'none';
-      serveBox.setAttribute('aria-hidden', !serveCheckbox.checked);
-    });
-
-    // Append selected serve suboptions and interests to hidden fields before submit
-    const form = document.getElementById('connect-form');
-    const hidden = document.getElementById('hidden-fields');
-    const thankOverlay = document.getElementById('thankOverlay');
-
-    function appendHidden(name, value){
-      const i = document.createElement('input');
-      i.type = 'hidden';
-      i.name = name;
-      i.value = value;
-      hidden.appendChild(i);
-    }
-
-    form.addEventListener('submit', (e) => {
-      // basic client validation
-      const first = document.getElementById('first_name');
-      const last = document.getElementById('last_name');
-      if (!first.value.trim() || !last.value.trim()){
-        e.preventDefault();
-        first.focus();
-        if (!document.getElementById('err')) {
-          const err = document.createElement('div');
-          err.id = 'err';
-          err.style.color = '#b91c1c';
-          err.style.marginTop = '10px';
-          err.style.fontWeight = '700';
-          err.textContent = (localStorage.getItem('cmr_lang') === 'fr') ? 'Veuillez fournir votre prénom et nom.' : 'Please provide your first and last name.';
-          form.insertBefore(err, document.getElementById('submit-btn'));
-          setTimeout(()=> err.remove(), 4500);
-        }
-        return;
-      }
-
-      // clear previous hidden fields
-      hidden.innerHTML = '';
-
-      // interests (multiple)
-      document.querySelectorAll('input[name="interest"]:checked').forEach(cb => appendHidden('interest', cb.value));
-
-      // serve suboptions
-      if (serveCheckbox.checked){
-        ['serve_hospitality','serve_production','serve_choir','serve_band','serve_children'].forEach(n => {
-          const el = document.querySelector(`[name="${n}"]`);
-          if (el && el.checked) appendHidden(n, el.value);
-        });
-      }
-
-      // show thank you overlay briefly then submit
-      e.preventDefault();
-      thankOverlay.style.display = 'block';
-      setTimeout(()=> {
-        thankOverlay.style.display = 'none';
-        form.submit();
-      }, 900);
-    });
-
-    // Improve keyboard flow: Enter in last name moves to phone
-    document.getElementById('last_name').addEventListener('keydown', (ev) => {
-      if (ev.key === 'Enter') { ev.preventDefault(); document.getElementById('phone').focus(); }
-    });
-  </script>
 </body>
 </html>
