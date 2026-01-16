@@ -4,8 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Listen — CMR</title>
+
+  <!-- Base styles -->
   <style>
     :root{ --accent:#2b6cb0; --muted:#6b7280; --card-bg:#fff; --page-bg:#f3f4f6; --radius:10px; --max-width:900px; --pad:20px; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+    html,body { max-width:100%; overflow-x:hidden; box-sizing:border-box; }
+    *,*::before,*::after { box-sizing:inherit; }
     body{ margin:0; background:var(--page-bg); color:#111827; display:flex; justify-content:center; padding:28px; }
     .wrap{ width:100%; max-width:var(--max-width); }
     .card{ background:var(--card-bg); border-radius:var(--radius); padding:var(--pad); box-shadow:0 6px 18px rgba(15,23,42,0.06); }
@@ -21,6 +25,8 @@
     .btn{ padding:8px 12px; border-radius:8px; border:0; cursor:pointer; font-weight:700; color:#fff; background:var(--accent); }
     .back{ text-decoration:none; color:var(--accent); font-weight:700; display:inline-block; margin-bottom:12px; }
   </style>
+
+  <!-- Brand stylesheet (after base styles) -->
   <link rel="stylesheet" href="cmr-brand.css">
 </head>
 <body>
@@ -52,8 +58,8 @@
   </div>
 
   <script>
-    // Simple playlist (replace with your own MP3 URLs and metadata)
-    const playlist = [
+    // Playlist: will try to fetch /playlist.json first; fallback to inline list
+    let playlist = [
       { title: "Sunday Sermon — Hope", src: "https://example.com/audio/sermon1.mp3", desc: "Pastor John Doe — 35 min" },
       { title: "Midweek Reflection — Prayer", src: "https://example.com/audio/sermon2.mp3", desc: "Pastor Jane Smith — 22 min" },
       { title: "Worship Highlights", src: "https://example.com/audio/worship.mp3", desc: "Worship team — 18 min" }
@@ -74,7 +80,7 @@
         const title = document.createElement('div'); title.textContent = t.title; title.style.fontWeight = 700;
         const desc = document.createElement('div'); desc.textContent = t.desc; desc.style.color = 'var(--muted)'; desc.style.fontSize = '13px';
         meta.appendChild(title); meta.appendChild(desc);
-        const btn = document.createElement('button'); btn.className = 'btn'; btn.textContent = 'Play';
+        const btn = document.createElement('button'); btn.className = 'btn btn-primary'; btn.textContent = 'Play';
         btn.onclick = () => playTrack(i);
         tr.appendChild(meta); tr.appendChild(btn);
         playlistEl.appendChild(tr);
@@ -91,8 +97,21 @@
       nowDesc.textContent = t.desc;
     }
 
+    async function tryLoadRemotePlaylist(){
+      try{
+        const res = await fetch('/playlist.json', { cache: 'no-store' });
+        if(!res.ok) throw new Error('no playlist');
+        const data = await res.json();
+        if(Array.isArray(data) && data.length) { playlist = data; }
+      }catch(e){
+        // fallback to inline playlist
+      } finally {
+        renderPlaylist();
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-      renderPlaylist();
+      tryLoadRemotePlaylist();
     });
   </script>
 </body>
