@@ -1,126 +1,237 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="color-scheme" content="light">
-  <title>CMR HUB</title>
-
-  <!-- PWA + ICONS -->
-  <link rel="manifest" href="/manifest.json">
-  <link rel="icon" type="image/png" sizes="512x512" href="/cmr512.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/cmr192.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/cmr32.png">
-  <link rel="icon" type="image/png" href="//cmr512.png"">
-  <link rel="apple-touch-icon" sizes="180x180" href="/cmr180.png">
-  <meta name="theme-color" content="#ffffff">
-
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CMR Hub</title>
   <style>
-    /* Safe area, fluid type, responsive logo plate */
-    :root { --page-padding: 24px; --bg:#f7f7f7; --card:#ffffff; --muted:#666; --accent:#007aff; }
-    body {
-      margin: 0;
-      padding: calc(var(--page-padding) + env(safe-area-inset-top)) calc(var(--page-padding) + env(safe-area-inset-right)) calc(var(--page-padding) + env(safe-area-inset-bottom)) calc(var(--page-padding) + env(safe-area-inset-left));
-      background: var(--bg);
-      font-family: 'Roboto', system-ui, -apple-system, "Segoe UI", Arial;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      color: #111827;
-      min-height: 100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+    :root{
+      --accent:#2b6cb0;
+      --muted:#6b7280;
+      --card-bg:#ffffff;
+      --page-bg:#f3f4f6;
+      --radius:10px;
+      --gap:18px;
+      --max-width:1100px;
+      --container-padding:20px;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
-
-    h1, .church { font-size: clamp(1.05rem, 2.6vw, 1.6rem); }
-    p, label, .small { font-size: clamp(0.88rem, 1.8vw, 1rem); }
-
-    .card {
-      background: var(--card);
-      border-radius: 24px;
-      padding: 2.5rem 2rem;
-      max-width: 420px;
-      width: 100%;
-      text-align: center;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
-    }
-
-    /* responsive logo plate */
-    .icon-wrap {
-      width: clamp(64px, 12vw, 120px);
-      height: auto;
-      border-radius: 18px;
-      padding: 10px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      background: linear-gradient(180deg,#fff,#fbfbff);
-      box-shadow: 0 8px 24px rgba(16,24,40,0.06);
-      overflow:hidden;
-      margin: 0 auto 12px;
-    }
-    .icon-wrap img { width: 70%; height: auto; display:block; }
-
-    .church-name {
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      color: #444;
-      margin-bottom: 1.4rem;
-    }
-
-    p.lead { color: var(--muted); margin-bottom: 1.8rem; }
-
-    a.btn {
-      display: block;
-      margin: 10px 0;
-      padding: 14px;
-      border-radius: 14px;
-      text-decoration: none;
-      font-weight: 600;
-      color: white;
-      font-size: 0.95rem;
-      transition: all 0.18s ease;
-    }
-
-    .give { background: linear-gradient(135deg, #34c759, #2fa94f); }
-    .notes { background: linear-gradient(135deg, #007aff, #0a66d6); }
-    .sermons { background: linear-gradient(135deg, #5856d6, #4b47c2); }
-    .events { background: linear-gradient(135deg, #8e8e93, #7a7a7f); }
-    .connect { background: linear-gradient(135deg, #5e5ce6, #4a48c9); }
-    .website { background: linear-gradient(135deg, #1c1c1e, #000000); }
-    .social { background: linear-gradient(135deg, #af52de, #9c3ecb); }
-
-    a.btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
-
-    @media (max-width:480px){
-      .card { padding: 1.6rem 1.2rem; border-radius: 18px; }
-      a.btn { padding: 12px; border-radius: 12px; font-size: 0.92rem; }
-    }
+    body{ margin:0; background:var(--page-bg); color:#111827; padding:30px; display:flex; justify-content:center; }
+    .wrap{ width:100%; max-width:var(--max-width); padding:var(--container-padding); box-sizing:border-box; }
+    .layout{ display:grid; grid-template-columns:1fr; gap:var(--gap); align-items:start; }
+    @media(min-width:900px){ .layout{ grid-template-columns: 1fr 380px; } }
+    .card{ background:var(--card-bg); border-radius:var(--radius); padding:20px; box-shadow:0 6px 18px rgba(15,23,42,0.06); }
+    .hub-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    @media(max-width:640px){ .hub-grid{ grid-template-columns:repeat(2,1fr); } }
+    .hub-button{ background:#f8fafc; border-radius:10px; padding:14px; display:flex; gap:12px; align-items:center; cursor:pointer; border:1px solid transparent; transition:all .12s ease; }
+    .hub-button:hover{ transform:translateY(-2px); box-shadow:0 6px 18px rgba(15,23,42,0.04); }
+    .hub-icon{ width:44px; height:44px; border-radius:8px; background:linear-gradient(135deg,var(--accent),#4c9bd6); display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:18px; }
+    .hub-label{ font-weight:600; font-size:15px; }
+    .hub-sub{ font-size:13px; color:var(--muted); }
+    .connect-list{ margin-top:18px; display:flex; flex-direction:column; gap:10px; }
+    .connect-item{ display:flex; align-items:center; gap:12px; padding:10px; border-radius:8px; background:#fff; border:1px solid #eef2f7; }
+    .connect-item input[type="checkbox"]{ width:18px; height:18px; margin:0; flex:0 0 18px; accent-color:var(--accent); }
+    .connect-item label{ display:block; margin:0; font-size:14px; color:#111827; line-height:1.2; word-break:break-word; }
+    .announcement{ display:flex; flex-direction:column; gap:12px; }
+    .announcement .thumb{ width:100%; height:160px; border-radius:8px; object-fit:cover; background:#e6eef9; }
+    .meta-row{ display:flex; justify-content:space-between; gap:10px; align-items:center; font-size:13px; color:var(--muted); }
+    .announce-title{ font-size:18px; font-weight:700; margin:0; }
+    .announce-theme{ font-size:14px; color:var(--muted); }
+    .announce-desc{ font-size:14px; color:#111827; line-height:1.45; }
+    .small-muted{ font-size:13px; color:var(--muted); }
+    .cta-row{ display:flex; gap:10px; margin-top:8px; }
+    .btn{ padding:10px 12px; border-radius:8px; border:1px solid transparent; cursor:pointer; font-weight:600; font-size:14px; text-decoration:none; display:inline-block; }
+    .btn-primary{ background:var(--accent); color:white; }
+    .btn-outline{ background:white; border:1px solid #e6eef9; color:#111827; }
+    .announcement-placeholder{ display:flex; align-items:center; justify-content:center; height:100%; color:var(--muted); font-size:14px; text-align:center; padding:18px; }
+    .note{ margin-top:14px; font-size:13px; color:var(--muted); }
   </style>
 </head>
-
 <body>
-  <div class="card" role="main" aria-label="CMR Hub">
-    <div class="icon-wrap" aria-hidden="false">
-      <!-- External SVG or PNG file. If using PNG, include srcset for retina: src="logo.png" srcset="logo@2x.png 2x" -->
-      <img src="cmr512.png" alt="CMR Logo">
+  <div class="wrap">
+    <div class="layout">
+      <!-- Hub Card -->
+      <div class="card" id="hubCard" aria-label="CMR Hub">
+        <h2 style="margin:0 0 12px 0">CMR Hub</h2>
+
+        <div class="hub-grid" role="navigation" aria-label="Main actions">
+          <div class="hub-button" onclick="location.href='#give'">
+            <div class="hub-icon">G</div>
+            <div><div class="hub-label">Give</div><div class="hub-sub">Support online</div></div>
+          </div>
+
+          <div class="hub-button" onclick="location.href='#sermons'">
+            <div class="hub-icon">S</div>
+            <div><div class="hub-label">Sermons</div><div class="hub-sub">Watch on YouTube</div></div>
+          </div>
+
+          <div class="hub-button" onclick="location.href='#listen'">
+            <div class="hub-icon">L</div>
+            <div><div class="hub-label">Listen</div><div class="hub-sub">Audio highlights</div></div>
+          </div>
+
+          <div class="hub-button" onclick="location.href='#connect'">
+            <div class="hub-icon">C</div>
+            <div><div class="hub-label">Connect</div><div class="hub-sub">Fill out the form</div></div>
+          </div>
+
+          <div class="hub-button" onclick="location.href='https://yourchurchwebsite.example'">
+            <div class="hub-icon">W</div>
+            <div><div class="hub-label">Visit Website</div><div class="hub-sub">More info online</div></div>
+          </div>
+
+          <div class="hub-button" onclick="location.href='https://linktr.ee/yourchurch'">
+            <div class="hub-icon">F</div>
+            <div><div class="hub-label">Follow Us</div><div class="hub-sub">Social links</div></div>
+          </div>
+        </div>
+
+        <!-- Connect list -->
+        <div style="margin-top:18px">
+          <h3 style="margin:0 0 8px 0">What I'm interested in</h3>
+          <div class="connect-list" id="connectList">
+            <div class="connect-item"><input type="checkbox" id="interest1" /><label for="interest1">Receive weekly updates by email</label></div>
+            <div class="connect-item"><input type="checkbox" id="interest2" /><label for="interest2">Volunteer for children's ministry</label></div>
+            <div class="connect-item"><input type="checkbox" id="interest3" /><label for="interest3">Join a small group</label></div>
+            <div class="connect-item"><input type="checkbox" id="interest4" /><label for="interest4">Baptism or membership info</label></div>
+          </div>
+          <div class="note">Tip: check items and submit via the Connect form</div>
+        </div>
+      </div>
+
+      <!-- Announcement Card -->
+      <div class="card" id="announcementCard" aria-label="Announcements">
+        <div id="announcementContainer"></div>
+      </div>
     </div>
-
-    <div class="church-name">Centre Missionnaire La Restauration</div>
-
-    <p class="lead">Welcome to the CMR Hub</p>
-
-    <a class="btn give" href="https://paypal.com/send?phone=16823812259">Give</a>
-    <a class="btn notes" href="notes.html">Take Notes</a>
-    <a class="btn sermons" href="https://youtube.com">Sermons</a>
-    <a class="btn events" href="listen.html">Listen</a>
-    <a class="btn connect" href="connect.html">Connect</a>
-    <a class="btn website" href="https://yourchurchsite.com">Visit Website</a>
-    <a class="btn social" href="https://linktr.ee/YOURCHURCH">Follow Us</a>
   </div>
+
+  <script>
+    // URL to the public announcement JSON file
+    const ANNOUNCEMENT_JSON_URL = '/announcement.json'; // adjust path if needed
+
+    // Check if expireDate has passed
+    function isExpired(expireDateStr) {
+      if (!expireDateStr) return false;
+      const now = new Date();
+      const expire = new Date(expireDateStr + 'T23:59:59');
+      return now > expire;
+    }
+
+    // Render announcement from data object
+    function renderAnnouncementFromData(containerId, data) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+
+      if (!data || !data.enabled || isExpired(data.expireDate)) {
+        const placeholder = document.createElement('div');
+        placeholder.className = 'announcement-placeholder';
+        placeholder.textContent = 'No current announcements';
+        container.appendChild(placeholder);
+        return;
+      }
+
+      const ann = document.createElement('div');
+      ann.className = 'announcement';
+
+      // Date and type
+      const meta = document.createElement('div');
+      meta.className = 'meta-row';
+      const dateSpan = document.createElement('div');
+      dateSpan.className = 'small-muted';
+      dateSpan.textContent = data.date || new Date().toLocaleDateString();
+      const typeSpan = document.createElement('div');
+      typeSpan.className = 'small-muted';
+      typeSpan.textContent = (data.type || 'announcement').toUpperCase();
+      meta.appendChild(dateSpan);
+      meta.appendChild(typeSpan);
+      ann.appendChild(meta);
+
+      // Thumbnail
+      if (data.thumbnail) {
+        const img = document.createElement('img');
+        img.className = 'thumb';
+        img.src = data.thumbnail;
+        img.alt = data.title || 'Announcement image';
+        ann.appendChild(img);
+      }
+
+      // Title
+      const title = document.createElement('h3');
+      title.className = 'announce-title';
+      title.textContent = data.title || 'Announcement';
+      ann.appendChild(title);
+
+      // Theme and pastor
+      const themeRow = document.createElement('div');
+      themeRow.className = 'meta-row';
+      const theme = document.createElement('div');
+      theme.className = 'announce-theme';
+      theme.textContent = data.theme ? `Theme: ${data.theme}` : '';
+      const pastor = document.createElement('div');
+      pastor.className = 'announce-theme';
+      pastor.textContent = data.pastor ? `Pastor: ${data.pastor}` : '';
+      themeRow.appendChild(theme);
+      themeRow.appendChild(pastor);
+      ann.appendChild(themeRow);
+
+      // Description
+      if (data.description) {
+        const desc = document.createElement('div');
+        desc.className = 'announce-desc';
+        desc.textContent = data.description;
+        ann.appendChild(desc);
+      }
+
+      // Location/time
+      if (data.extra && (data.extra.location || data.extra.time)) {
+        const info = document.createElement('div');
+        info.className = 'small-muted';
+        info.textContent = `${data.extra.location ? data.extra.location + ' • ' : ''}${data.extra.time ? data.extra.time : ''}`.trim();
+        ann.appendChild(info);
+      }
+
+      // Funeral info
+      if (data.extra && data.extra.funeralInfo && data.extra.funeralInfo.enabled) {
+        const funeral = document.createElement('div');
+        funeral.style.marginTop = '8px';
+        funeral.innerHTML = `<strong>Funeral Info</strong><div class="small-muted">${data.extra.funeralInfo.details}</div>`;
+        ann.appendChild(funeral);
+      }
+
+      // CTA placeholder
+      const ctaRow = document.createElement('div');
+      ctaRow.className = 'cta-row';
+      const learn = document.createElement('a');
+      learn.className = 'btn btn-primary';
+      learn.href = '#';
+      learn.textContent = 'Learn More';
+      ctaRow.appendChild(learn);
+      ann.appendChild(ctaRow);
+
+      container.appendChild(ann);
+    }
+
+    // Fetch announcement JSON and render
+    async function loadAndRenderAnnouncement() {
+      try {
+        const res = await fetch(ANNOUNCEMENT_JSON_URL, { cache: 'no-store' });
+        if (!res.ok) throw new Error('Announcement not found');
+        const data = await res.json();
+        renderAnnouncementFromData('announcementContainer', data);
+      } catch (e) {
+        // If fetch fails, show placeholder
+        renderAnnouncementFromData('announcementContainer', null);
+        console.warn('Failed to load announcement.json', e);
+      }
+    }
+
+    // Initial load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAndRenderAnnouncement();
+      // Optional: refresh announcement every 5 minutes to pick up edits without reload
+      setInterval(loadAndRenderAnnouncement, 5 * 60 * 1000);
+    });
+  </script>
 </body>
 </html>
