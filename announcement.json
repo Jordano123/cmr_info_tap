@@ -1,42 +1,52 @@
-[
-  {
-    "enabled": true,
-    "date": "2026-04-12",
-    "title": "Easter Celebration Service",
-    "thumbnail": "https://example.com/images/easter-thumb.jpg",
-    "theme": "Rising Hope",
-    "pastor": "Pastor John Doe",
-    "description": "Join us this Sunday for a special Easter celebration. Worship starts at 10:00 AM followed by a community lunch.",
-    "type": "event",
-    "extra": {
-      "location": "CMR Main Campus",
-      "time": "10:00 AM",
-      "funeralInfo": {
-        "enabled": false,
-        "details": ""
-      }
+{
+  "showAnnouncements": true,
+  "items": [
+    {
+      "enabled": true,
+      "date": "2026-04-12",
+      "title": "Easter Celebration Service",
+      "title_fr": "Célébration de Pâques",
+      "thumbnail": "https://example.com/images/easter-thumb.jpg",
+      "theme": "Rising Hope",
+      "pastor": "Pastor John Doe",
+      "description": "Join us this Sunday for a special Easter celebration. Worship starts at 10:00 AM followed by a community lunch.",
+      "description_fr": "Rejoignez-nous ce dimanche pour une célébration spéciale de Pâques. Le culte commence à 10h00 suivi d’un repas communautaire.",
+      "type": "event",
+      "extra": {
+        "location": "CMR Main Campus",
+        "time": "10:00 AM",
+        "funeralInfo": {
+          "enabled": false,
+          "details": ""
+        }
+      },
+      "expireDate": "2026-04-13",
+      "learnMoreUrl": "https://example.com/events/easter"
     },
-    "expireDate": "2026-04-13",
-    "learnMoreUrl": "https://example.com/events/easter"
-  },
-  {
-    "enabled": true,
-    "date": "2026-05-01",
-    "title": "Prayer Night",
-    "thumbnail": "",
-    "theme": "Seeking His Presence",
-    "pastor": "Pastor Jane Smith",
-    "description": "An evening of worship and prayer for our city and families.",
-    "type": "event",
-    "extra": {
-      "location": "CMR Main Campus",
-      "time": "7:00 PM",
-      "funeralInfo": {
-        "enabled": false,
-        "details": ""
-      }
-    },
-    "expireDate": "2026-05-02",
-    "learnMoreUrl": "https://example.com/events/prayer-night"
-  }
-]
+    {
+      "enabled": true,
+      "date": "2026-05-01",
+      "title": "Prayer Night",
+      "title_fr": "Nuit de Prière",
+      "thumbnail": "",
+      "theme": "Seeking His Presence",
+      "pastor": "Pastor Jane Smith",
+      "description": "An evening of worship and prayer for our city and families.",
+      "description_fr": "Une soirée de louange et de prière pour notre ville et nos familles.",
+      "type": "event",
+      "extra": {
+        "location": "CMR Main Campus",
+        "time": "7:00 PM",
+        "funeralInfo": {
+          "enabled": false,
+          "details": ""
+        }
+      },
+      "expireDate": "2026-05-02",
+      "learnMoreUrl": "https://example.com/events/prayer-night"
+    }
+  ]
+}
+
+
+
