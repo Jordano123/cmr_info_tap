@@ -2,299 +2,96 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Listen — CMR Hub</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="color-scheme" content="light">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Listen — CMR</title>
   <style>
-    :root{
-      --page-pad:20px;
-      --bg:#f3f4f6;
-      --card:#ffffff;
-      --muted:#6b7280;
-      --accent:#0b1220;
-      --accent-2:#d4a017;
-      --radius:14px;
-      --shadow:0 18px 48px rgba(16,24,40,0.08);
-      --max-width:1100px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      padding: calc(var(--page-pad) + env(safe-area-inset-top)) calc(var(--page-pad) + env(safe-area-inset-right)) calc(var(--page-pad) + env(safe-area-inset-bottom)) calc(var(--page-pad) + env(safe-area-inset-left));
-      background:var(--bg);
-      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-      color:var(--accent);
-      display:flex;
-      justify-content:center;
-      align-items:flex-start;
-    }
-    .wrap{
-      width:100%;
-      max-width:var(--max-width);
-      background:var(--card);
-      border-radius:16px;
-      box-shadow:var(--shadow);
-      padding:22px;
-      margin-top:12px;
-    }
-
-    /* Header */
-    header{ display:flex; gap:16px; align-items:center; margin-bottom:14px; flex-wrap:wrap; }
-    .logo-plate{ width:clamp(64px,10vw,110px); padding:8px; border-radius:12px; background:linear-gradient(180deg,#fff,#fbfbff); display:flex; align-items:center; justify-content:center; box-shadow:0 8px 24px rgba(16,24,40,0.06); }
-    .logo-plate img{ width:70%; height:auto; display:block; }
-    .brand{ display:flex; flex-direction:column; min-width:0; }
-    .brand .name{ font-weight:700; font-size:1.05rem; line-height:1; }
-    .brand .tag{ color:var(--muted); font-size:0.92rem; margin-top:4px; }
-    .lang-toggle{ margin-left:auto; display:flex; gap:8px; }
-    .lang-toggle button{ border:0; background:#f3f4f6; padding:8px 10px; border-radius:10px; font-weight:700; cursor:pointer; }
-    .lang-toggle button.active{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; }
-
-    /* Hero */
-    .hero{ margin-bottom:18px; }
-    .hero h1{ margin:0; font-size:clamp(1.4rem,2.6vw,2rem); }
-    .hero p{ margin:8px 0 0; color:var(--muted); }
-
-    /* Layout: player left, playlist right on wide screens */
-    .layout{ display:grid; gap:18px; grid-template-columns: 1fr; }
-    @media(min-width:880px){ .layout{ grid-template-columns: 1fr 360px; } }
-
-    /* Player card */
-    .player-card{ background:var(--card); border-radius:12px; padding:18px; border:1px solid #eef0f3; box-shadow:0 8px 24px rgba(16,24,40,0.04); }
-    .now{ display:flex; gap:14px; align-items:center; }
-    .now .cover{ width:84px; height:84px; border-radius:12px; background:#f6f7fb; display:flex; align-items:center; justify-content:center; overflow:hidden; }
-    .now .meta{ min-width:0; }
-    .now .meta h2{ margin:0; font-size:1.05rem; }
-    .now .meta p{ margin:6px 0 0; color:var(--muted); font-size:0.92rem; }
-
-    /* Controls */
-    .controls{ display:flex; gap:12px; align-items:center; margin-top:14px; flex-wrap:wrap; }
-    .btn{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; border:0; padding:10px 12px; border-radius:10px; font-weight:700; cursor:pointer; }
-    .icon-btn{ background:#fff; border:1px solid #eef0f3; padding:10px; border-radius:10px; cursor:pointer; }
-    .progress{ width:100%; height:10px; background:#eef2f6; border-radius:8px; overflow:hidden; margin-top:12px; }
-    .progress > i{ display:block; height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); width:0%; }
-
-    .player-extra{ display:flex; gap:12px; align-items:center; margin-top:10px; flex-wrap:wrap; color:var(--muted); font-weight:600; }
-
-    /* Transcript */
-    .transcript{ margin-top:12px; border-radius:10px; padding:12px; background:#fbfdff; border:1px solid #eef6ff; max-height:260px; overflow:auto; display:none; }
-
-    /* Playlist */
-    .playlist{ background:var(--card); border-radius:12px; padding:12px; border:1px solid #eef0f3; box-shadow:0 8px 24px rgba(16,24,40,0.04); max-height:calc(80vh - 160px); overflow:auto; }
-    .episode{ display:flex; gap:12px; padding:10px; border-radius:10px; align-items:center; cursor:pointer; border:1px solid transparent; }
-    .episode:hover{ background:#fbfdff; border-color:#eef6ff; }
-    .episode .thumb{ width:56px; height:56px; border-radius:8px; background:#f6f7fb; display:flex; align-items:center; justify-content:center; overflow:hidden; }
-    .episode .info{ min-width:0; }
-    .episode .info h4{ margin:0; font-size:0.98rem; }
-    .episode .info p{ margin:6px 0 0; color:var(--muted); font-size:0.86rem; }
-
-    /* Footer small */
-    .foot{ margin-top:14px; color:var(--muted); font-size:0.9rem; text-align:center; }
-
-    /* Focus states */
-    button:focus, .episode:focus{ outline:3px solid rgba(11,17,32,0.06); outline-offset:2px; }
-
+    :root{ --accent:#2b6cb0; --muted:#6b7280; --card-bg:#fff; --page-bg:#f3f4f6; --radius:10px; --max-width:900px; --pad:20px; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+    body{ margin:0; background:var(--page-bg); color:#111827; display:flex; justify-content:center; padding:28px; }
+    .wrap{ width:100%; max-width:var(--max-width); }
+    .card{ background:var(--card-bg); border-radius:var(--radius); padding:var(--pad); box-shadow:0 6px 18px rgba(15,23,42,0.06); }
+    .header{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+    .logo{ width:36px; height:36px; border-radius:8px; background:#111827; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; }
+    h1{ margin:0; font-size:20px; }
+    p.sub{ margin:6px 0 18px 0; color:var(--muted); }
+    .player{ display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+    audio{ width:100%; max-width:520px; }
+    .playlist{ margin-top:16px; display:flex; flex-direction:column; gap:10px; }
+    .track{ padding:10px; border-radius:8px; background:#f8fafc; display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    .track .meta{ display:flex; flex-direction:column; }
+    .btn{ padding:8px 12px; border-radius:8px; border:0; cursor:pointer; font-weight:700; color:#fff; background:var(--accent); }
+    .back{ text-decoration:none; color:var(--accent); font-weight:700; display:inline-block; margin-bottom:12px; }
   </style>
 </head>
 <body>
-  <main class="wrap" role="main" aria-labelledby="listen-heading">
-    <header>
-      <div class="logo-plate"><img src="logo.png" srcset="logo@2x.png 2x" alt="CMR Logo"></div>
-      <div class="brand"><div class="name">Centre Missionnaire La Restauration</div><div class="tag">Sermons to listen to</div></div>
-      <div class="lang-toggle" role="toolbar" aria-label="Language toggle"><button id="btn-en" class="active">EN</button><button id="btn-fr">FR</button></div>
-    </header>
-
-    <section class="hero">
-      <h1 id="listen-heading" data-en="Listen" data-fr="Écouter">Listen</h1>
-      <p id="lead" data-en="Hear our sermons without the video. Focused preaching, easy listening." data-fr="Écoutez nos sermons sans la vidéo. Prédication concentrée, écoute facile.">Hear our sermons without the video. Focused preaching, easy listening.</p>
-    </section>
-
-    <div class="layout">
-      <!-- Player column -->
-      <section class="player-card" aria-label="Audio player">
-        <div class="now" id="nowPlaying">
-          <div class="cover" aria-hidden="true"><img id="nowThumb" src="" alt="" style="width:100%;height:100%;object-fit:cover"></div>
-          <div class="meta">
-            <h2 id="nowTitle">Select a sermon</h2>
-            <p id="nowMeta" class="muted">Date • Preacher</p>
-          </div>
+  <div class="wrap">
+    <a class="back" href="index.html">← Back to CMR Hub</a>
+    <div class="card">
+      <div class="header">
+        <div class="logo">CMR</div>
+        <div>
+          <h1>Listen</h1>
+          <p class="sub">Audio sermons and highlights. Click a track to play.</p>
         </div>
+      </div>
 
-        <div class="controls" role="group" aria-label="Playback controls">
-          <button class="icon-btn" id="back15" title="Back 15s">«15</button>
-          <button class="btn" id="playPause" aria-pressed="false">Play</button>
-          <button class="icon-btn" id="forward30" title="Forward 30s">30»</button>
-
-          <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
-            <label for="speed" style="font-weight:700;color:var(--muted);font-size:0.9rem">Speed</label>
-            <select id="speed" aria-label="Playback speed" style="padding:8px;border-radius:8px;border:1px solid #eef0f3;">
-              <option value="0.75">0.75×</option>
-              <option value="1" selected>1×</option>
-              <option value="1.25">1.25×</option>
-              <option value="1.5">1.5×</option>
-              <option value="2">2×</option>
-            </select>
-          </div>
+      <div class="player">
+        <audio id="audioPlayer" controls preload="none">
+          <source id="audioSource" src="" type="audio/mpeg" />
+          Your browser does not support the audio element.
+        </audio>
+        <div style="flex:1; min-width:220px;">
+          <div id="nowPlaying" style="font-weight:700; margin-bottom:6px;">Now playing: —</div>
+          <div id="nowDesc" style="color:var(--muted); font-size:14px;">Select a track from the list below.</div>
         </div>
+      </div>
 
-        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0" id="progressBar">
-          <i id="progressFill"></i>
-        </div>
-
-        <div class="player-extra">
-          <div id="timeDisplay">00:00 / 00:00</div>
-          <button class="icon-btn" id="downloadBtn" title="Download audio" style="margin-left:auto">Download</button>
-          <button class="icon-btn" id="transcriptToggle" aria-pressed="false">Transcript</button>
-        </div>
-
-        <div class="transcript" id="transcript" aria-hidden="true"></div>
-
-        <!-- Hidden native audio element -->
-        <audio id="audio" preload="metadata"></audio>
-      </section>
-
-      <!-- Playlist column -->
-      <aside class="playlist" aria-label="Sermon playlist" id="playlist">
-        <!-- Episodes injected by JS -->
-      </aside>
+      <div class="playlist" id="playlist"></div>
     </div>
-
-    <div class="foot">© Centre Missionnaire La Restauration — We exist to love God and serve people</div>
-  </main>
+  </div>
 
   <script>
-    // Sample episodes array - replace src and thumb/transcript paths
-    const episodes = [
-      { id: 's1', title: 'Sermon 1: Hope', date: '2025-01-12', preacher: 'Pastor A', src: 'audio/sermon1.mp3', thumb: 'audio/thumb1.jpg', transcript: 'transcripts/s1.txt', desc: 'A message about hope.' },
-      { id: 's2', title: 'Sermon 2: Faith', date: '2025-01-05', preacher: 'Pastor B', src: 'audio/sermon2.mp3', thumb: 'audio/thumb2.jpg', transcript: 'transcripts/s2.txt', desc: 'A message about faith.' }
+    // Simple playlist (replace with your own MP3 URLs and metadata)
+    const playlist = [
+      { title: "Sunday Sermon — Hope", src: "https://example.com/audio/sermon1.mp3", desc: "Pastor John Doe — 35 min" },
+      { title: "Midweek Reflection — Prayer", src: "https://example.com/audio/sermon2.mp3", desc: "Pastor Jane Smith — 22 min" },
+      { title: "Worship Highlights", src: "https://example.com/audio/worship.mp3", desc: "Worship team — 18 min" }
     ];
 
-    // Elements
+    const audio = document.getElementById('audioPlayer');
+    const source = document.getElementById('audioSource');
     const playlistEl = document.getElementById('playlist');
-    const audio = document.getElementById('audio');
-    const playPause = document.getElementById('playPause');
-    const back15 = document.getElementById('back15');
-    const forward30 = document.getElementById('forward30');
-    const speed = document.getElementById('speed');
-    const progressBar = document.getElementById('progressBar');
-    const progressFill = document.getElementById('progressFill');
-    const timeDisplay = document.getElementById('timeDisplay');
-    const nowTitle = document.getElementById('nowTitle');
-    const nowMeta = document.getElementById('nowMeta');
-    const nowThumb = document.getElementById('nowThumb');
-    const downloadBtn = document.getElementById('downloadBtn');
-    const transcriptToggle = document.getElementById('transcriptToggle');
-    const transcriptEl = document.getElementById('transcript');
+    const nowPlaying = document.getElementById('nowPlaying');
+    const nowDesc = document.getElementById('nowDesc');
 
-    let current = null;
-
-    // Build playlist UI
     function renderPlaylist(){
       playlistEl.innerHTML = '';
-      episodes.forEach((ep, i) => {
-        const el = document.createElement('div');
-        el.className = 'episode';
-        el.tabIndex = 0;
-        el.dataset.index = i;
-        el.innerHTML = `
-          <div class="thumb"><img src="${ep.thumb}" alt="${ep.title}" style="width:100%;height:100%;object-fit:cover"></div>
-          <div class="info"><h4>${ep.title}</h4><p>${ep.date} • ${ep.preacher}</p></div>
-        `;
-        el.addEventListener('click', () => loadEpisode(i));
-        el.addEventListener('keydown', (e) => { if (e.key === 'Enter') loadEpisode(i); });
-        playlistEl.appendChild(el);
+      playlist.forEach((t, i) => {
+        const tr = document.createElement('div');
+        tr.className = 'track';
+        const meta = document.createElement('div'); meta.className = 'meta';
+        const title = document.createElement('div'); title.textContent = t.title; title.style.fontWeight = 700;
+        const desc = document.createElement('div'); desc.textContent = t.desc; desc.style.color = 'var(--muted)'; desc.style.fontSize = '13px';
+        meta.appendChild(title); meta.appendChild(desc);
+        const btn = document.createElement('button'); btn.className = 'btn'; btn.textContent = 'Play';
+        btn.onclick = () => playTrack(i);
+        tr.appendChild(meta); tr.appendChild(btn);
+        playlistEl.appendChild(tr);
       });
     }
 
-    // Load episode
-    function loadEpisode(index){
-      const ep = episodes[index];
-      if (!ep) return;
-      current = index;
-      audio.src = ep.src;
-      nowTitle.textContent = ep.title;
-      nowMeta.textContent = `${ep.date} • ${ep.preacher}`;
-      nowThumb.src = ep.thumb || '';
-      downloadBtn.onclick = () => { window.open(ep.src, '_blank'); };
-      // load transcript if available
-      transcriptEl.textContent = '';
-      transcriptEl.style.display = 'none';
-      transcriptToggle.setAttribute('aria-pressed', 'false');
-      transcriptToggle.textContent = 'Transcript';
-      fetch(ep.transcript).then(r => r.ok ? r.text() : Promise.reject()).then(txt => {
-        transcriptEl.textContent = txt;
-      }).catch(()=>{ /* no transcript */ });
-      audio.playbackRate = parseFloat(speed.value);
-      audio.play().then(()=> { playPause.textContent = 'Pause'; playPause.setAttribute('aria-pressed','true'); }).catch(()=>{});
+    function playTrack(index){
+      const t = playlist[index];
+      if(!t) return;
+      source.src = t.src;
+      audio.load();
+      audio.play().catch(()=>{});
+      nowPlaying.textContent = 'Now playing: ' + t.title;
+      nowDesc.textContent = t.desc;
     }
 
-    // Playback controls
-    playPause.addEventListener('click', () => {
-      if (!audio.src) { if (episodes.length) loadEpisode(0); else return; }
-      if (audio.paused) { audio.play(); playPause.textContent = 'Pause'; playPause.setAttribute('aria-pressed','true'); }
-      else { audio.pause(); playPause.textContent = 'Play'; playPause.setAttribute('aria-pressed','false'); }
+    document.addEventListener('DOMContentLoaded', () => {
+      renderPlaylist();
     });
-    back15.addEventListener('click', () => { audio.currentTime = Math.max(0, audio.currentTime - 15); });
-    forward30.addEventListener('click', () => { audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 30); });
-    speed.addEventListener('change', () => { audio.playbackRate = parseFloat(speed.value); });
-
-    // Progress bar update
-    audio.addEventListener('timeupdate', () => {
-      const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
-      progressFill.style.width = pct + '%';
-      timeDisplay.textContent = formatTime(audio.currentTime) + ' / ' + (audio.duration ? formatTime(audio.duration) : '00:00');
-      progressBar.setAttribute('aria-valuenow', Math.round(pct));
-    });
-
-    // Seek by clicking progress bar
-    progressBar.addEventListener('click', (e) => {
-      const rect = progressBar.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const pct = x / rect.width;
-      if (audio.duration) audio.currentTime = pct * audio.duration;
-    });
-
-    // Transcript toggle
-    transcriptToggle.addEventListener('click', () => {
-      const pressed = transcriptToggle.getAttribute('aria-pressed') === 'true';
-      transcriptToggle.setAttribute('aria-pressed', String(!pressed));
-      transcriptEl.style.display = pressed ? 'none' : 'block';
-      transcriptToggle.textContent = pressed ? 'Transcript' : 'Hide Transcript';
-    });
-
-    // Format time
-    function formatTime(s){ if (!s || isNaN(s)) return '00:00'; const m = Math.floor(s/60); const sec = Math.floor(s%60).toString().padStart(2,'0'); return `${m}:${sec}`; }
-
-    // Keyboard shortcuts
-    document.addEventListener('keydown', (e) => {
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-      if (e.code === 'Space') { e.preventDefault(); playPause.click(); }
-      if (e.key === 'ArrowLeft') back15.click();
-      if (e.key === 'ArrowRight') forward30.click();
-      if (e.key === 'ArrowUp') audio.volume = Math.min(1, audio.volume + 0.05);
-      if (e.key === 'ArrowDown') audio.volume = Math.max(0, audio.volume - 0.05);
-    });
-
-    // Language toggle (persist)
-    const btnEn = document.getElementById('btn-en'), btnFr = document.getElementById('btn-fr');
-    function setLang(lang){
-      document.querySelectorAll('[data-en]').forEach(el => {
-        const key = 'data-' + lang;
-        if (el.hasAttribute(key)) el.innerText = el.getAttribute(key);
-      });
-      btnEn.classList.toggle('active', lang === 'en');
-      btnFr.classList.toggle('active', lang === 'fr');
-      localStorage.setItem('cmr_lang', lang);
-    }
-    btnEn.addEventListener('click', ()=> setLang('en'));
-    btnFr.addEventListener('click', ()=> setLang('fr'));
-    setLang(localStorage.getItem('cmr_lang') || 'en');
-
-    // Init
-    renderPlaylist();
-    // Optionally auto-load first episode
-    // loadEpisode(0);
   </script>
 </body>
 </html>
