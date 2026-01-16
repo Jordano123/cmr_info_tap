@@ -4,12 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Connect — CMR</title>
-  <link rel="stylesheet" href="cmr-brand.css">
+
+  <!-- Base styles -->
   <style>
     :root{
       --accent:#2b6cb0; --muted:#6b7280; --card-bg:#ffffff; --page-bg:#f3f4f6; --radius:10px; --max-width:900px; --pad:20px;
       font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
+    html,body { max-width:100%; overflow-x:hidden; box-sizing:border-box; }
+    *,*::before,*::after { box-sizing:inherit; }
     body{ margin:0; background:var(--page-bg); color:#111827; display:flex; justify-content:center; padding:28px; }
     .wrap{ width:100%; max-width:var(--max-width); }
     .card{ background:var(--card-bg); border-radius:var(--radius); padding:var(--pad); box-shadow:0 6px 18px rgba(15,23,42,0.06); }
@@ -30,6 +33,9 @@
     .note{ font-size:13px; color:var(--muted); margin-top:8px; }
     .back{ text-decoration:none; color:var(--accent); font-weight:700; display:inline-block; margin-bottom:12px; }
   </style>
+
+  <!-- Brand stylesheet (after base styles) -->
+  <link rel="stylesheet" href="cmr-brand.css">
 </head>
 <body>
   <div class="wrap">
@@ -44,7 +50,7 @@
         </div>
       </div>
 
-      <!-- Netlify-ready form (replace or adapt action if you use another backend) -->
+      <!-- Netlify-ready form -->
       <form name="connect" method="POST" data-netlify="true" netlify-honeypot="bot-field">
         <input type="hidden" name="form-name" value="connect" />
         <p style="display:none"><label>Don’t fill this out: <input name="bot-field" /></label></p>
@@ -102,6 +108,7 @@
         </div>
 
         <div class="full actions">
+          <!-- Maroon primary button (brand) -->
           <button class="btn-maroon" type="submit">Submit</button>
           <a class="btn-ghost" href="index.html">Cancel</a>
         </div>
