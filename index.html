@@ -87,6 +87,7 @@
   </style>
 
   <!-- Brand stylesheet (after base styles) -->
+  <!-- Make sure cmr-brand.css includes the serveCard hide rule and the serve-card styling you want -->
   <link rel="stylesheet" href="cmr-brand.css">
 
   <!-- Feather icons -->
@@ -114,7 +115,7 @@
               <div><div class="hub-label" id="giveLabel">Give</div><div class="hub-sub" id="giveSub">Support online</div></div>
             </a>
 
-            <!-- YouTube: example uses a VIDEO_ID placeholder; replace VIDEO_ID with your sermon video id -->
+            <!-- YouTube: replace VIDEO_ID with your sermon video id -->
             <a class="hub-button" href="https://www.youtube.com/watch?v=VIDEO_ID" id="sermonsBtn" title="Sermons" data-app-href="youtube://watch?v=VIDEO_ID" data-android-intent="intent://www.youtube.com/watch?v=VIDEO_ID#Intent;package=com.google.android.youtube;scheme=https;end">
               <div class="hub-icon"><i data-feather="video"></i></div>
               <div><div class="hub-label" id="sermonsLabel">Sermons</div><div class="hub-sub" id="sermonsSub">Watch on YouTube</div></div>
@@ -146,12 +147,12 @@
           </div>
         </div>
 
-        <!-- HOW TO SERVE (under Hub) - removed logo/badge next to title per request -->
+        <!-- HOW TO SERVE (under Hub) - no logo/badge next to title per request -->
         <div class="card serve-card" id="serveCard" data-accent="true" aria-label="How to Serve">
           <div class="serve-header" style="align-items:flex-start;">
             <div style="flex:1;">
-              <div style="font-weight:700; font-size:16px;">How to Serve</div>
-              <div class="small-muted" style="font-size:13px;">Join a team that fits your gifts</div>
+              <div class="serve-title" style="font-weight:700; font-size:16px;">How to Serve</div>
+              <div class="serve-sub small-muted" style="font-size:13px;">Join a team that fits your gifts</div>
             </div>
           </div>
 
@@ -195,6 +196,11 @@
               <div class="serve-title">Guest Experience</div>
               <div class="serve-item">• Usher / Greeter</div>
               <div class="serve-item">• Welcome Team</div>
+            </div>
+
+            <div class="serve-cta" style="margin-top:8px;">
+              <a class="btn-serve" href="connect.html#serve" style="text-decoration:none; display:inline-flex; align-items:center; gap:8px;">Join a Team</a>
+              <a class="btn" href="connect.html#learn" style="text-decoration:none; display:inline-flex; align-items:center; gap:8px; background:#fff; border:1px solid rgba(15,23,42,0.06); color:#111827;">Learn More</a>
             </div>
           </div>
         </div>
@@ -243,7 +249,8 @@
     function applyTranslations(){
       const lang = getSavedLang();
       const t = translations[lang] || translations.en;
-      document.getElementById('announcementsTitle').textContent = t.announcements;
+      const primaryTitle = document.getElementById('announcementsTitle');
+      if(primaryTitle) primaryTitle.textContent = t.announcements;
       const secH = document.querySelector('#announcementsCard2 h3');
       if(secH) secH.textContent = t.more_announcements;
     }
@@ -288,6 +295,19 @@
       ctaRow.appendChild(learn); wrapper.appendChild(ctaRow);
 
       containerEl.appendChild(wrapper);
+    }
+
+    // Helper to mark secondary card with blue accent if it contains a thumbnail
+    function markSecondaryAccentIfThumbnail(){
+      const secContainer = document.getElementById('announcementContainer2');
+      const secCard = document.getElementById('announcementsCard2');
+      if(!secContainer || !secCard) return;
+      const img = secContainer.querySelector('img.thumb');
+      if(img && img.src && img.src.trim() !== ''){
+        secCard.setAttribute('data-accent', 'true');
+      } else {
+        secCard.removeAttribute('data-accent');
+      }
     }
 
     function renderAnnouncementsFromData(rawData){
@@ -341,7 +361,14 @@
       if(secondaryContainer) secondaryContainer.innerHTML = '';
 
       if(active[0] && primaryContainer) renderSingleAnnouncement(primaryContainer, active[0], lang);
-      if(active[1] && secondaryContainer) renderSingleAnnouncement(secondaryContainer, active[1], lang);
+      if(active[1] && secondaryContainer) {
+        renderSingleAnnouncement(secondaryContainer, active[1], lang);
+        // mark accent if thumbnail exists
+        markSecondaryAccentIfThumbnail();
+      } else {
+        // ensure accent removed if no second announcement
+        if (secondaryCard) secondaryCard.removeAttribute('data-accent');
+      }
 
       if(active.length > 2 && primaryContainer){
         const more = document.createElement('div'); more.className = 'small-muted'; more.style.marginTop = '8px';
@@ -369,74 +396,64 @@
     }
 
     // ---------- APP LINK HELPER ----------
-    // Generic helper: tries to open an app-specific URL (data-app-href) and falls back to the web href.
-    // Works on mobile; desktop will immediately use the web href.
     function tryOpenAppThenFallback(anchor, event){
-      // If user used modifier keys or middle click, let default happen
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.button === 1) return;
-
       const appHref = anchor.getAttribute('data-app-href');
-      const androidIntent = anchor.getAttribute('data-android-intent'); // optional Android intent string
+      const androidIntent = anchor.getAttribute('data-android-intent');
       const webHref = anchor.href;
-
-      // Only attempt app open on mobile devices
       const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-      if(!isMobile || !appHref) {
-        // let the link behave normally (web)
-        return;
-      }
-
+      if(!isMobile || !appHref) return;
       event.preventDefault();
-
-      // For Android, prefer intent if provided (works reliably)
       if (/Android/i.test(navigator.userAgent) && androidIntent) {
         window.location = androidIntent;
-        // no further fallback here; Android intent will open app or show Play Store
         return;
       }
-
-      // Try to open app scheme and fallback to web after timeout
-      const now = Date.now();
       let didHide = false;
-
-      // Listen for page visibility change (user returned to page -> app likely not installed)
-      function onVisibilityChange() {
-        didHide = document.hidden;
-      }
+      function onVisibilityChange() { didHide = document.hidden; }
       document.addEventListener('visibilitychange', onVisibilityChange);
-
-      // Attempt to open app via location change
       const timeout = setTimeout(() => {
         document.removeEventListener('visibilitychange', onVisibilityChange);
-        // If page didn't become hidden (app didn't open), navigate to web fallback
         if (!didHide) window.location = webHref;
       }, 1200);
-
-      // Try opening app scheme
-      try {
-        // For iOS, setting window.location to the scheme works
-        window.location = appHref;
-      } catch (e) {
-        clearTimeout(timeout);
-        document.removeEventListener('visibilitychange', onVisibilityChange);
-        window.location = webHref;
-      }
+      try { window.location = appHref; } catch (e) { clearTimeout(timeout); document.removeEventListener('visibilitychange', onVisibilityChange); window.location = webHref; }
     }
 
-    // Attach app-link behavior to configured hub buttons
     function wireAppLinks(){
       const anchors = document.querySelectorAll('.hub-button[data-app-href]');
-      anchors.forEach(a => {
-        a.addEventListener('click', function(e){ tryOpenAppThenFallback(a, e); });
-      });
+      anchors.forEach(a => { a.addEventListener('click', function(e){ tryOpenAppThenFallback(a, e); }); });
     }
+
+    // ---------- MOBILE REORDER: Serve card under Announcements on small screens ----------
+    (function manageServeCardPlacement(){
+      const serve = document.getElementById('serveCard');
+      const rightCol = document.querySelector('.right-col');
+      const leftCol = document.querySelector('.left-col');
+      if(!serve || !rightCol || !leftCol) return;
+      const originalParent = serve.parentElement;
+      const originalNext = serve.nextElementSibling;
+
+      function placeForMobile(){
+        if (rightCol.nextElementSibling !== serve) {
+          rightCol.parentNode.insertBefore(serve, rightCol.nextElementSibling);
+        }
+      }
+      function restoreForDesktop(){
+        if (originalParent && originalParent !== serve.parentElement) {
+          if (originalNext) originalParent.insertBefore(serve, originalNext);
+          else originalParent.appendChild(serve);
+        }
+      }
+      function checkAndApply(){
+        if (window.innerWidth <= 980) placeForMobile();
+        else restoreForDesktop();
+      }
+      checkAndApply();
+      window.addEventListener('resize', checkAndApply);
+    })();
 
     // ---------- INIT ----------
     document.addEventListener('DOMContentLoaded', () => {
-      // Replace feather icons after DOM is ready so icons render
-      if (window.feather && typeof feather.replace === 'function') {
-        feather.replace();
-      }
+      if (window.feather && typeof feather.replace === 'function') feather.replace();
       createLangSwitcher();
       applyTranslations();
       loadAndRenderAnnouncements();
