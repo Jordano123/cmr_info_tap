@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "date": "2026-04-12",
+  "title": "Easter Celebration Service",
+  "thumbnail": "https://yourdomain.com/images/easter-thumb.jpg",
+  "theme": "Rising Hope",
+  "pastor": "Pastor John Doe",
+  "description": "Join us this Sunday for a special Easter celebration. Worship starts at 10:00 AM followed by a community lunch.",
+  "type": "event",
+  "extra": {
+    "location": "CMR Main Campus",
+    "time": "10:00 AM",
+    "funeralInfo": {
+      "enabled": false,
+      "details": ""
+    }
+  },
+  "expireDate": "2026-04-13"
+}
