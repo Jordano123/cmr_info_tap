@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>CMR Hub</title>
 
-  <!-- Base styles (keeps layout and spacing) -->
+  <!-- Base styles -->
   <style>
     :root{
       --accent:#2b6cb0;
@@ -55,6 +55,7 @@
     .hub-button{ background:#f8fafc; border-radius:10px; padding:14px; display:flex; gap:12px; align-items:center; cursor:pointer; border:1px solid transparent; transition:all .12s ease; text-decoration:none; color:inherit; }
     .hub-button:hover{ transform:translateY(-2px); box-shadow:0 6px 18px rgba(15,23,42,0.04); }
     .hub-icon{ width:44px; height:44px; border-radius:8px; background:linear-gradient(135deg,var(--accent),#4c9bd6); display:flex; align-items:center; justify-content:center; color:white; }
+    .hub-icon svg{ width:22px; height:22px; stroke-width:2.2; }
     .hub-label{ font-weight:600; font-size:15px; }
     .hub-sub{ font-size:13px; color:var(--muted); }
 
@@ -74,7 +75,6 @@
     .serve-title{ font-weight:700; font-size:15px; margin:0; }
     .serve-item{ font-size:14px; color:#111827; margin-left:8px; }
 
-    /* Serve card custom class for brand styling (kept minimal here; cmr-brand.css will enhance) */
     .serve-card { border-radius:12px; padding:18px; display:flex; flex-direction:column; gap:10px; }
     .serve-card .serve-header { display:flex; align-items:center; gap:10px; }
     .serve-card .serve-badge { width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; }
@@ -89,12 +89,13 @@
   <!-- Brand stylesheet (after base styles) -->
   <link rel="stylesheet" href="cmr-brand.css">
 
+  <!-- Feather icons -->
   <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <body>
   <div class="wrap" id="pageWrap">
     <div class="layout-fixed" id="mainLayout">
-      <!-- LEFT COLUMN: Hub + How to Serve (moved under Hub) -->
+      <!-- LEFT COLUMN: Hub + How to Serve -->
       <div class="left-col">
         <!-- CMR HUB CARD -->
         <div class="card" id="hubCard" aria-label="CMR Hub">
@@ -107,43 +108,48 @@
           </div>
 
           <div class="hub-grid" role="navigation" aria-label="Main actions">
-            <a class="hub-button" href="give.html" id="giveBtn">
+            <!-- Give: attempts app deep link first (configure data-app-href) then falls back to web href -->
+            <a class="hub-button" href="https://example.com/give" id="giveBtn" title="Give" data-app-href="paypal://send?recipient=YOUR_PAYPAL_ID">
               <div class="hub-icon"><i data-feather="heart"></i></div>
               <div><div class="hub-label" id="giveLabel">Give</div><div class="hub-sub" id="giveSub">Support online</div></div>
             </a>
 
-            <a class="hub-button" href="listen.html" id="sermonsBtn">
+            <!-- YouTube: example uses a VIDEO_ID placeholder; replace VIDEO_ID with your sermon video id -->
+            <a class="hub-button" href="https://www.youtube.com/watch?v=VIDEO_ID" id="sermonsBtn" title="Sermons" data-app-href="youtube://watch?v=VIDEO_ID" data-android-intent="intent://www.youtube.com/watch?v=VIDEO_ID#Intent;package=com.google.android.youtube;scheme=https;end">
               <div class="hub-icon"><i data-feather="video"></i></div>
               <div><div class="hub-label" id="sermonsLabel">Sermons</div><div class="hub-sub" id="sermonsSub">Watch on YouTube</div></div>
             </a>
 
-            <a class="hub-button" href="listen.html" id="listenBtn">
+            <!-- Listen: opens listen page (audio) -->
+            <a class="hub-button" href="listen.html" id="listenBtn" title="Listen">
               <div class="hub-icon"><i data-feather="headphones"></i></div>
               <div><div class="hub-label" id="listenLabel">Listen</div><div class="hub-sub" id="listenSub">Audio highlights</div></div>
             </a>
 
-            <a class="hub-button" href="connect.html" id="connectBtn">
+            <!-- Connect -->
+            <a class="hub-button" href="connect.html" id="connectBtn" title="Connect">
               <div class="hub-icon"><i data-feather="user-plus"></i></div>
               <div><div class="hub-label" id="connectLabel">Connect</div><div class="hub-sub" id="connectSub">Fill out the form</div></div>
             </a>
 
-            <a class="hub-button" href="https://example.com" id="visitBtn">
+            <!-- Visit website -->
+            <a class="hub-button" href="https://example.com" id="visitBtn" title="Visit Website">
               <div class="hub-icon"><i data-feather="globe"></i></div>
               <div><div class="hub-label" id="visitLabel">Visit Website</div><div class="hub-sub" id="visitSub">More info online</div></div>
             </a>
 
-            <a class="hub-button" href="https://linktr.ee" id="followBtn">
+            <!-- Follow / Social -->
+            <a class="hub-button" href="https://linktr.ee" id="followBtn" title="Follow Us">
               <div class="hub-icon"><i data-feather="share-2"></i></div>
               <div><div class="hub-label" id="followLabel">Follow Us</div><div class="hub-sub" id="followSub">Social links</div></div>
             </a>
           </div>
         </div>
 
-        <!-- HOW TO SERVE (moved under Hub, styled with brand) -->
+        <!-- HOW TO SERVE (under Hub) - removed logo/badge next to title per request -->
         <div class="card serve-card" id="serveCard" data-accent="true" aria-label="How to Serve">
-          <div class="serve-header">
-            <div class="serve-badge" style="background:linear-gradient(90deg,#73b3cf,#4c9bd6);">CMR</div>
-            <div>
+          <div class="serve-header" style="align-items:flex-start;">
+            <div style="flex:1;">
               <div style="font-weight:700; font-size:16px;">How to Serve</div>
               <div class="small-muted" style="font-size:13px;">Join a team that fits your gifts</div>
             </div>
@@ -194,7 +200,7 @@
         </div>
       </div>
 
-      <!-- RIGHT COLUMN: Announcements (slot 1 and optional slot 2) -->
+      <!-- RIGHT COLUMN: Announcements -->
       <aside class="right-col" aria-label="Right column">
         <!-- Primary announcement slot -->
         <div class="card" id="announcementsCard" aria-live="polite" data-accent="true">
@@ -212,24 +218,19 @@
   </div>
 
   <script>
-    // ---------- CONFIGURATION ----------
-    // Manual control flags:
-    // SHOW_ANNOUNCEMENTS: true = force show; false = force hide; null = auto (based on data)
-    // SHOW_SECOND_ANNOUNCEMENT: true = force show; false = force hide; null = auto (show only when 2+ active)
-    const SHOW_ANNOUNCEMENTS = null;
-    const SHOW_SECOND_ANNOUNCEMENT = null;
-
-    // Announcement JSON URL (can include showAnnouncements flag and items array)
+    // ---------- CONFIG ----------
+    const SHOW_ANNOUNCEMENTS = null; // true | false | null (auto)
+    const SHOW_SECOND_ANNOUNCEMENT = null; // true | false | null (auto)
     const ANNOUNCEMENT_JSON_URL = '/announcement.json';
 
-    // ---------- TRANSLATIONS (keeps language switcher working) ----------
+    // translations
     const translations = {
       en: { announcements: "Announcements", more_announcements: "More Announcements", learn_more: "Learn more", no_announcements: "No current announcements" },
       fr: { announcements: "Annonces", more_announcements: "Plus d'annonces", learn_more: "En savoir plus", no_announcements: "Aucune annonce en cours" }
     };
     function getSavedLang(){ return localStorage.getItem('cmr_lang') || 'en'; }
 
-    // ---------- LANGUAGE SWITCHER (existing) ----------
+    // language switcher
     const ENABLE_LANGUAGE_SWITCHER = true;
     function createLangSwitcher(){
       if(!ENABLE_LANGUAGE_SWITCHER) return;
@@ -243,18 +244,17 @@
       const lang = getSavedLang();
       const t = translations[lang] || translations.en;
       document.getElementById('announcementsTitle').textContent = t.announcements;
-      document.querySelector('#announcementsCard2 h3')?.textContent = t.more_announcements;
+      const secH = document.querySelector('#announcementsCard2 h3');
+      if(secH) secH.textContent = t.more_announcements;
     }
 
-    // ---------- ANNOUNCEMENT RENDERING & TOGGLE LOGIC ----------
+    // ---------- ANNOUNCEMENT LOGIC ----------
     let lastAnnouncementData = null;
-
     function isExpired(expireDateStr){ if(!expireDateStr) return false; const now = new Date(); const expire = new Date(expireDateStr + 'T23:59:59'); return now > expire; }
 
-    // Render a single announcement into a container element
     function renderSingleAnnouncement(containerEl, data, lang){
       if(!containerEl) return;
-      containerEl.innerHTML = ''; // clear
+      containerEl.innerHTML = '';
       const wrapper = document.createElement('div'); wrapper.className = 'announcement';
       const meta = document.createElement('div'); meta.className = 'meta-row';
       const dateSpan = document.createElement('div'); dateSpan.className = 'small-muted'; dateSpan.textContent = data.date || new Date().toLocaleDateString();
@@ -290,13 +290,9 @@
       containerEl.appendChild(wrapper);
     }
 
-    // Main renderer that decides visibility of slots
     function renderAnnouncementsFromData(rawData){
       lastAnnouncementData = rawData;
       const lang = getSavedLang();
-      // Support two shapes:
-      // 1) { showAnnouncements: false, items: [...] }
-      // 2) [ {enabled:true, ...}, ... ]
       let showAnnouncementsFlag = undefined;
       let items = [];
 
@@ -310,27 +306,22 @@
         if(rawData.showAnnouncements === true) showAnnouncementsFlag = true;
       }
 
-      // filter active announcements
       const active = (items || []).filter(a => a.enabled !== false && !isExpired(a.expireDate));
 
-      // Decide visibility for primary and secondary
       const primaryCard = document.getElementById('announcementsCard');
       const secondaryCard = document.getElementById('announcementsCard2');
 
-      // If admin JSON explicitly disables announcements, hide both
       if (showAnnouncementsFlag === false) {
         if(primaryCard) primaryCard.style.display = 'none';
         if(secondaryCard) secondaryCard.style.display = 'none';
         return;
       }
 
-      // Manual override flags take precedence
       if (SHOW_ANNOUNCEMENTS === false) {
         if(primaryCard) primaryCard.style.display = 'none';
       } else if (SHOW_ANNOUNCEMENTS === true) {
         if(primaryCard) primaryCard.style.display = '';
       } else {
-        // auto: hide primary if no active items
         if(primaryCard) primaryCard.style.display = (active.length > 0) ? '' : 'none';
       }
 
@@ -340,12 +331,10 @@
         } else if (SHOW_SECOND_ANNOUNCEMENT === false) {
           secondaryCard.style.display = 'none';
         } else {
-          // auto: show secondary only when there are 2+ active items
           secondaryCard.style.display = (active.length >= 2) ? '' : 'none';
         }
       }
 
-      // Populate slots: first active -> primary, second active -> secondary
       const primaryContainer = document.getElementById('announcementContainer');
       const secondaryContainer = document.getElementById('announcementContainer2');
       if(primaryContainer) primaryContainer.innerHTML = '';
@@ -354,14 +343,12 @@
       if(active[0] && primaryContainer) renderSingleAnnouncement(primaryContainer, active[0], lang);
       if(active[1] && secondaryContainer) renderSingleAnnouncement(secondaryContainer, active[1], lang);
 
-      // If there are more than 2 active items, you can choose to show them inside primary or provide a link to "All announcements"
       if(active.length > 2 && primaryContainer){
         const more = document.createElement('div'); more.className = 'small-muted'; more.style.marginTop = '8px';
         more.textContent = `${active.length - 2} more announcement(s) available.`;
         primaryContainer.appendChild(more);
       }
 
-      // If no active and no manual show, show placeholder in primary (if visible)
       if(active.length === 0 && primaryCard && primaryCard.style.display !== 'none' && primaryContainer){
         const placeholder = document.createElement('div'); placeholder.className = 'announcement-placeholder';
         placeholder.textContent = translations[lang].no_announcements;
@@ -369,7 +356,6 @@
       }
     }
 
-    // Fetch announcement.json and render
     async function loadAndRenderAnnouncements(){
       try{
         const res = await fetch(ANNOUNCEMENT_JSON_URL, { cache: 'no-store' });
@@ -382,13 +368,79 @@
       }
     }
 
+    // ---------- APP LINK HELPER ----------
+    // Generic helper: tries to open an app-specific URL (data-app-href) and falls back to the web href.
+    // Works on mobile; desktop will immediately use the web href.
+    function tryOpenAppThenFallback(anchor, event){
+      // If user used modifier keys or middle click, let default happen
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.button === 1) return;
+
+      const appHref = anchor.getAttribute('data-app-href');
+      const androidIntent = anchor.getAttribute('data-android-intent'); // optional Android intent string
+      const webHref = anchor.href;
+
+      // Only attempt app open on mobile devices
+      const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      if(!isMobile || !appHref) {
+        // let the link behave normally (web)
+        return;
+      }
+
+      event.preventDefault();
+
+      // For Android, prefer intent if provided (works reliably)
+      if (/Android/i.test(navigator.userAgent) && androidIntent) {
+        window.location = androidIntent;
+        // no further fallback here; Android intent will open app or show Play Store
+        return;
+      }
+
+      // Try to open app scheme and fallback to web after timeout
+      const now = Date.now();
+      let didHide = false;
+
+      // Listen for page visibility change (user returned to page -> app likely not installed)
+      function onVisibilityChange() {
+        didHide = document.hidden;
+      }
+      document.addEventListener('visibilitychange', onVisibilityChange);
+
+      // Attempt to open app via location change
+      const timeout = setTimeout(() => {
+        document.removeEventListener('visibilitychange', onVisibilityChange);
+        // If page didn't become hidden (app didn't open), navigate to web fallback
+        if (!didHide) window.location = webHref;
+      }, 1200);
+
+      // Try opening app scheme
+      try {
+        // For iOS, setting window.location to the scheme works
+        window.location = appHref;
+      } catch (e) {
+        clearTimeout(timeout);
+        document.removeEventListener('visibilitychange', onVisibilityChange);
+        window.location = webHref;
+      }
+    }
+
+    // Attach app-link behavior to configured hub buttons
+    function wireAppLinks(){
+      const anchors = document.querySelectorAll('.hub-button[data-app-href]');
+      anchors.forEach(a => {
+        a.addEventListener('click', function(e){ tryOpenAppThenFallback(a, e); });
+      });
+    }
+
     // ---------- INIT ----------
     document.addEventListener('DOMContentLoaded', () => {
-      feather.replace();
+      // Replace feather icons after DOM is ready so icons render
+      if (window.feather && typeof feather.replace === 'function') {
+        feather.replace();
+      }
       createLangSwitcher();
       applyTranslations();
       loadAndRenderAnnouncements();
-      // refresh periodically
+      wireAppLinks();
       setInterval(loadAndRenderAnnouncements, 5 * 60 * 1000);
     });
   </script>
