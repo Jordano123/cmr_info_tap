@@ -145,7 +145,6 @@
     }
   </style>
 
-  <link rel="stylesheet" href="cmr-brand.css">
   <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <body>
@@ -214,8 +213,8 @@
           <div id="serveGrid" class="serve-grid" role="list" aria-live="polite"></div>
 
           <div class="serve-cta" style="margin-top:12px;">
-            <a class="btn" href="connect.html#serve">Join a Team</a>
-            <a class="btn-ghost" href="connect.html#learn">Learn More</a>
+            <a class="btn" id="joinTeamBtn" href="connect.html#serve">Join a Team</a>
+            <a class="btn-ghost" id="learnMoreBtn" href="connect.html#learn">Learn More</a>
           </div>
         </section>
       </div>
@@ -242,12 +241,13 @@
 
   <script>
     // ---------- CONFIG ----------
-    const SHOW_SECOND_ANNOUNCEMENT = true; // null = auto, true = force show, false = hide
-    const SHOW_THIRD_ANNOUNCEMENT = null;  // null = auto, true = force show, false = hide
-    const SERVE_ENABLED = true;            // true = show serve card, false = hide serve card
-    const ANNOUNCEMENT_JSON_URL = '/announcement.json';
+    // null = auto (show if present), true = force show, false = hide
+    const SHOW_SECOND_ANNOUNCEMENT = null;
+    const SHOW_THIRD_ANNOUNCEMENT = null;
+    const ANNOUNCEMENT_JSON_PATH = '/announcement.json'; // must be served at site root
+    const SERVE_ENABLED = true;
 
-    // translations (hub + announcements + serve)
+    // translations
     const translations = {
       en: {
         hubTitle: "CMR Hub",
@@ -308,13 +308,12 @@
     function getSavedLang(){ return localStorage.getItem('cmr_lang') || 'en'; }
     function setSavedLang(lang){ localStorage.setItem('cmr_lang', lang); applyTranslations(); renderAnnouncementsFromData(lastAnnouncementData); renderServeGridFromData(lastServeData); }
 
-    // Build language switcher
     function buildLangSwitcher(){
       const container = document.getElementById('globalLangSwitcher');
       if(!container) return;
       container.innerHTML = '';
-      const enBtn = document.createElement('button'); enBtn.className = 'lang-btn'; enBtn.textContent = 'EN'; enBtn.onclick = () => { setSavedLang('en'); };
-      const frBtn = document.createElement('button'); frBtn.className = 'lang-btn'; frBtn.textContent = 'FR'; frBtn.onclick = () => { setSavedLang('fr'); };
+      const enBtn = document.createElement('button'); enBtn.className = 'lang-btn'; enBtn.textContent = 'EN'; enBtn.onclick = () => setSavedLang('en');
+      const frBtn = document.createElement('button'); frBtn.className = 'lang-btn'; frBtn.textContent = 'FR'; frBtn.onclick = () => setSavedLang('fr');
       container.appendChild(enBtn); container.appendChild(frBtn);
     }
 
@@ -351,7 +350,7 @@
       if(terH) terH.textContent = t.more;
     }
 
-    // ---------- ANNOUNCEMENTS ----------
+    // ---------- ANNOUNCEMENTS RENDERER ----------
     let lastAnnouncementData = null;
     function isExpired(expireDateStr){ if(!expireDateStr) return false; const now = new Date(); const expire = new Date(expireDateStr + 'T23:59:59'); return now > expire; }
 
@@ -387,7 +386,7 @@
 
       const ctaRow = document.createElement('div'); ctaRow.className = 'cta-row';
       const learn = document.createElement('a'); learn.className = 'btn btn-primary'; learn.href = data.learnMoreUrl || '#'; learn.target = '_blank'; learn.rel = 'noopener';
-      learn.textContent = translations[lang].learn_more;
+      learn.textContent = translations[lang].learn_more || 'Learn more';
       ctaRow.appendChild(learn); wrapper.appendChild(ctaRow);
 
       containerEl.appendChild(wrapper);
@@ -441,15 +440,27 @@
       }
     }
 
+    // Robust loader with fallback and clear logging
     async function loadAndRenderAnnouncements(){
-      try{
-        const res = await fetch(ANNOUNCEMENT_JSON_URL, { cache: 'no-store' });
-        if(!res.ok) throw new Error('Announcement not found');
+      const url = ANNOUNCEMENT_JSON_PATH + '?t=' + Date.now();
+      try {
+        const res = await fetch(url, { cache: 'no-store' });
+        if(!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
+        console.info('Loaded announcement.json', data);
         renderAnnouncementsFromData(data);
-      }catch(e){
-        console.warn('Failed to load announcement.json', e);
-        renderAnnouncementsFromData(null);
+      } catch (err) {
+        console.error('Failed to load announcement.json from', url, err);
+        // fallback: try to render lastAnnouncementData if present
+        if(lastAnnouncementData) {
+          console.info('Rendering last known announcement data');
+          renderAnnouncementsFromData(lastAnnouncementData);
+          return;
+        }
+        // fallback: show a friendly placeholder announcement
+        renderAnnouncementsFromData({ items: [
+          { title: "Announcements temporarily unavailable", description: "We are updating announcements. Check back soon.", enabled: true }
+        ]});
       }
     }
 
@@ -554,10 +565,13 @@
       if (window.feather && typeof feather.replace === 'function') feather.replace();
       buildLangSwitcher();
       applyTranslations();
-      loadAndRenderAnnouncements();
       wireAppLinks();
       renderServeGridFromData(SERVE_DATA);
-      applyServeVisibility();
+      // apply serve visibility
+      setServeVisible(SERVE_ENABLED);
+      // load announcements robustly
+      loadAndRenderAnnouncements();
+      // refresh announcements periodically
       setInterval(loadAndRenderAnnouncements, 5 * 60 * 1000);
     });
   </script>
