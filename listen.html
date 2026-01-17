@@ -2,117 +2,105 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Listen — CMR</title>
-
-  <!-- Base styles -->
   <style>
-    :root{ --accent:#2b6cb0; --muted:#6b7280; --card-bg:#fff; --page-bg:#f3f4f6; --radius:10px; --max-width:900px; --pad:20px; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
-    html,body { max-width:100%; overflow-x:hidden; box-sizing:border-box; }
-    *,*::before,*::after { box-sizing:inherit; }
-    body{ margin:0; background:var(--page-bg); color:#111827; display:flex; justify-content:center; padding:28px; }
-    .wrap{ width:100%; max-width:var(--max-width); }
-    .card{ background:var(--card-bg); border-radius:var(--radius); padding:var(--pad); box-shadow:0 6px 18px rgba(15,23,42,0.06); }
-    .header{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
-    .logo{ width:36px; height:36px; border-radius:8px; background:#111827; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; }
-    h1{ margin:0; font-size:20px; }
-    p.sub{ margin:6px 0 18px 0; color:var(--muted); }
-    .player{ display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
-    audio{ width:100%; max-width:520px; }
-    .playlist{ margin-top:16px; display:flex; flex-direction:column; gap:10px; }
-    .track{ padding:10px; border-radius:8px; background:#f8fafc; display:flex; justify-content:space-between; align-items:center; gap:12px; }
-    .track .meta{ display:flex; flex-direction:column; }
-    .btn{ padding:8px 12px; border-radius:8px; border:0; cursor:pointer; font-weight:700; color:#fff; background:var(--accent); }
-    .back{ text-decoration:none; color:var(--accent); font-weight:700; display:inline-block; margin-bottom:12px; }
+    :root{ --accent:#2b6cb0; --muted:#6b7280; --card-bg:#ffffff; --page-bg:#f3f4f6; --max-width:1000px; --pad:20px; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+    html,body{ margin:0; padding:0; background:var(--page-bg); color:#111827; -webkit-font-smoothing:antialiased; }
+    .wrap{ width:100%; max-width:var(--max-width); margin:0 auto; padding:var(--pad); box-sizing:border-box; }
+    .card{ background:var(--card-bg); border-radius:12px; padding:18px; box-shadow:0 8px 30px rgba(15,23,42,0.06); border:1px solid rgba(15,23,42,0.04); margin-bottom:16px; }
+    h1{ margin:0 0 8px 0; font-size:20px; }
+    .meta{ color:var(--muted); font-size:13px; margin-bottom:10px; }
+    .episode-grid{ display:grid; grid-template-columns: 1fr; gap:14px; }
+    @media(min-width:760px){ .episode-grid{ grid-template-columns: repeat(2, 1fr); } }
+    .episode-thumb{ width:100%; height:160px; object-fit:cover; border-radius:8px; background:#e6eef9; display:block; margin-bottom:10px; }
+    .episode-title{ font-weight:700; margin:0 0 6px 0; }
+    .episode-desc{ margin:0 0 10px 0; color:#111827; line-height:1.4; }
+    .controls{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .btn{ background:var(--accent); color:#fff; padding:8px 12px; border-radius:8px; text-decoration:none; font-weight:700; display:inline-flex; align-items:center; gap:8px; }
+    .btn-ghost{ background:#fff; border:1px solid rgba(15,23,42,0.06); color:#111827; padding:8px 12px; border-radius:8px; text-decoration:none; }
+    .hidden { display:none !important; }
+    .note{ font-size:13px; color:var(--muted); margin-top:8px; }
+    .lang-switcher { position:fixed; top:12px; right:12px; display:flex; gap:8px; z-index:9999; }
+    .lang-btn { padding:8px 10px; border-radius:8px; border:1px solid rgba(15,23,42,0.06); background:#fff; cursor:pointer; font-weight:700; }
   </style>
-
-  <!-- Brand stylesheet (after base styles) -->
-  <link rel="stylesheet" href="cmr-brand.css">
 </head>
 <body>
+  <div class="lang-switcher" id="langSwitcherListen"></div>
+
   <div class="wrap">
-    <a class="back" href="index.html">← Back to CMR Hub</a>
-    <div class="card" data-accent="true">
-      <div class="header">
-        <div class="logo">CMR</div>
-        <div>
-          <h1>Listen</h1>
-          <div class="hr-cmr" aria-hidden="true"></div>
-          <p class="sub">Audio sermons and highlights. Click a track to play.</p>
-        </div>
-      </div>
-
-      <div class="player">
-        <audio id="audioPlayer" controls preload="none">
-          <source id="audioSource" src="" type="audio/mpeg" />
-          Your browser does not support the audio element.
-        </audio>
-        <div style="flex:1; min-width:220px;">
-          <div id="nowPlaying" style="font-weight:700; margin-bottom:6px;">Now playing: —</div>
-          <div id="nowDesc" style="color:var(--muted); font-size:14px;">Select a track from the list below.</div>
-        </div>
-      </div>
-
-      <div class="playlist" id="playlist"></div>
+    <div class="card">
+      <h1 id="listenHeading">Listen</h1>
+      <div class="meta" id="listenIntro">Audio recordings and edited services</div>
+      <div id="episodes" class="episode-grid" aria-live="polite"></div>
+      <div id="noEpisodes" class="note hidden">No episodes available right now.</div>
     </div>
   </div>
 
   <script>
-    // Playlist: will try to fetch /playlist.json first; fallback to inline list
-    let playlist = [
-      { title: "Sunday Sermon — Hope", src: "https://example.com/audio/sermon1.mp3", desc: "Pastor John Doe — 35 min" },
-      { title: "Midweek Reflection — Prayer", src: "https://example.com/audio/sermon2.mp3", desc: "Pastor Jane Smith — 22 min" },
-      { title: "Worship Highlights", src: "https://example.com/audio/worship.mp3", desc: "Worship team — 18 min" }
-    ];
+    const DATA_URL = '/listen-data.json';
 
-    const audio = document.getElementById('audioPlayer');
-    const source = document.getElementById('audioSource');
-    const playlistEl = document.getElementById('playlist');
-    const nowPlaying = document.getElementById('nowPlaying');
-    const nowDesc = document.getElementById('nowDesc');
+    const T_LISTEN = {
+      en: { listenHeading: "Listen", listenIntro: "Audio recordings and edited services", download: "Download" },
+      fr: { listenHeading: "Écouter", listenIntro: "Enregistrements audio et services édités", download: "Télécharger" }
+    };
 
-    function renderPlaylist(){
-      playlistEl.innerHTML = '';
-      playlist.forEach((t, i) => {
-        const tr = document.createElement('div');
-        tr.className = 'track';
-        const meta = document.createElement('div'); meta.className = 'meta';
-        const title = document.createElement('div'); title.textContent = t.title; title.style.fontWeight = 700;
-        const desc = document.createElement('div'); desc.textContent = t.desc; desc.style.color = 'var(--muted)'; desc.style.fontSize = '13px';
-        meta.appendChild(title); meta.appendChild(desc);
-        const btn = document.createElement('button'); btn.className = 'btn btn-primary'; btn.textContent = 'Play';
-        btn.onclick = () => playTrack(i);
-        tr.appendChild(meta); tr.appendChild(btn);
-        playlistEl.appendChild(tr);
-      });
+    function getSavedLang(){ return localStorage.getItem('cmr_lang') || 'en'; }
+    function setSavedLang(lang){ localStorage.setItem('cmr_lang', lang); }
+
+    function buildLangSwitcher(containerId='langSwitcherListen'){
+      const container = document.getElementById(containerId);
+      if(!container) return;
+      container.innerHTML = '';
+      const enBtn = document.createElement('button'); enBtn.className='lang-btn'; enBtn.textContent='EN'; enBtn.onclick = ()=>{ setSavedLang('en'); applyListenTranslations(); loadEpisodes(); };
+      const frBtn = document.createElement('button'); frBtn.className='lang-btn'; frBtn.textContent='FR'; frBtn.onclick = ()=>{ setSavedLang('fr'); applyListenTranslations(); loadEpisodes(); };
+      container.appendChild(enBtn); container.appendChild(frBtn);
     }
 
-    function playTrack(index){
-      const t = playlist[index];
-      if(!t) return;
-      source.src = t.src;
-      audio.load();
-      audio.play().catch(()=>{});
-      nowPlaying.textContent = 'Now playing: ' + t.title;
-      nowDesc.textContent = t.desc;
+    function applyListenTranslations(){
+      const lang = getSavedLang();
+      const t = T_LISTEN[lang] || T_LISTEN.en;
+      document.getElementById('listenHeading').textContent = t.listenHeading;
+      document.getElementById('listenIntro').textContent = t.listenIntro;
     }
 
-    async function tryLoadRemotePlaylist(){
+    function createEpisodeCard(ep){
+      const card = document.createElement('article'); card.className='card'; card.id='episode-'+ep.id;
+      if(ep.thumbnail){ const img = document.createElement('img'); img.className='episode-thumb'; img.src=ep.thumbnail; img.alt=ep.title || 'Episode thumbnail'; card.appendChild(img); }
+      const title = document.createElement('h2'); title.className='episode-title'; title.textContent = ep.title || 'Untitled'; card.appendChild(title);
+      if(ep.date){ const meta = document.createElement('div'); meta.className='meta'; meta.textContent = ep.date; card.appendChild(meta); }
+      if(ep.description){ const desc = document.createElement('p'); desc.className='episode-desc'; desc.textContent = ep.description; card.appendChild(desc); }
+      if(ep.file){
+        const audio = document.createElement('audio'); audio.controls=true; audio.preload='metadata';
+        const src = document.createElement('source'); src.src = ep.file; src.type='audio/mpeg'; audio.appendChild(src); card.appendChild(audio);
+        const controls = document.createElement('div'); controls.className='controls';
+        const download = document.createElement('a'); download.className='btn-ghost'; download.href = ep.file; download.download=''; download.textContent = T_LISTEN[getSavedLang()].download;
+        controls.appendChild(download); card.appendChild(controls);
+      } else {
+        const note = document.createElement('div'); note.className='note'; note.textContent = 'Audio file not available.'; card.appendChild(note);
+      }
+      return card;
+    }
+
+    async function loadEpisodes(){
       try{
-        const res = await fetch('/playlist.json', { cache: 'no-store' });
-        if(!res.ok) throw new Error('no playlist');
+        const res = await fetch(DATA_URL, { cache: 'no-store' });
+        if(!res.ok) throw new Error('Data not found');
         const data = await res.json();
-        if(Array.isArray(data) && data.length) { playlist = data; }
-      }catch(e){
-        // fallback to inline playlist
-      } finally {
-        renderPlaylist();
+        const episodes = (data.episodes || []).filter(e => e.enabled);
+        const container = document.getElementById('episodes');
+        const none = document.getElementById('noEpisodes');
+        container.innerHTML = '';
+        if(episodes.length === 0){ none.classList.remove('hidden'); return; }
+        none.classList.add('hidden');
+        episodes.forEach(ep => { const card = createEpisodeCard(ep); container.appendChild(card); });
+      }catch(err){
+        console.warn('Failed to load episodes', err);
+        document.getElementById('noEpisodes').classList.remove('hidden');
       }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      tryLoadRemotePlaylist();
-    });
+    document.addEventListener('DOMContentLoaded', () => { buildLangSwitcher(); applyListenTranslations(); loadEpisodes(); });
   </script>
 </body>
 </html>
