@@ -1,52 +1,49 @@
 {
-  "showAnnouncements": false,
   "items": [
     {
+      "id": "ann-1",
+      "title": "Sunday Service Times",
+      "title_fr": "Horaires des services du dimanche",
+      "description": "Join us Sundays at 9:00 AM and 11:00 AM for worship and teaching. Childcare available.",
+      "description_fr": "Rejoignez-nous les dimanches à 9h00 et 11h00 pour l'adoration et l'enseignement. Garde d'enfants disponible.",
+      "date": "2026-01-16",
+      "thumbnail": "/images/announcements/service-times.jpg",
+      "learnMoreUrl": "/events/service-times.html",
+      "learnMore_fr": "/fr/events/service-times.html",
+      "type": "service",
       "enabled": true,
-      "date": "2026-04-12",
-      "title": "Easter Celebration Service",
-      "title_fr": "Célébration de Pâques",
-      "thumbnail": "https://example.com/images/easter-thumb.jpg",
-      "theme": "Rising Hope",
-      "pastor": "Pastor John Doe",
-      "description": "Join us this Sunday for a special Easter celebration. Worship starts at 10:00 AM followed by a community lunch.",
-      "description_fr": "Rejoignez-nous ce dimanche pour une célébration spéciale de Pâques. Le culte commence à 10h00 suivi d’un repas communautaire.",
-      "type": "event",
-      "extra": {
-        "location": "CMR Main Campus",
-        "time": "10:00 AM",
-        "funeralInfo": {
-          "enabled": false,
-          "details": ""
-        }
-      },
-      "expireDate": "2026-04-13",
-      "learnMoreUrl": "https://example.com/events/easter"
+      "expireDate": "2026-12-31",
+      "extra": { "location": "Main Campus", "time": "9:00 AM • 11:00 AM" }
     },
     {
+      "id": "ann-2",
+      "title": "Community Food Drive",
+      "title_fr": "Collecte alimentaire communautaire",
+      "description": "Help us collect non-perishable food for local families. Drop-off at the church lobby through Feb 1.",
+      "description_fr": "Aidez-nous à collecter des denrées non périssables pour les familles locales. Déposez-les dans le hall de l'église jusqu'au 1er février.",
+      "date": "2026-01-18",
+      "thumbnail": "/images/announcements/food-drive.jpg",
+      "learnMoreUrl": "/events/food-drive.html",
+      "learnMore_fr": "/fr/events/food-drive.html",
+      "type": "outreach",
       "enabled": true,
-      "date": "2026-05-01",
-      "title": "Prayer Night",
-      "title_fr": "Nuit de Prière",
-      "thumbnail": "",
-      "theme": "Seeking His Presence",
-      "pastor": "Pastor Jane Smith",
-      "description": "An evening of worship and prayer for our city and families.",
-      "description_fr": "Une soirée de louange et de prière pour notre ville et nos familles.",
-      "type": "event",
-      "extra": {
-        "location": "CMR Main Campus",
-        "time": "7:00 PM",
-        "funeralInfo": {
-          "enabled": false,
-          "details": ""
-        }
-      },
-      "expireDate": "2026-05-02",
-      "learnMoreUrl": "https://example.com/events/prayer-night"
+      "expireDate": "2026-02-01",
+      "extra": { "location": "Church Lobby", "time": "All week" }
+    },
+    {
+      "id": "ann-3",
+      "title": "Volunteer Training Night",
+      "title_fr": "Soirée de formation des bénévoles",
+      "description": "New and returning volunteers: join our training night to learn roles and safety procedures.",
+      "description_fr": "Nouveaux et anciens bénévoles : rejoignez notre soirée de formation pour connaître les rôles et les procédures de sécurité.",
+      "date": "2026-01-20",
+      "thumbnail": "/images/announcements/volunteer-training.jpg",
+      "learnMoreUrl": "/events/volunteer-training.html",
+      "learnMore_fr": "/fr/events/volunteer-training.html",
+      "type": "training",
+      "enabled": false,
+      "expireDate": "2026-03-01",
+      "extra": { "location": "Room B2", "time": "7:00 PM" }
     }
   ]
 }
-
-
-
