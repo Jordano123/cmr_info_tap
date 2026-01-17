@@ -41,7 +41,7 @@
       "learnMoreUrl": "/events/volunteer-training.html",
       "learnMore_fr": "/fr/events/volunteer-training.html",
       "type": "training",
-      "enabled": false,
+      "enabled": true,
       "expireDate": "2026-03-01",
       "extra": { "location": "Room B2", "time": "7:00 PM" }
     }
