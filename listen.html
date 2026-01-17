@@ -31,7 +31,7 @@
   <div class="wrap">
     <div class="card">
       <h1 id="listenHeading">Listen</h1>
-      <div class="meta" id="listenIntro">Audio recordings and edited services</div>
+      <div class="meta" id="listenIntro">Audio recordings and edited services.</div>
       <div id="episodes" class="episode-grid" aria-live="polite"></div>
       <div id="noEpisodes" class="note hidden">No episodes available right now.</div>
     </div>
@@ -41,8 +41,8 @@
     const DATA_URL = '/listen-data.json';
 
     const T_LISTEN = {
-      en: { listenHeading: "Listen", listenIntro: "Audio recordings and edited services", download: "Download" },
-      fr: { listenHeading: "Écouter", listenIntro: "Enregistrements audio et services édités", download: "Télécharger" }
+      en: { listenHeading: "Listen", listenIntro: "Audio recordings and edited services.", download: "Download", noEpisodes:"No episodes available right now." },
+      fr: { listenHeading: "Écouter", listenIntro: "Enregistrements audio et services édités", download: "Télécharger", noEpisodes:"Aucun épisode n'est disponible pour le moment." }
     };
 
     function getSavedLang(){ return localStorage.getItem('cmr_lang') || 'en'; }
