@@ -2,151 +2,195 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Connect — CMR</title>
-
-  <!-- Base styles (page-specific) -->
   <style>
-    :root{
-      --accent:#2b6cb0;
-      --maroon:#7a0f0f;
-      --muted:#6b7280;
-      --card-bg:#ffffff;
-      --page-bg:#f3f4f6;
-      --radius:10px;
-      --max-width:900px;
-      --pad:20px;
-      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    }
-
-    /* Reset & layout */
-    html,body { margin:0; padding:0; box-sizing:border-box; width:100%; }
-    *,*::before,*::after { box-sizing:inherit; }
-    body{ background:var(--page-bg); color:#111827; display:flex; justify-content:center; padding:28px; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
-
-    .wrap{ width:100%; max-width:var(--max-width); padding:18px; }
-
-    /* Card */
-    .card{ background:var(--card-bg); border-radius:12px; padding:20px; box-shadow:0 10px 30px rgba(15,23,42,0.06); border:1px solid rgba(15,23,42,0.04); }
-
-    /* Header */
-    .header{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
-    .logo{ width:44px; height:44px; border-radius:10px; background:#111827; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px; }
-    h1{ margin:0; font-size:20px; }
-    p.sub{ margin:6px 0 18px 0; color:var(--muted); }
-
-    /* Form grid */
-    form{ display:grid; grid-template-columns:1fr; gap:12px; }
-    @media(min-width:760px){ form{ grid-template-columns:1fr 1fr; } .full{ grid-column:1 / -1; } }
-
-    label{ display:block; font-size:13px; color:var(--muted); margin-bottom:6px; }
-    input[type="text"], input[type="email"], input[type="tel"], textarea, select{
-      width:100%; padding:10px 12px; border-radius:10px; border:1px solid #e6eef9; font-size:14px; background:#fff; color:#111827;
-    }
-    textarea{ min-height:120px; resize:vertical; }
-
-    /* Buttons */
-    .actions{ display:flex; gap:10px; align-items:center; margin-top:6px; }
-    .btn{ padding:10px 14px; border-radius:10px; border:0; cursor:pointer; font-weight:700; color:#fff; background:var(--accent); }
-    .btn-ghost{ background:#fff; border:1px solid #e6eef9; color:#111827; font-weight:700; padding:10px 14px; border-radius:10px; text-decoration:none; display:inline-flex; align-items:center; }
-    .btn-maroon{ background:var(--maroon); color:#fff; padding:10px 14px; border-radius:10px; border:0; font-weight:700; }
-
-    /* Small text */
-    .note{ font-size:13px; color:var(--muted); margin-top:8px; }
-
-    /* Accessibility focus */
-    input:focus, textarea:focus, select:focus, button:focus { outline:3px solid rgba(43,108,176,0.12); outline-offset:2px; }
-
-    /* Minor responsive */
-    @media(max-width:420px){
-      .wrap{ padding:12px; }
-      .logo{ width:40px; height:40px; font-size:14px; }
-    }
+    :root{ --accent:#2b6cb0; --muted:#6b7280; --page-bg:#f3f4f6; --max-width:900px; --pad:18px; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+    html,body{ margin:0; padding:0; background:var(--page-bg); color:#111827; -webkit-font-smoothing:antialiased; }
+    .wrap{ width:100%; max-width:var(--max-width); margin:0 auto; padding:var(--pad); box-sizing:border-box; }
+    .card{ background:#fff; border-radius:12px; padding:18px; box-shadow:0 8px 30px rgba(15,23,42,0.06); border:1px solid rgba(15,23,42,0.04); }
+    h1{ margin:0 0 8px 0; font-size:20px; }
+    label{ display:block; margin-top:10px; font-weight:600; }
+    input, textarea{ width:100%; padding:10px; margin-top:6px; border-radius:8px; border:1px solid #e5e7eb; box-sizing:border-box; }
+    .btn{ margin-top:12px; background:var(--accent); color:#fff; padding:10px 14px; border-radius:8px; border:0; cursor:pointer; font-weight:700; }
+    .lang-switcher { position:fixed; top:12px; right:12px; display:flex; gap:8px; z-index:9999; }
+    .lang-btn { padding:8px 10px; border-radius:8px; border:1px solid rgba(15,23,42,0.06); background:#fff; cursor:pointer; font-weight:700; }
+    .field-error { color:#b91c1c; font-size:13px; margin-top:6px; display:none; }
+    .input-invalid { box-shadow: 0 0 0 3px rgba(185,28,28,0.08); border-color: #ef4444; }
   </style>
-
-  <!-- Brand stylesheet (after base styles so brand rules override defaults) -->
-  <link rel="stylesheet" href="cmr-brand.css">
 </head>
 <body>
+  <div class="lang-switcher" id="langSwitcherConnect"></div>
+
   <div class="wrap">
-    <a class="btn-ghost" href="index.html" style="margin-bottom:12px; display:inline-block;">← Back to CMR Hub</a>
+    <div class="card">
+      <h1 id="connectHeading">Connect</h1>
+      <p id="connectIntro" style="color:var(--muted); margin-top:6px;">Tell us about yourself and how you'd like to get involved.</p>
 
-    <div class="card" role="main" aria-labelledby="connectHeading">
-      <div class="header">
-        <div class="logo" aria-hidden="true">CMR</div>
-        <div>
-          <h1 id="connectHeading">Connect</h1>
-          <div class="hr-cmr" aria-hidden="true" style="margin-top:8px;"></div>
-          <p class="sub">Tell us about yourself so we can serve you better.</p>
-        </div>
-      </div>
-
-      <!-- Netlify-ready form -->
       <form name="connect" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
         <input type="hidden" name="form-name" value="connect" />
-        <p style="display:none"><label>Don’t fill this out: <input name="bot-field" /></label></p>
+        <label for="first" id="labelFirst">First name</label>
+        <input id="first" name="first" type="text" required />
+        <div class="field-error" id="first-error" aria-hidden="true"></div>
 
-        <div>
-          <label for="first">First name</label>
-          <input id="first" name="first" type="text" placeholder="First name" required autocomplete="given-name" />
-        </div>
+        <label for="last" id="labelLast">Last name</label>
+        <input id="last" name="last" type="text" required />
+        <div class="field-error" id="last-error" aria-hidden="true"></div>
 
-        <div>
-          <label for="last">Last name</label>
-          <input id="last" name="last" type="text" placeholder="Last name" required autocomplete="family-name" />
-        </div>
+        <label for="phone" id="labelPhone">Phone</label>
+        <input id="phone" name="phone" type="tel" required />
+        <div class="field-error" id="phone-error" aria-hidden="true"></div>
 
-        <div>
-          <label for="phone">Phone</label>
-          <input id="phone" name="phone" type="tel" placeholder="+1 (555) 555-5555" required autocomplete="tel" />
-        </div>
+        <label for="address" id="labelAddress">Address (optional)</label>
+        <input id="address" name="address" type="text" />
 
-        <div>
-          <label for="email">Email (optional)</label>
-          <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" />
-        </div>
+        <label for="serve" id="labelServe">I want to serve in</label>
+        <select id="serve" name="serve">
+          <option value="production">Production Team</option>
+          <option value="worship">Worship Team</option>
+          <option value="kids">Kids Ministry</option>
+          <option value="guest">Guest Experience</option>
+          <option value="creative">Creative & Media</option>
+          <option value="admin">Administration</option>
+        </select>
 
-        <div class="full">
-          <label for="address">Address (optional)</label>
-          <input id="address" name="address" type="text" placeholder="Street, City, State, ZIP" autocomplete="street-address" />
-        </div>
+        <label for="notes" id="labelNotes">Notes</label>
+        <textarea id="notes" name="notes" rows="4"></textarea>
 
-        <div>
-          <label for="status">Status</label>
-          <select id="status" name="status" required>
-            <option value="">Select</option>
-            <option>First visit</option>
-            <option>Second visit</option>
-            <option>Regular</option>
-            <option>Member</option>
-          </select>
-        </div>
-
-        <div class="full">
-          <label>Interests (check all that apply)</label>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">
-            <label style="display:inline-flex;align-items:center;gap:8px;"><input type="checkbox" name="interests" value="Join a Serve Team" /> Join a Serve Team</label>
-            <label style="display:inline-flex;align-items:center;gap:8px;"><input type="checkbox" name="interests" value="Following Jesus" /> Following Jesus</label>
-            <label style="display:inline-flex;align-items:center;gap:8px;"><input type="checkbox" name="interests" value="Baptism" /> Baptism</label>
-            <label style="display:inline-flex;align-items:center;gap:8px;"><input type="checkbox" name="interests" value="Learn about CMR" /> Learn about CMR</label>
-            <label style="display:inline-flex;align-items:center;gap:8px;"><input type="checkbox" name="interests" value="Youth and Kids" /> Youth and Kids Opportunities</label>
-            <label style="display:inline-flex;align-items:center;gap:8px;"><input type="checkbox" name="interests" value="Give" /> I would like to give</label>
-          </div>
-        </div>
-
-        <div class="full">
-          <label for="prayer">How can we pray for you? (optional)</label>
-          <textarea id="prayer" name="prayer" placeholder="Share a short prayer request or note" rows="4"></textarea>
-        </div>
-
-        <div class="full actions" style="grid-column:1 / -1;">
-          <button class="btn-maroon" type="submit">Submit</button>
-          <a class="btn-ghost" href="index.html" role="button">Cancel</a>
-        </div>
-
-        <div class="note">By submitting, you agree to be contacted by Centre Missionnaire la Restauration for ministry purposes.</div>
+        <button type="submit" class="btn" id="submitBtn">Submit</button>
       </form>
     </div>
   </div>
+
+  <script>
+    // Translations for connect page
+    const T_CONNECT = {
+      en: {
+        connectHeading: "Connect",
+        connectIntro: "Tell us about yourself and how you'd like to get involved.",
+        labelFirst: "First name",
+        labelLast: "Last name",
+        labelPhone: "Phone",
+        labelAddress: "Address (optional)",
+        labelServe: "I want to serve in",
+        labelNotes: "Notes",
+        submitBtn: "Submit",
+        serveOptions: {
+          production: "Production Team",
+          worship: "Worship Team",
+          kids: "Kids Ministry",
+          guest: "Guest Experience",
+          creative: "Creative & Media",
+          admin: "Administration"
+        }
+      },
+      fr: {
+        connectHeading: "Se connecter",
+        connectIntro: "Parlez-nous de vous et comment vous souhaitez vous impliquer.",
+        labelFirst: "Prénom",
+        labelLast: "Nom",
+        labelPhone: "Téléphone",
+        labelAddress: "Adresse (optionnel)",
+        labelServe: "Je veux servir dans",
+        labelNotes: "Remarques",
+        submitBtn: "Envoyer",
+        serveOptions: {
+          production: "Équipe Production",
+          worship: "Équipe de Louange",
+          kids: "Ministère des Enfants",
+          guest: "Accueil",
+          creative: "Créatif & Médias",
+          admin: "Administration"
+        }
+      }
+    };
+
+    function getSavedLang(){ return localStorage.getItem('cmr_lang') || 'en'; }
+    function setSavedLang(lang){ localStorage.setItem('cmr_lang', lang); }
+
+    function buildLangSwitcher(containerId='langSwitcherConnect'){
+      const container = document.getElementById(containerId);
+      if(!container) return;
+      container.innerHTML = '';
+      const enBtn = document.createElement('button'); enBtn.className='lang-btn'; enBtn.textContent='EN'; enBtn.onclick = ()=>{ setSavedLang('en'); applyConnectTranslations(); };
+      const frBtn = document.createElement('button'); frBtn.className='lang-btn'; frBtn.textContent='FR'; frBtn.onclick = ()=>{ setSavedLang('fr'); applyConnectTranslations(); };
+      container.appendChild(enBtn); container.appendChild(frBtn);
+    }
+
+    function applyConnectTranslations(){
+      const lang = getSavedLang();
+      const t = T_CONNECT[lang] || T_CONNECT.en;
+      document.getElementById('connectHeading').textContent = t.connectHeading;
+      document.getElementById('connectIntro').textContent = t.connectIntro;
+      document.getElementById('labelFirst').textContent = t.labelFirst;
+      document.getElementById('labelLast').textContent = t.labelLast;
+      document.getElementById('labelPhone').textContent = t.labelPhone;
+      document.getElementById('labelAddress').textContent = t.labelAddress;
+      document.getElementById('labelServe').textContent = t.labelServe;
+      document.getElementById('labelNotes').textContent = t.labelNotes;
+      document.getElementById('submitBtn').textContent = t.submitBtn;
+
+      // update select options
+      const opts = t.serveOptions;
+      const sel = document.getElementById('serve');
+      if(sel){
+        sel.innerHTML = '';
+        for(const key of ['production','worship','kids','guest','creative','admin']){
+          const o = document.createElement('option');
+          o.value = key;
+          o.textContent = opts[key] || key;
+          sel.appendChild(o);
+        }
+      }
+    }
+
+    // Simple client-side validation (same as earlier)
+    (function(){
+      const form = document.querySelector('form[name="connect"]');
+      if(!form) return;
+      const first = form.querySelector('#first');
+      const last = form.querySelector('#last');
+      const phone = form.querySelector('#phone');
+      const phonePattern = /^[0-9+\-\s().]{7,20}$/;
+
+      function ensureErrorNode(input){
+        let err = input.parentElement.querySelector('.field-error');
+        if(!err){
+          err = document.createElement('div'); err.className='field-error'; input.parentElement.appendChild(err);
+        }
+        return err;
+      }
+
+      function validateField(input){
+        if(!input) return true;
+        const val = (input.value||'').trim();
+        let valid = true;
+        let message = '';
+        const lang = getSavedLang();
+        if(input === first || input === last){
+          if(!val){ valid=false; message = (lang==='fr') ? 'Ce champ est requis.' : 'This field is required.'; }
+        }
+        if(input === phone){
+          if(!val){ valid=false; message = (lang==='fr') ? 'Le numéro de téléphone est requis.' : 'Phone number is required.'; }
+          else if(!phonePattern.test(val)){ valid=false; message = (lang==='fr') ? 'Entrez un numéro de téléphone valide.' : 'Enter a valid phone number.'; }
+        }
+        const errNode = ensureErrorNode(input);
+        if(!valid){ input.classList.add('input-invalid'); errNode.textContent = message; errNode.style.display='block'; errNode.setAttribute('aria-hidden','false'); }
+        else { input.classList.remove('input-invalid'); errNode.style.display='none'; errNode.setAttribute('aria-hidden','true'); }
+        return valid;
+      }
+
+      [first,last,phone].forEach(f => { if(!f) return; f.addEventListener('blur', ()=>validateField(f)); f.addEventListener('input', ()=>validateField(f)); });
+
+      form.addEventListener('submit', function(e){
+        let ok = true; [first,last,phone].forEach(f => { if(f) ok = validateField(f) && ok; });
+        if(!ok){ e.preventDefault(); e.stopPropagation(); const firstInvalid = form.querySelector('.input-invalid'); if(firstInvalid) firstInvalid.focus(); }
+      });
+
+      window.cmrValidateConnectForm = function(){ let ok=true; [first,last,phone].forEach(f => { if(f) ok = validateField(f) && ok; }); return ok; };
+    })();
+
+    document.addEventListener('DOMContentLoaded', () => { buildLangSwitcher(); applyConnectTranslations(); });
+  </script>
 </body>
 </html>
