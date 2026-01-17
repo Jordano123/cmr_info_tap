@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -5,6 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>CMR Hub</title>
 
+  <!-- Base styles -->
   <style>
     :root{
       --accent:#2b6cb0;
@@ -17,15 +19,62 @@
       --container-padding:20px;
       font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
-    html, body { margin:0; padding:0; width:100%; height:100%; box-sizing:border-box; background:var(--page-bg); color:#111827; -webkit-font-smoothing:antialiased; }
-    *, *::before, *::after { box-sizing:inherit; }
-    .wrap { width:100%; max-width:var(--max-width); margin:0 auto; padding-left:calc(var(--container-padding) + env(safe-area-inset-left)); padding-right:calc(var(--container-padding) + env(safe-area-inset-right)); padding-top:var(--container-padding); padding-bottom:var(--container-padding); box-sizing:border-box; position:relative; }
-    @supports not (padding: env(safe-area-inset-left)) { .wrap { padding-left:var(--container-padding); padding-right:var(--container-padding); } }
 
-    .layout-fixed{ display:grid; grid-template-columns: 1fr 360px; gap:18px; align-items:start; width:100%; margin:0 auto; box-sizing:border-box; }
+    /* Reset and robust centering for foldables and all devices */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      -webkit-text-size-adjust: 100%;
+      -webkit-font-smoothing: antialiased;
+      background: var(--page-bg);
+      color: #111827;
+      min-height: 100vh;
+    }
+    *, *::before, *::after { box-sizing: inherit; }
+
+    /* Centering container: margin auto is robust across devices */
+    .wrap {
+      width: 100%;
+      max-width: var(--max-width);
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: calc(var(--container-padding) + env(safe-area-inset-left));
+      padding-right: calc(var(--container-padding) + env(safe-area-inset-right));
+      padding-top: var(--container-padding);
+      padding-bottom: var(--container-padding);
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    /* Fallback for browsers without env() support */
+    @supports not (padding: env(safe-area-inset-left)) {
+      .wrap {
+        padding-left: var(--container-padding);
+        padding-right: var(--container-padding);
+      }
+    }
+
+    /* Layout: left column + right column stacked */
+    .layout-fixed{
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:18px;
+      align-items:start;
+      width:100%;
+      margin:0 auto;
+      box-sizing: border-box;
+    }
     .left-col{ display:flex; flex-direction:column; gap:18px; }
     .right-col{ display:flex; flex-direction:column; gap:16px; }
-    @media (max-width:980px){ .layout-fixed{ grid-template-columns: 1fr; } .right-col{ order:2; } .left-col{ order:1; } }
+
+    @media (max-width:980px){
+      .layout-fixed{ grid-template-columns: 1fr; }
+      .right-col{ order:2; }
+      .left-col{ order:1; }
+    }
 
     .card{ background:var(--card-bg); border-radius:var(--radius); padding:20px; box-shadow:0 6px 18px rgba(15,23,42,0.06); border:1px solid rgba(15,23,42,0.04); }
     .hub-header{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
@@ -39,45 +88,88 @@
     .hub-button{ background:#f8fafc; border-radius:10px; padding:14px; display:flex; gap:12px; align-items:center; cursor:pointer; border:1px solid transparent; transition:all .12s ease; text-decoration:none; color:inherit; }
     .hub-button:hover{ transform:translateY(-2px); box-shadow:0 6px 18px rgba(15,23,42,0.04); }
     .hub-icon{ width:44px; height:44px; border-radius:8px; background:linear-gradient(135deg,var(--accent),#4c9bd6); display:flex; align-items:center; justify-content:center; color:white; }
+    .hub-icon svg{ width:22px; height:22px; stroke-width:2.2; }
     .hub-label{ font-weight:600; font-size:15px; }
     .hub-sub{ font-size:13px; color:var(--muted); }
 
-    .serve-card { background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.45)); backdrop-filter: blur(6px); border:1px solid rgba(255,255,255,0.18); box-shadow: 0 8px 30px rgba(15,23,42,0.06); padding:18px; border-radius:12px; }
-    .serve-header { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
-    .serve-title { margin:0; font-size:18px; font-weight:700; }
-    .serve-sub { margin:4px 0 0 0; color:var(--muted); font-size:13px; }
-    .serve-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:14px; justify-items:center; align-items:start; }
-    .serve-item { width:100%; max-width:320px; background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.35)); border-radius:12px; padding:14px; box-shadow: 0 6px 18px rgba(15,23,42,0.04); border:1px solid rgba(15,23,42,0.04); display:flex; flex-direction:column; gap:8px; }
-    .serve-item h3 { margin:0; font-size:15px; font-weight:700; }
-    .serve-item ul { margin:0; padding-left:18px; color:#111827; }
-    .serve-item li { margin:6px 0; font-size:14px; }
-    .serve-badge { width:44px; height:44px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; color:#fff; font-weight:700; background:linear-gradient(135deg,var(--accent),#4c9bd6); }
-    .serve-actions { display:flex; gap:8px; }
-    .btn { padding:10px 12px; border-radius:8px; border:1px solid transparent; cursor:pointer; font-weight:600; font-size:14px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; background:var(--accent); color:#fff; }
-    .btn-ghost { background:#fff; border:1px solid rgba(15,23,42,0.06); color:#111827; padding:8px 12px; border-radius:8px; cursor:pointer; }
-
+    .announcement-list{ display:flex; flex-direction:column; gap:16px; }
     .announcement{ display:flex; flex-direction:column; gap:12px; border-radius:10px; padding:14px; background:#f9fafb; border:1px solid #e5e7eb; }
     .announcement .thumb{ width:100%; height:160px; border-radius:8px; object-fit:cover; background:#e6eef9; }
     .meta-row{ display:flex; justify-content:space-between; gap:10px; align-items:center; font-size:13px; color:var(--muted); }
     .announce-title{ font-size:18px; font-weight:700; margin:0; }
     .announce-desc{ font-size:14px; color:#111827; line-height:1.45; }
     .small-muted{ font-size:13px; color:var(--muted); }
+    .cta-row{ display:flex; gap:10px; margin-top:8px; }
+    .btn{ padding:10px 12px; border-radius:8px; border:1px solid transparent; cursor:pointer; font-weight:600; font-size:14px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
+    .btn-primary{ background:var(--accent); color:white; }
 
-    .lang-switcher { position:fixed; top:12px; right:12px; display:flex; gap:8px; z-index:9999; }
-    .lang-btn { padding:8px 10px; border-radius:8px; border:1px solid rgba(15,23,42,0.06); background:#fff; cursor:pointer; font-weight:700; }
+    /* Serve section: glass cards and centered rows */
+    .serve-card { background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.45)); backdrop-filter: blur(6px); border:1px solid rgba(255,255,255,0.18); box-shadow: 0 8px 30px rgba(15,23,42,0.06); padding:18px; border-radius:12px; }
 
-    @media (max-width:420px){ .wrap{ padding-left:calc(12px + env(safe-area-inset-left)); padding-right:calc(12px + env(safe-area-inset-right)); } .card{ padding:14px; } }
+    .serve-header { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+    .serve-title { margin:0; font-size:18px; font-weight:700; }
+    .serve-sub { margin:4px 0 0 0; color:var(--muted); font-size:13px; }
+
+    .serve-grid {
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap:14px;
+      justify-items:center;
+      align-items:start;
+    }
+
+    .serve-item {
+      width:100%;
+      max-width:320px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.35));
+      border-radius:12px;
+      padding:14px;
+      box-shadow: 0 6px 18px rgba(15,23,42,0.04);
+      border:1px solid rgba(15,23,42,0.04);
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .serve-item h3 { margin:0; font-size:15px; font-weight:700; }
+    .serve-item ul { margin:0; padding-left:18px; color:#111827; }
+    .serve-item li { margin:6px 0; font-size:14px; }
+
+    .serve-badge { width:44px; height:44px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; color:#fff; font-weight:700; background:linear-gradient(135deg,var(--accent),#4c9bd6); }
+
+    .serve-actions { display:flex; gap:8px; }
+    .btn-ghost { background:#fff; border:1px solid rgba(15,23,42,0.06); color:#111827; padding:8px 12px; border-radius:8px; cursor:pointer; }
+
+    /* Hidden state */
+    #serveCard[aria-hidden="true"], #serveCard.hidden { display:none !important; }
+
+    /* Announcement accent when data-accent is set */
+    #announcementsCard[data-accent="true"] { border-left: 4px solid var(--accent); padding-left: 12px; }
+    #announcementsCard2[data-accent="true"] { border-left: 4px solid var(--accent); padding-left: 12px; }
+
+    /* small responsive tweaks */
+    @media (max-width:420px){
+      .wrap{ padding-left: calc(12px + env(safe-area-inset-left)); padding-right: calc(12px + env(safe-area-inset-right)); }
+      .card{ padding:14px; }
+    }
+
+    /* Optional: quick rule to hide the serve section (comment out to show) */
+    /* To hide the serve section site-wide, uncomment the next line:
+       #serveCard { display: none !important; } */
   </style>
 
+  <!-- Brand stylesheet (after base styles) -->
   <link rel="stylesheet" href="cmr-brand.css">
+
+  <!-- Feather icons -->
   <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <body>
-  <div class="lang-switcher" aria-hidden="false" id="globalLangSwitcher"></div>
-
   <div class="wrap" id="pageWrap">
     <div class="layout-fixed" id="mainLayout">
+      <!-- LEFT COLUMN: Hub + How to Serve -->
       <div class="left-col">
+        <!-- CMR HUB CARD -->
         <div class="card" id="hubCard" aria-label="CMR Hub">
           <div class="hub-header">
             <div class="hub-logo" id="logoText">CMR</div>
@@ -88,7 +180,7 @@
           </div>
 
           <div class="hub-grid" role="navigation" aria-label="Main actions">
-            <a class="hub-button" href="give.html" id="giveBtn" title="Give" data-app-href="paypal://send?recipient=YOUR_PAYPAL_ID">
+            <a class="hub-button" href="https://example.com/give" id="giveBtn" title="Give" data-app-href="paypal://send?recipient=YOUR_PAYPAL_ID">
               <div class="hub-icon"><i data-feather="heart"></i></div>
               <div><div class="hub-label" id="giveLabel">Give</div><div class="hub-sub" id="giveSub">Support online</div></div>
             </a>
@@ -120,27 +212,29 @@
           </div>
         </div>
 
+        <!-- HOW TO SERVE (updated glass cards) -->
         <section id="serveCard" class="card serve-card" aria-labelledby="serveHeading" data-enabled="true">
           <div class="serve-header">
             <div style="flex:1;">
               <h2 id="serveHeading" class="serve-title">How to Serve</h2>
-              <p class="serve-sub small-muted" id="serveIntro">Join a team that fits your gifts</p>
+              <p class="serve-sub small-muted">Join a team that fits your gifts</p>
             </div>
             <div class="serve-actions" aria-hidden="true">
-              <button class="btn" onclick="setServeVisible(false)" title="Hide section" id="serveHideBtn">Hide</button>
-              <button class="btn-ghost" onclick="setServeVisible(true)" title="Show section" id="serveShowBtn">Show</button>
+              <button class="btn" onclick="setServeVisible(false)" title="Hide section">Hide</button>
+              <button class="btn-ghost" onclick="setServeVisible(true)" title="Show section">Show</button>
             </div>
           </div>
 
           <div id="serveGrid" class="serve-grid" role="list" aria-live="polite"></div>
 
           <div class="serve-cta" style="margin-top:12px;">
-            <a class="btn" href="connect.html#serve" id="joinTeamBtn">Join a Team</a>
-            <a class="btn-ghost" href="connect.html#learn" id="learnMoreBtn">Learn More</a>
+            <a class="btn" href="connect.html#serve">Join a Team</a>
+            <a class="btn-ghost" href="connect.html#learn">Learn More</a>
           </div>
         </section>
       </div>
 
+      <!-- RIGHT COLUMN: Announcements -->
       <aside class="right-col" aria-label="Right column">
         <div class="card" id="announcementsCard" aria-live="polite" data-accent="true">
           <h3 id="announcementsTitle" style="margin:0 0 12px 0;">Announcements</h3>
@@ -156,119 +250,39 @@
   </div>
 
   <script>
-    // ---------- TRANSLATIONS ----------
+    // ---------- CONFIG ----------
+    const SHOW_ANNOUNCEMENTS = null; // true | false | null (auto)
+    const SHOW_SECOND_ANNOUNCEMENT = null; // true | false | null (auto)
+    const ANNOUNCEMENT_JSON_URL = '/announcement.json';
+
+    // translations
     const translations = {
-      en: {
-        hubTitle: "CMR Hub",
-        hubSubtitle: "One place for everything happening at CMR.",
-        giveLabel: "Give",
-        giveSub: "Support online",
-        sermonsLabel: "Sermons",
-        sermonsSub: "Watch on YouTube",
-        listenLabel: "Listen",
-        listenSub: "Audio highlights",
-        connectLabel: "Connect",
-        connectSub: "Fill out the form",
-        visitLabel: "Visit Website",
-        visitSub: "More info online",
-        followLabel: "Follow Us",
-        followSub: "Social links",
-        serveTitle: "How to Serve",
-        serveIntro: "Join a team that fits your gifts",
-        joinTeam: "Join a Team",
-        learnMore: "Learn More",
-        hide: "Hide",
-        show: "Show",
-        announcements: "Announcements",
-        more_announcements: "More Announcements",
-        learn_more: "Learn more",
-        no_announcements: "No current announcements"
-      },
-      fr: {
-        hubTitle: "Centre CMR",
-        hubSubtitle: "Un endroit pour tout ce qui se passe à CMR.",
-        giveLabel: "Donner",
-        giveSub: "Soutenir en ligne",
-        sermonsLabel: "Sermons",
-        sermonsSub: "Regarder sur YouTube",
-        listenLabel: "Écouter",
-        listenSub: "Extraits audio",
-        connectLabel: "Se connecter",
-        connectSub: "Remplir le formulaire",
-        visitLabel: "Visiter le site",
-        visitSub: "Plus d'infos en ligne",
-        followLabel: "Suivez-nous",
-        followSub: "Liens sociaux",
-        serveTitle: "Comment Servir",
-        serveIntro: "Rejoignez une équipe adaptée à vos dons",
-        joinTeam: "Rejoindre une équipe",
-        learnMore: "En savoir plus",
-        hide: "Cacher",
-        show: "Afficher",
-        announcements: "Annonces",
-        more_announcements: "Plus d'annonces",
-        learn_more: "En savoir plus",
-        no_announcements: "Aucune annonce en cours"
-      }
+      en: { announcements: "Announcements", more_announcements: "More Announcements", learn_more: "Learn more", no_announcements: "No current announcements" },
+      fr: { announcements: "Annonces", more_announcements: "Plus d'annonces", learn_more: "En savoir plus", no_announcements: "Aucune annonce en cours" }
     };
-
     function getSavedLang(){ return localStorage.getItem('cmr_lang') || 'en'; }
-    function setSavedLang(lang){ localStorage.setItem('cmr_lang', lang); }
 
-    // Build language switcher UI
-    function buildLangSwitcher(containerId='globalLangSwitcher'){
-      const container = document.getElementById(containerId);
-      if(!container) return;
-      container.innerHTML = '';
-      const enBtn = document.createElement('button');
-      enBtn.className = 'lang-btn';
-      enBtn.textContent = 'EN';
-      enBtn.onclick = () => { setSavedLang('en'); applyTranslations(); renderAnnouncementsFromData(lastAnnouncementData); renderServeGridFromData(lastServeData); };
-      const frBtn = document.createElement('button');
-      frBtn.className = 'lang-btn';
-      frBtn.textContent = 'FR';
-      frBtn.onclick = () => { setSavedLang('fr'); applyTranslations(); renderAnnouncementsFromData(lastAnnouncementData); renderServeGridFromData(lastServeData); };
-      container.appendChild(enBtn);
-      container.appendChild(frBtn);
+    // language switcher
+    const ENABLE_LANGUAGE_SWITCHER = true;
+    function createLangSwitcher(){
+      if(!ENABLE_LANGUAGE_SWITCHER) return;
+      const wrap = document.createElement('div');
+      wrap.className = 'lang-switcher';
+      const enBtn = document.createElement('button'); enBtn.className = 'lang-btn'; enBtn.textContent = 'EN'; enBtn.onclick = () => { localStorage.setItem('cmr_lang','en'); applyTranslations(); renderAnnouncementsFromData(lastAnnouncementData); renderServeGridFromData(lastServeData); };
+      const frBtn = document.createElement('button'); frBtn.className = 'lang-btn'; frBtn.textContent = 'FR'; frBtn.onclick = () => { localStorage.setItem('cmr_lang','fr'); applyTranslations(); renderAnnouncementsFromData(lastAnnouncementData); renderServeGridFromData(lastServeData); };
+      wrap.appendChild(enBtn); wrap.appendChild(frBtn); document.body.appendChild(wrap);
     }
-
     function applyTranslations(){
       const lang = getSavedLang();
       const t = translations[lang] || translations.en;
-      // Hub
-      document.getElementById('hubTitle').textContent = t.hubTitle;
-      document.getElementById('hubSubtitle').textContent = t.hubSubtitle;
-      document.getElementById('giveLabel').textContent = t.giveLabel;
-      document.getElementById('giveSub').textContent = t.giveSub;
-      document.getElementById('sermonsLabel').textContent = t.sermonsLabel;
-      document.getElementById('sermonsSub').textContent = t.sermonsSub;
-      document.getElementById('listenLabel').textContent = t.listenLabel;
-      document.getElementById('listenSub').textContent = t.listenSub;
-      document.getElementById('connectLabel').textContent = t.connectLabel;
-      document.getElementById('connectSub').textContent = t.connectSub;
-      document.getElementById('visitLabel').textContent = t.visitLabel;
-      document.getElementById('visitSub').textContent = t.visitSub;
-      document.getElementById('followLabel').textContent = t.followLabel;
-      document.getElementById('followSub').textContent = t.followSub;
-
-      // Serve
-      document.getElementById('serveHeading').textContent = t.serveTitle;
-      document.getElementById('serveIntro').textContent = t.serveIntro;
-      document.getElementById('joinTeamBtn').textContent = t.joinTeam;
-      document.getElementById('learnMoreBtn').textContent = t.learnMore;
-      document.getElementById('serveHideBtn').textContent = t.hide;
-      document.getElementById('serveShowBtn').textContent = t.show;
-
-      // Announcements
-      const annTitle = document.getElementById('announcementsTitle');
-      if(annTitle) annTitle.textContent = t.announcements;
+      const primaryTitle = document.getElementById('announcementsTitle');
+      if(primaryTitle) primaryTitle.textContent = t.announcements;
       const secH = document.querySelector('#announcementsCard2 h3');
       if(secH) secH.textContent = t.more_announcements;
     }
 
-    // ---------- ANNOUNCEMENTS (unchanged logic) ----------
-    const ANNOUNCEMENT_JSON_URL = '/announcement.json';
-    let lastAnnouncementData = true;
+    // ---------- ANNOUNCEMENT LOGIC ----------
+    let lastAnnouncementData = null;
     function isExpired(expireDateStr){ if(!expireDateStr) return false; const now = new Date(); const expire = new Date(expireDateStr + 'T23:59:59'); return now > expire; }
 
     function renderSingleAnnouncement(containerEl, data, lang){
@@ -309,22 +323,87 @@
       containerEl.appendChild(wrapper);
     }
 
+    // Helper to mark secondary card with blue accent if it contains a thumbnail
+    function markSecondaryAccentIfThumbnail(){
+      const secContainer = document.getElementById('announcementContainer2');
+      const secCard = document.getElementById('announcementsCard2');
+      if(!secContainer || !secCard) return;
+      const img = secContainer.querySelector('img.thumb');
+      if(img && img.src && img.src.trim() !== ''){
+        secCard.setAttribute('data-accent', 'true');
+      } else {
+        secCard.removeAttribute('data-accent');
+      }
+    }
+
     function renderAnnouncementsFromData(rawData){
       lastAnnouncementData = rawData;
       const lang = getSavedLang();
+      let showAnnouncementsFlag = undefined;
       let items = [];
-      if(!rawData) items = [];
-      else if(Array.isArray(rawData)) items = rawData;
-      else if(typeof rawData === 'object'){ if(Array.isArray(rawData.items)) items = rawData.items; }
+
+      if(!rawData){
+        items = [];
+      } else if(Array.isArray(rawData)){
+        items = rawData;
+      } else if(typeof rawData === 'object'){
+        if(Array.isArray(rawData.items)) items = rawData.items;
+        if(rawData.showAnnouncements === false) showAnnouncementsFlag = false;
+        if(rawData.showAnnouncements === true) showAnnouncementsFlag = true;
+      }
+
       const active = (items || []).filter(a => a.enabled !== false && !isExpired(a.expireDate));
+
+      const primaryCard = document.getElementById('announcementsCard');
+      const secondaryCard = document.getElementById('announcementsCard2');
+
+      if (showAnnouncementsFlag === false) {
+        if(primaryCard) primaryCard.style.display = 'none';
+        if(secondaryCard) secondaryCard.style.display = 'none';
+        return;
+      }
+
+      if (SHOW_ANNOUNCEMENTS === false) {
+        if(primaryCard) primaryCard.style.display = 'none';
+      } else if (SHOW_ANNOUNCEMENTS === true) {
+        if(primaryCard) primaryCard.style.display = '';
+      } else {
+        if(primaryCard) primaryCard.style.display = (active.length > 0) ? '' : 'none';
+      }
+
+      if (secondaryCard) {
+        if (SHOW_SECOND_ANNOUNCEMENT === true) {
+          secondaryCard.style.display = '';
+        } else if (SHOW_SECOND_ANNOUNCEMENT === false) {
+          secondaryCard.style.display = 'none';
+        } else {
+          secondaryCard.style.display = (active.length >= 2) ? '' : 'none';
+        }
+      }
+
       const primaryContainer = document.getElementById('announcementContainer');
       const secondaryContainer = document.getElementById('announcementContainer2');
       if(primaryContainer) primaryContainer.innerHTML = '';
       if(secondaryContainer) secondaryContainer.innerHTML = '';
+
       if(active[0] && primaryContainer) renderSingleAnnouncement(primaryContainer, active[0], lang);
-      if(active[1] && secondaryContainer) renderSingleAnnouncement(secondaryContainer, active[1], lang);
-      if(active.length === 0 && primaryContainer){
-        const placeholder = document.createElement('div'); placeholder.className = 'announcement-placeholder'; placeholder.textContent = translations[lang].no_announcements;
+      if(active[1] && secondaryContainer) {
+        renderSingleAnnouncement(secondaryContainer, active[1], lang);
+        // mark accent if thumbnail exists
+        markSecondaryAccentIfThumbnail();
+      } else {
+        if (secondaryCard) secondaryCard.removeAttribute('data-accent');
+      }
+
+      if(active.length > 2 && primaryContainer){
+        const more = document.createElement('div'); more.className = 'small-muted'; more.style.marginTop = '8px';
+        more.textContent = `${active.length - 2} more announcement(s) available.`;
+        primaryContainer.appendChild(more);
+      }
+
+      if(active.length === 0 && primaryCard && primaryCard.style.display !== 'none' && primaryContainer){
+        const placeholder = document.createElement('div'); placeholder.className = 'announcement-placeholder';
+        placeholder.textContent = translations[lang].no_announcements;
         primaryContainer.appendChild(placeholder);
       }
     }
@@ -363,55 +442,108 @@
       }, 1200);
       try { window.location = appHref; } catch (e) { clearTimeout(timeout); document.removeEventListener('visibilitychange', onVisibilityChange); window.location = webHref; }
     }
-    function wireAppLinks(){ const anchors = document.querySelectorAll('.hub-button[data-app-href]'); anchors.forEach(a => { a.addEventListener('click', function(e){ tryOpenAppThenFallback(a, e); }); }); }
 
-    // ---------- SERVE GRID (data-driven) ----------
+    function wireAppLinks(){
+      const anchors = document.querySelectorAll('.hub-button[data-app-href]');
+      anchors.forEach(a => { a.addEventListener('click', function(e){ tryOpenAppThenFallback(a, e); }); });
+    }
+
+    // ---------- SERVE GRID DATA & RENDER ----------
+    // Inline fallback data; you can move this to public/serve-data.json and call loadServeDataFrom()
     const SERVE_DATA = [
-      { id: 'production', title: { en: 'Production Team', fr: 'Équipe Production' }, roles: ['Sound Engineer','Video Switcher','Camera Operator','Slide Operator'], enabled: true, badgeText: 'PROD' },
-      { id: 'worship', title: { en: 'Worship Team', fr: 'Équipe de Louange' }, roles: ['Lead Singer','Guitar','Bass','Drums','Keys'], enabled: true, badgeText: 'WOR' },
-      { id: 'kids', title: { en: 'Kids Ministry', fr: 'Ministère des Enfants' }, roles: ['Classroom Helper','Check-In Support','Story Leader'], enabled: true, badgeText: 'KIDS' },
-      { id: 'guest', title: { en: 'Guest Experience', fr: 'Accueil' }, roles: ['Usher','Greeter','Welcome Team'], enabled: true, badgeText: 'GUEST' },
-      { id: 'creative', title: { en: 'Creative & Media', fr: 'Créatif & Médias' }, roles: ['Photography','Social Media','Graphic Support'], enabled: true, badgeText: 'CRE' },
-      { id: 'admin', title: { en: 'Administration', fr: 'Administration' }, roles: ['Office Support','Prayer Follow-up','Hospitality'], enabled: true, badgeText: 'ADMIN' }
+      { id: 'production', title: 'Production Team', roles: ['Sound Engineer','Video Switcher','Camera Operator','Slide Operator'], enabled: true, badgeText: 'PROD' },
+      { id: 'worship', title: 'Worship Team', roles: ['Lead Singer','Guitar','Bass','Drums','Keys'], enabled: true, badgeText: 'WOR' },
+      { id: 'kids', title: 'Kids Ministry', roles: ['Classroom Helper','Check-In Support','Story Leader'], enabled: true, badgeText: 'KIDS' },
+      { id: 'guest', title: 'Guest Experience', roles: ['Usher','Greeter','Welcome Team'], enabled: true, badgeText: 'GUEST' },
+      { id: 'creative', title: 'Creative & Media', roles: ['Photography','Social Media','Graphic Support'], enabled: true, badgeText: 'CRE' },
+      { id: 'admin', title: 'Administration', roles: ['Office Support','Prayer Follow-up','Hospitality'], enabled: true, badgeText: 'ADMIN' }
     ];
-    let lastServeData = true;
+    let lastServeData = null;
 
-    function renderServeGridFromData(data){
+    function renderServeGrid(data) {
       lastServeData = data || SERVE_DATA;
       const grid = document.getElementById('serveGrid');
       if(!grid) return;
       grid.innerHTML = '';
-      const lang = getSavedLang();
       const visible = (lastServeData || []).filter(i => i.enabled !== false);
       visible.forEach(item => {
-        const card = document.createElement('div'); card.className = 'serve-item'; card.setAttribute('role','listitem');
-        const header = document.createElement('div'); header.style.display='flex'; header.style.alignItems='center'; header.style.gap='10px';
-        const badge = document.createElement('div'); badge.className='serve-badge'; badge.textContent = item.badgeText || (item.title[lang]||item.title.en).slice(0,3).toUpperCase();
+        const card = document.createElement('div');
+        card.className = 'serve-item';
+        card.setAttribute('role','listitem');
+
+        const header = document.createElement('div');
+        header.style.display = 'flex';
+        header.style.alignItems = 'center';
+        header.style.gap = '10px';
+
+        const badge = document.createElement('div');
+        badge.className = 'serve-badge';
+        badge.textContent = item.badgeText || item.title.split(' ')[0].slice(0,3).toUpperCase();
         header.appendChild(badge);
-        const h = document.createElement('h3'); h.textContent = (item.title[lang] || item.title.en || item.title);
+
+        const h = document.createElement('h3');
+        h.textContent = item.title;
         header.appendChild(h);
         card.appendChild(header);
+
         if(Array.isArray(item.roles) && item.roles.length){
           const ul = document.createElement('ul');
-          item.roles.forEach(r => { const li = document.createElement('li'); li.textContent = r; ul.appendChild(li); });
+          item.roles.forEach(r => {
+            const li = document.createElement('li');
+            li.textContent = r;
+            ul.appendChild(li);
+          });
           card.appendChild(ul);
         }
-        const actionRow = document.createElement('div'); actionRow.style.marginTop='8px';
-        const joinBtn = document.createElement('a'); joinBtn.className='btn-ghost'; joinBtn.href='connect.html#serve'; joinBtn.textContent = translations[lang].joinTeam;
-        actionRow.appendChild(joinBtn); card.appendChild(actionRow);
+
+        const actionRow = document.createElement('div');
+        actionRow.style.marginTop = '8px';
+        const joinBtn = document.createElement('a');
+        joinBtn.className = 'btn-ghost';
+        joinBtn.href = 'connect.html#serve';
+        joinBtn.textContent = 'I want to serve';
+        actionRow.appendChild(joinBtn);
+        card.appendChild(actionRow);
+
         grid.appendChild(card);
       });
-      if(visible.length === 0){ const note = document.createElement('div'); note.className='small-muted'; note.textContent = translations[getSavedLang()].no_announcements; grid.appendChild(note); }
+
+      if(visible.length === 0){
+        const note = document.createElement('div');
+        note.className = 'small-muted';
+        note.textContent = 'No serve opportunities are available right now.';
+        grid.appendChild(note);
+      }
     }
 
+    // Public API: show/hide the whole section
     function setServeVisible(show){
       const sec = document.getElementById('serveCard');
       if(!sec) return;
-      if(show){ sec.removeAttribute('aria-hidden'); sec.classList.remove('hidden'); sec.setAttribute('data-enabled','true'); }
-      else { sec.setAttribute('aria-hidden','true'); sec.classList.add('hidden'); sec.setAttribute('data-enabled','false'); }
+      if(show){
+        sec.removeAttribute('aria-hidden');
+        sec.classList.remove('hidden');
+        sec.setAttribute('data-enabled','true');
+      } else {
+        sec.setAttribute('aria-hidden','true');
+        sec.classList.add('hidden');
+        sec.setAttribute('data-enabled','false');
+      }
     }
 
-    // ---------- MOBILE REORDER ----------
+    // Optional: load data from JSON file instead of inline array
+    async function loadServeDataFrom(url='/serve-data.json'){
+      try{
+        const res = await fetch(url, {cache:'no-store'});
+        if(!res.ok) throw new Error('No serve-data.json');
+        const json = await res.json();
+        renderServeGrid(json.items || json);
+      }catch(e){
+        renderServeGrid(SERVE_DATA);
+      }
+    }
+
+    // ---------- MOBILE REORDER: Serve card under Announcements on small screens ----------
     (function manageServeCardPlacement(){
       const serve = document.getElementById('serveCard');
       const rightCol = document.querySelector('.right-col');
@@ -419,22 +551,38 @@
       if(!serve || !rightCol || !leftCol) return;
       const originalParent = serve.parentElement;
       const originalNext = serve.nextElementSibling;
-      function placeForMobile(){ if (rightCol.nextElementSibling !== serve) rightCol.parentNode.insertBefore(serve, rightCol.nextElementSibling); }
-      function restoreForDesktop(){ if (originalParent && originalParent !== serve.parentElement) { if (originalNext) originalParent.insertBefore(serve, originalNext); else originalParent.appendChild(serve); } }
-      function checkAndApply(){ if (window.innerWidth <= 980) placeForMobile(); else restoreForDesktop(); }
-      checkAndApply(); window.addEventListener('resize', checkAndApply);
+
+      function placeForMobile(){
+        if (rightCol.nextElementSibling !== serve) {
+          rightCol.parentNode.insertBefore(serve, rightCol.nextElementSibling);
+        }
+      }
+      function restoreForDesktop(){
+        if (originalParent && originalParent !== serve.parentElement) {
+          if (originalNext) originalParent.insertBefore(serve, originalNext);
+          else originalParent.appendChild(serve);
+        }
+      }
+      function checkAndApply(){
+        if (window.innerWidth <= 980) placeForMobile();
+        else restoreForDesktop();
+      }
+      checkAndApply();
+      window.addEventListener('resize', checkAndApply);
     })();
 
     // ---------- INIT ----------
     document.addEventListener('DOMContentLoaded', () => {
       if (window.feather && typeof feather.replace === 'function') feather.replace();
-      buildLangSwitcher();
+      createLangSwitcher();
       applyTranslations();
       loadAndRenderAnnouncements();
       wireAppLinks();
-      renderServeGridFromData(SERVE_DATA);
+      // render serve grid (attempt to load external JSON first)
+      loadServeDataFrom().catch(()=>renderServeGrid(SERVE_DATA));
       setInterval(loadAndRenderAnnouncements, 5 * 60 * 1000);
     });
   </script>
 </body>
 </html>
+
