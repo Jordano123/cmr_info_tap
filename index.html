@@ -268,7 +268,7 @@
 
     // ---------- ANNOUNCEMENTS (unchanged logic) ----------
     const ANNOUNCEMENT_JSON_URL = '/announcement.json';
-    let lastAnnouncementData = null;
+    let lastAnnouncementData = true;
     function isExpired(expireDateStr){ if(!expireDateStr) return false; const now = new Date(); const expire = new Date(expireDateStr + 'T23:59:59'); return now > expire; }
 
     function renderSingleAnnouncement(containerEl, data, lang){
