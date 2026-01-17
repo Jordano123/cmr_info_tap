@@ -4,292 +4,91 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Give — CMR</title>
-
   <style>
     :root{
-      --accent:#2b6cb0;
-      --muted:#6b7280;
-      --page-bg:#f3f4f6; /* same as CMR hub */
-      --card-bg:#ffffff;
-      --glass-border: rgba(15,23,42,0.06);
-      --radius:12px;
-      --max-width:980px;
-      --pad:20px;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      color-scheme: light;
+      --accent:#2b6cb0; --muted:#6b7280; --page-bg:#f3f4f6; --card-bg:#fff; --radius:12px; --max-width:980px; --pad:20px;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     }
-
-    /* Page layout matches CMR hub */
-    html,body{ height:100%; margin:0; padding:0; -webkit-font-smoothing:antialiased; background:var(--page-bg); color:#0f172a; }
-    .wrap{
-      width:100%;
-      max-width:var(--max-width);
-      margin:28px auto;
-      padding:var(--pad);
-      box-sizing:border-box;
-    }
-
-    .card{
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,250,0.96));
-      border-radius:var(--radius);
-      padding:22px;
-      box-shadow: 0 8px 30px rgba(15,23,42,0.06);
-      border:1px solid var(--glass-border);
-    }
-
-    .header{
-      display:flex;
-      gap:14px;
-      align-items:center;
-      margin-bottom:8px;
-    }
-    .logo{
-      width:64px;
-      height:64px;
-      border-radius:10px;
-      background:#111827;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-      flex:0 0 64px;
-    }
+    html,body{ margin:0; padding:0; background:var(--page-bg); color:#0f172a; -webkit-font-smoothing:antialiased; }
+    .wrap{ width:100%; max-width:var(--max-width); margin:28px auto; padding:var(--pad); box-sizing:border-box; }
+    .card{ background:linear-gradient(180deg,#fff,#fbfbfb); border-radius:var(--radius); padding:22px; box-shadow:0 8px 30px rgba(15,23,42,0.06); border:1px solid rgba(15,23,42,0.04); }
+    .header{ display:flex; gap:14px; align-items:center; margin-bottom:8px; }
+    .logo{ width:64px; height:64px; border-radius:10px; background:#111827; display:flex; align-items:center; justify-content:center; overflow:hidden; }
     .logo img{ width:100%; height:100%; object-fit:contain; display:block; }
-
-    .church-title{ display:flex; flex-direction:column; gap:4px; }
     .church-name{ font-size:20px; font-weight:800; margin:0; color:#0f172a; }
     .church-sub{ font-size:13px; color:var(--muted); margin:0; }
-
-    h1.page-title{ margin:14px 0 8px 0; font-size:28px; letter-spacing:-0.3px; color:#0f172a; }
-
-    .lead{
-      color:#0f172a;
-      opacity:0.8;
-      margin-bottom:18px;
-      line-height:1.45;
-      font-size:15px;
-    }
-
-    /* Give buttons grid */
-    .give-grid{
-      display:grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap:14px;
-      margin-bottom:18px;
-    }
-
-    /* Glass-style button base */
-    .give-btn{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:14px 16px;
-      border-radius:12px;
-      text-decoration:none;
-      color:inherit;
-      font-weight:700;
-      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.85));
-      border:1px solid rgba(15,23,42,0.04);
-      box-shadow: 0 6px 18px rgba(15,23,42,0.04);
-      transition: transform .12s ease, box-shadow .12s ease;
-      justify-content:flex-start;
-    }
-    .give-btn:hover{ transform: translateY(-3px); box-shadow: 0 12px 30px rgba(15,23,42,0.08); }
-    .give-btn:active{ transform: translateY(0); }
-
-    .give-icon{
-      width:44px;
-      height:44px;
-      border-radius:10px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:800;
-      font-size:18px;
-      flex:0 0 44px;
-      color:#fff;
-    }
-
+    h1{ margin:14px 0 8px 0; font-size:28px; color:#0f172a; }
+    .lead{ color:#0f172a; opacity:0.85; margin-bottom:18px; line-height:1.45; }
+    .give-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-bottom:18px; }
+    .give-btn{ display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:12px; text-decoration:none; color:inherit; font-weight:700; background:linear-gradient(180deg,rgba(255,255,255,0.95),rgba(250,250,250,0.95)); border:1px solid rgba(15,23,42,0.04); box-shadow:0 6px 18px rgba(15,23,42,0.04); justify-content:flex-start; }
+    .give-btn:hover{ transform:translateY(-3px); box-shadow:0 12px 30px rgba(15,23,42,0.08); }
+    .give-icon{ width:44px; height:44px; border-radius:8px; display:flex; align-items:center; justify-content:center; background:transparent; overflow:hidden; flex:0 0 44px; }
+    .give-icon img{ width:100%; height:100%; object-fit:contain; display:block; }
     .give-label{ display:flex; flex-direction:column; gap:2px; }
     .give-label .title{ font-size:15px; color:#0f172a; }
     .give-label .sub{ font-size:12px; color:var(--muted); font-weight:600; }
-
-    /* App brand colors (glass tinted) */
-    .cash { background: linear-gradient(180deg, rgba(0,194,68,0.08), rgba(0,194,68,0.03)); border:1px solid rgba(0,194,68,0.12); }
-    .cash .give-icon{ background: #00C244; }
-
-    .paypal { background: linear-gradient(180deg, rgba(0,112,186,0.06), rgba(0,112,186,0.02)); border:1px solid rgba(0,112,186,0.08); }
-    .paypal .give-icon{ background: linear-gradient(180deg,#003087,#0070ba); }
-
-    .zelle { background: linear-gradient(180deg, rgba(108,29,173,0.06), rgba(108,29,173,0.02)); border:1px solid rgba(108,29,173,0.08); }
-    .zelle .give-icon{ background: linear-gradient(180deg,#6C1DAD,#9B3ADF); }
-
-    /* Bank transfer uses neutral glass */
-    .bank { background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.85)); border:1px solid rgba(15,23,42,0.04); }
-    .bank .give-icon{ background: linear-gradient(180deg,#f3f4f6,#e6eef9); color:#0f172a; }
-
-    /* In-person chips */
-    .inperson {
-      margin-top:18px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:10px 14px;
-      border-radius:999px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,250,0.96));
-      color:#0f172a;
-      border:1px solid rgba(15,23,42,0.04);
-      cursor:pointer;
-      text-decoration:none;
-      font-weight:700;
-    }
-    .chip .mini{ width:28px; height:28px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; color:#fff; font-weight:800; }
-
-    /* Bank info block */
-    .bank-info{
-      margin-top:18px;
-      padding:14px;
-      border-radius:10px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,250,0.96));
-      border:1px solid rgba(15,23,42,0.04);
-      color:#0f172a;
-      font-size:14px;
-      line-height:1.5;
-    }
-
-    .notice{
-      margin-top:12px;
-      font-size:13px;
-      color:var(--muted);
-    }
-
-    /* Responsive tweaks */
-    @media (max-width:520px){
-      .header{ gap:10px; }
-      .logo{ width:56px; height:56px; }
-      h1.page-title{ font-size:24px; }
-      .give-btn{ padding:12px; }
-      .give-icon{ width:40px; height:40px; }
-    }
-
-    /* Focus outlines */
-    .give-btn:focus, .chip:focus { outline: 3px solid rgba(43,108,176,0.12); outline-offset: 3px; }
-
-    /* small helper to keep SVGs crisp */
-    .svg-icon { display:block; width:22px; height:22px; }
+    .inperson{ margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .chip{ display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:999px; background:linear-gradient(180deg,#fff,#fbfbfb); color:#0f172a; border:1px solid rgba(15,23,42,0.04); cursor:pointer; text-decoration:none; font-weight:700; }
+    .bank-info{ margin-top:18px; padding:14px; border-radius:10px; background:linear-gradient(180deg,#fff,#fbfbfb); border:1px solid rgba(15,23,42,0.04); color:#0f172a; font-size:14px; line-height:1.5; }
+    .notice{ margin-top:12px; font-size:13px; color:var(--muted); }
+    .lang-switcher { position:fixed; top:12px; right:12px; display:flex; gap:8px; z-index:9999; }
+    .lang-btn { padding:8px 10px; border-radius:8px; border:1px solid rgba(15,23,42,0.06); background:#fff; cursor:pointer; font-weight:700; }
+    @media(max-width:520px){ h1{ font-size:22px; } .logo{ width:56px; height:56px; } .give-btn{ padding:10px; } .give-icon{ width:40px; height:40px; } }
   </style>
 </head>
 <body>
+  <div class="lang-switcher" id="langSwitcherGive" aria-hidden="false"></div>
+
   <div class="wrap">
     <div class="card" role="main" aria-labelledby="giveTitle">
       <div class="header">
-        <div class="logo" aria-hidden="false">
-          <!-- Replace with your PNG logo path -->
-          <img src="/images/cmr-logo.png" alt="CMR logo" id="churchLogo">
-        </div>
-        <div class="church-title">
+        <div class="logo"><img src="/images/cmr-logo.png" alt="CMR logo" id="churchLogo"></div>
+        <div>
           <div class="church-name" id="churchFullName">Christ Missionary Revival Church</div>
           <div class="church-sub" id="churchTag">Community • Worship • Service</div>
         </div>
       </div>
 
-      <h1 class="page-title" id="giveTitle">Give</h1>
+      <h1 id="giveTitle">Give</h1>
+      <p class="lead" id="giveLead">Thank you for partnering with CMR. Your generosity supports ministries, outreach, and the ongoing work of the church.</p>
 
-      <p class="lead" id="giveLead">
-        Thank you for partnering with CMR. Your generosity supports ministries, outreach, and the ongoing work of the church.
-      </p>
-
-      <!-- Primary giving options -->
       <div class="give-grid" role="list" aria-label="Primary giving options">
-        <!-- Cash App (official-style icon) -->
-        <a class="give-btn cash" id="cashAppBtn" role="listitem" href="https://cash.app/$YourCashTag" target="_blank" rel="noopener">
-          <div class="give-icon" aria-hidden="true" title="Cash App">
-            <!-- Cash App official-like square with $ -->
-            <svg class="svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="0" y="0" width="24" height="24" rx="4" fill="#00C244"/>
-              <path d="M12 7v10M9 9h6" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+        <!-- Cash App: place your icon at /images/cashapp.png -->
+        <a class="give-btn" id="cashAppBtn" href="#" role="listitem" aria-label="Cash App">
+          <div class="give-icon" id="cashIcon">
+            <img src="/images/cashapp.png" alt="Cash App logo" onerror="this.style.display='none'">
           </div>
-          <div class="give-label">
-            <div class="title">Cash App</div>
-            <div class="sub">Send to $YourCashTag</div>
-          </div>
+          <div class="give-label"><div class="title" id="cashTitle">Cash App</div><div class="sub" id="cashSub">Send to $YourCashTag</div></div>
         </a>
 
-        <!-- PayPal (official-style P mark) -->
-        <a class="give-btn paypal" id="paypalBtn" role="listitem" href="https://www.paypal.com/paypalme/YourPayPal" target="_blank" rel="noopener">
-          <div class="give-icon" aria-hidden="true" title="PayPal">
-            <!-- PayPal P mark (two-layer P) -->
-            <svg class="svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M7.5 7.5h4.2c1.9 0 3.4-1.5 3.4-3.4S13.6 0.7 11.7 0.7H6.3C5.6 0.7 5 1.3 5 2v12.5c0 .7.6 1.3 1.3 1.3h3.9" fill="#003087"/>
-              <path d="M9.2 7.5h4.2c1.9 0 3.4-1.5 3.4-3.4 0-1.9-1.5-3.4-3.4-3.4H8.5c-.7 0-1.3.6-1.3 1.3v12.5c0 .7.6 1.3 1.3 1.3h3.9c1.9 0 3.4-1.5 3.4-3.4 0-1.9-1.5-3.4-3.4-3.4H9.2" fill="#0070BA"/>
-            </svg>
-          </div>
-          <div class="give-label">
-            <div class="title">PayPal</div>
-            <div class="sub">paypal.me/YourPayPal</div>
-          </div>
+        <!-- PayPal: place your icon at /images/paypal.png -->
+        <a class="give-btn" id="paypalBtn" href="#" role="listitem" aria-label="PayPal">
+          <div class="give-icon" id="paypalIcon"><img src="/images/paypal.png" alt="PayPal logo" onerror="this.style.display='none'"></div>
+          <div class="give-label"><div class="title" id="paypalTitle">PayPal</div><div class="sub" id="paypalSub">paypal.me/YourPayPal</div></div>
         </a>
 
-        <!-- Zelle (stylized Z icon) -->
-        <a class="give-btn zelle" id="zelleBtn" role="listitem" href="https://yourbank.example.com/zelle" target="_blank" rel="noopener">
-          <div class="give-icon" aria-hidden="true" title="Zelle">
-            <!-- Zelle-like mark -->
-            <svg class="svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="0" y="0" width="24" height="24" rx="4" fill="#6C1DAD"/>
-              <path d="M7 8h10l-6 8h6" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            </svg>
-          </div>
-          <div class="give-label">
-            <div class="title">Zelle</div>
-            <div class="sub">Send to youremail@domain.com</div>
-          </div>
+        <!-- Zelle: place your icon at /images/zelle.png -->
+        <a class="give-btn" id="zelleBtn" href="#" role="listitem" aria-label="Zelle">
+          <div class="give-icon" id="zelleIcon"><img src="/images/zelle.png" alt="Zelle logo" onerror="this.style.display='none'"></div>
+          <div class="give-label"><div class="title" id="zelleTitle">Zelle</div><div class="sub" id="zelleSub">Send to youremail@domain.com</div></div>
         </a>
 
         <!-- Bank transfer -->
-        <a class="give-btn bank" id="bankBtn" role="listitem" href="#bank-info" aria-controls="bank-info">
-          <div class="give-icon" aria-hidden="true" title="Bank transfer">
-            <!-- bank icon -->
-            <svg class="svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M12 3L2 9h20L12 3z" fill="#0f172a" opacity="0.08"/>
-              <path d="M3 10h18v2H3zM6 13v5M10 13v5M14 13v5M18 13v5" stroke="#0f172a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            </svg>
-          </div>
-          <div class="give-label">
-            <div class="title">Bank Transfer</div>
-            <div class="sub">Account details below</div>
-          </div>
+        <a class="give-btn" id="bankBtn" href="#bank-info" role="listitem" aria-controls="bank-info">
+          <div class="give-icon"><img src="/images/bank-placeholder.png" alt="Bank" onerror="this.style.display='none'"></div>
+          <div class="give-label"><div class="title" id="bankTitle">Bank Transfer</div><div class="sub" id="bankSub">Account details below</div></div>
         </a>
       </div>
 
-      <!-- In-person giving -->
-      <div class="lead" style="margin-top:6px; margin-bottom:8px;">In person</div>
+      <div class="lead" style="margin-top:6px; margin-bottom:8px;" id="inPersonTitle">In person</div>
       <div class="inperson" role="list" aria-label="In-person giving options">
-        <a class="chip" href="#" onclick="alert('Open basket — thank you'); return false;">
-          <span class="mini" style="background:linear-gradient(180deg,#ffd6a5,#ffb86b); color:#0f172a;">🧺</span>
-          Open basket
-        </a>
-
-        <a class="chip" href="#" onclick="alert('Apple Pay — follow device prompts'); return false;">
-          <span class="mini" style="background:#000000;"></span>
-          Apple Pay
-        </a>
-
-        <a class="chip" href="#" onclick="alert('Google Pay — follow device prompts'); return false;">
-          <span class="mini" style="background:#4285F4;">G</span>
-          Google Pay
-        </a>
+        <a class="chip" href="#" onclick="alert('Open basket — thank you'); return false;">🧺 Open basket</a>
+        <a class="chip" href="#" onclick="alert('Apple Pay — follow device prompts'); return false;"> Apple Pay</a>
+        <a class="chip" href="#" onclick="alert('Google Pay — follow device prompts'); return false;">G Google Pay</a>
       </div>
 
-      <!-- Bank information -->
       <div id="bank-info" class="bank-info" aria-live="polite">
-        <strong>Bank Transfer</strong>
+        <strong id="bankTransferTitle">Bank Transfer</strong>
         <div style="margin-top:8px;">
           Account name: <span id="bankName">Christ Missionary Revival Church</span><br>
           Account number: <span id="acctNumber">123456789</span><br>
@@ -298,51 +97,105 @@
         </div>
       </div>
 
-      <div class="notice">
-        By giving you support the ministries and mission of CMR. For tax receipts, include your email in the Connect form or contact the church office.
-      </div>
+      <div class="notice" id="giveNotice">By giving you support the ministries and mission of CMR. For tax receipts, include your email in the Connect form or contact the church office.</div>
     </div>
   </div>
 
   <script>
-    // Wire primary buttons to open app or fallback to web (app URLs are optional)
+    const TRANSLATIONS = {
+      en: {
+        churchFullName: "Christ Missionary Revival Church",
+        churchTag: "Community • Worship • Service",
+        giveTitle: "Give",
+        giveLead: "Thank you for partnering with CMR. Your generosity supports ministries, outreach, and the ongoing work of the church.",
+        cashApp: "Cash App",
+        paypal: "PayPal",
+        zelle: "Zelle",
+        bankTransferTitle: "Bank Transfer",
+        inPerson: "In person",
+        openBasket: "Open basket",
+        applePay: "Apple Pay",
+        googlePay: "Google Pay",
+        bankNotice: "By giving you support the ministries and mission of CMR. For tax receipts, include your email in the Connect form or contact the church office."
+      },
+      fr: {
+        churchFullName: "Église Chrétienne Missionnaire Revival",
+        churchTag: "Communauté • Adoration • Service",
+        giveTitle: "Donner",
+        giveLead: "Merci de vous associer à CMR. Votre générosité soutient les ministères, la sensibilisation et le travail continu de l'église.",
+        cashApp: "Cash App",
+        paypal: "PayPal",
+        zelle: "Zelle",
+        bankTransferTitle: "Virement bancaire",
+        inPerson: "En personne",
+        openBasket: "Panier ouvert",
+        applePay: "Apple Pay",
+        googlePay: "Google Pay",
+        bankNotice: "En donnant, vous soutenez les ministères et la mission de CMR. Pour un reçu fiscal, incluez votre e-mail dans le formulaire Connect ou contactez le bureau de l'église."
+      }
+    };
+
+    function getSavedLang(){ return localStorage.getItem('cmr_lang') || 'en'; }
+    function setSavedLang(lang){ localStorage.setItem('cmr_lang', lang); applyTranslations(); }
+
+    function buildLangSwitcher(){
+      const container = document.getElementById('langSwitcherGive');
+      if(!container) return;
+      container.innerHTML = '';
+      const en = document.createElement('button'); en.className='lang-btn'; en.textContent='EN'; en.onclick = ()=> setSavedLang('en');
+      const fr = document.createElement('button'); fr.className='lang-btn'; fr.textContent='FR'; fr.onclick = ()=> setSavedLang('fr');
+      container.appendChild(en); container.appendChild(fr);
+    }
+
+    function applyTranslations(){
+      const lang = getSavedLang();
+      const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+      document.getElementById('churchFullName').textContent = t.churchFullName;
+      document.getElementById('churchTag').textContent = t.churchTag;
+      document.getElementById('giveTitle').textContent = t.giveTitle;
+      document.getElementById('giveLead').textContent = t.giveLead;
+      document.getElementById('cashTitle').textContent = t.cashApp;
+      document.getElementById('paypalTitle').textContent = t.paypal;
+      document.getElementById('zelleTitle').textContent = t.zelle;
+      document.getElementById('bankTransferTitle').textContent = t.bankTransferTitle;
+      document.getElementById('inPersonTitle').textContent = t.inPerson;
+      document.getElementById('giveNotice').textContent = t.bankNotice;
+    }
+
     function tryOpenAppThenFallback(webUrl, appUrl){
       const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-      if(!isMobile || !appUrl){ window.open(webUrl, '_blank', 'noopener'); return; }
+      if(!isMobile || !appUrl){ window.location.href = webUrl; return; }
       let didHide = false;
       function onVisibilityChange(){ didHide = document.hidden; }
       document.addEventListener('visibilitychange', onVisibilityChange);
-      const timeout = setTimeout(()=>{ document.removeEventListener('visibilitychange', onVisibilityChange); if(!didHide) window.open(webUrl, '_blank', 'noopener'); }, 1200);
-      try { window.location = appUrl; } catch(e){ clearTimeout(timeout); document.removeEventListener('visibilitychange', onVisibilityChange); window.open(webUrl, '_blank', 'noopener'); }
+      const timeout = setTimeout(()=>{ document.removeEventListener('visibilitychange', onVisibilityChange); if(!didHide) window.location.href = webUrl; }, 1200);
+      try { window.location = appUrl; } catch(e){ clearTimeout(timeout); document.removeEventListener('visibilitychange', onVisibilityChange); window.location.href = webUrl; }
     }
 
     document.addEventListener('DOMContentLoaded', function(){
-      // Replace these with your real links/app URIs
+      buildLangSwitcher();
+      applyTranslations();
+
       const cashWeb = 'https://cash.app/$YourCashTag';
       const cashApp = 'cashapp://$YourCashTag';
       document.getElementById('cashAppBtn').addEventListener('click', function(e){
-        e.preventDefault();
-        tryOpenAppThenFallback(cashWeb, cashApp);
+        e.preventDefault(); tryOpenAppThenFallback(cashWeb, cashApp);
       });
 
       const paypalWeb = 'https://www.paypal.com/paypalme/YourPayPal';
       const paypalApp = 'paypal://send?recipient=YourPayPal';
       document.getElementById('paypalBtn').addEventListener('click', function(e){
-        e.preventDefault();
-        tryOpenAppThenFallback(paypalWeb, paypalApp);
+        e.preventDefault(); tryOpenAppThenFallback(paypalWeb, paypalApp);
       });
 
       const zelleWeb = 'https://yourbank.example.com/zelle';
       const zelleApp = 'bankapp://pay?recipient=youremail@domain.com';
       document.getElementById('zelleBtn').addEventListener('click', function(e){
-        e.preventDefault();
-        tryOpenAppThenFallback(zelleWeb, zelleApp);
+        e.preventDefault(); tryOpenAppThenFallback(zelleWeb, zelleApp);
       });
 
-      // bank button scrolls to bank info
       document.getElementById('bankBtn').addEventListener('click', function(e){
-        e.preventDefault();
-        document.getElementById('bank-info').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        e.preventDefault(); document.getElementById('bank-info').scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
     });
   </script>
