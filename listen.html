@@ -31,29 +31,74 @@
   <div class="wrap">
     <div class="card">
       <h1 id="listenHeading">Listen</h1>
-      <div class="meta" id="listenIntro">Audio recordings and edited services.</div>
-      <div id="episodes" class="episode-grid" aria-live="polite"></div>
-      <div id="noEpisodes" class="note hidden">No episodes available right now.</div>
+      <div class="meta" id="listenIntro">Audio recordings and edited services</div>
+
+      <!-- Default simple view -->
+      <div id="simpleView">
+        <div class="note" id="noEpisodes">No episodes available right now.</div>
+      </div>
+
+      <!--
+        Rich player view (commented out). To enable: remove the surrounding comment markers and call loadEpisodesRich() on DOMContentLoaded.
+        It renders episodes from /listen-data.json and shows play controls and download links.
+      -->
+      <!--
+      <div id="richView" class="episode-grid" aria-live="polite"></div>
+
+      <script>
+        async function loadEpisodesRich(){
+          try{
+            const res = await fetch('/listen-data.json', { cache: 'no-store' });
+            if(!res.ok) throw new Error('Data not found');
+            const data = await res.json();
+            const episodes = (data.episodes || []).filter(e => e.enabled);
+            const container = document.getElementById('richView');
+            container.innerHTML = '';
+            if(episodes.length === 0){ document.getElementById('noEpisodes').classList.remove('hidden'); return; }
+            document.getElementById('simpleView').style.display = 'none';
+            episodes.forEach(ep => {
+              const card = document.createElement('article'); card.className='card';
+              if(ep.thumbnail){ const img = document.createElement('img'); img.className='episode-thumb'; img.src=ep.thumbnail; img.alt=ep.title || 'Episode thumbnail'; card.appendChild(img); }
+              const title = document.createElement('h2'); title.className='episode-title'; title.textContent = ep.title || 'Untitled'; card.appendChild(title);
+              if(ep.date){ const meta = document.createElement('div'); meta.className='meta'; meta.textContent = ep.date; card.appendChild(meta); }
+              if(ep.description){ const desc = document.createElement('p'); desc.className='episode-desc'; desc.textContent = ep.description; card.appendChild(desc); }
+              if(ep.file){
+                const audio = document.createElement('audio'); audio.controls=true; audio.preload='metadata';
+                const src = document.createElement('source'); src.src = ep.file; src.type='audio/mpeg'; audio.appendChild(src); card.appendChild(audio);
+                const controls = document.createElement('div'); controls.className='controls';
+                const download = document.createElement('a'); download.className='btn-ghost'; download.href = ep.file; download.download=''; download.textContent = (getSavedLang() === 'fr') ? 'Télécharger' : 'Download';
+                controls.appendChild(download); card.appendChild(controls);
+              } else {
+                const note = document.createElement('div'); note.className='note'; note.textContent = 'Audio file not available.'; card.appendChild(note);
+              }
+              container.appendChild(card);
+            });
+          }catch(err){
+            console.warn('Failed to load episodes', err);
+            document.getElementById('noEpisodes').classList.remove('hidden');
+          }
+        }
+      </script>
+      -->
+
     </div>
   </div>
 
   <script>
-    const DATA_URL = '/listen-data.json';
-
     const T_LISTEN = {
-      en: { listenHeading: "Listen", listenIntro: "Audio recordings and edited services.", download: "Download", noEpisodes:"No episodes available right now." },
-      fr: { listenHeading: "Écouter", listenIntro: "Enregistrements audio et services édités", download: "Télécharger", noEpisodes:"Aucun épisode n'est disponible pour le moment." }
+      en: { listenHeading: "Listen", listenIntro: "Audio recordings and edited services", noEpisodes: "No episodes available right now." },
+      fr: { listenHeading: "Écouter", listenIntro: "Enregistrements audio et services édités", noEpisodes: "Aucun épisode disponible pour le moment." }
     };
 
     function getSavedLang(){ return localStorage.getItem('cmr_lang') || 'en'; }
-    function setSavedLang(lang){ localStorage.setItem('cmr_lang', lang); }
+    function setSavedLang(lang){ localStorage.setItem('cmr_lang', lang); applyListenTranslations(); }
 
     function buildLangSwitcher(containerId='langSwitcherListen'){
       const container = document.getElementById(containerId);
       if(!container) return;
       container.innerHTML = '';
-      const enBtn = document.createElement('button'); enBtn.className='lang-btn'; enBtn.textContent='EN'; enBtn.onclick = ()=>{ setSavedLang('en'); applyListenTranslations(); loadEpisodes(); };
-      const frBtn = document.createElement('button'); frBtn.className='lang-btn'; frBtn.textContent='FR'; frBtn.onclick = ()=>{ setSavedLang('fr'); applyListenTranslations(); loadEpisodes(); };
+      const enBtn = document.createElement('button'); enBtn.className='lang-btn'; enBtn.textContent='EN'; enBtn.onclick = ()=>{ setSavedLang('en'); };
+      const frBtn = document.createElement('button'); frBtn.className='lang-btn'; frBtn.textContent='FR'; frBtn.onclick = ()=>{ setSavedLang('fr'); };
       container.appendChild(enBtn); container.appendChild(frBtn);
     }
 
@@ -62,45 +107,10 @@
       const t = T_LISTEN[lang] || T_LISTEN.en;
       document.getElementById('listenHeading').textContent = t.listenHeading;
       document.getElementById('listenIntro').textContent = t.listenIntro;
+      document.getElementById('noEpisodes').textContent = t.noEpisodes;
     }
 
-    function createEpisodeCard(ep){
-      const card = document.createElement('article'); card.className='card'; card.id='episode-'+ep.id;
-      if(ep.thumbnail){ const img = document.createElement('img'); img.className='episode-thumb'; img.src=ep.thumbnail; img.alt=ep.title || 'Episode thumbnail'; card.appendChild(img); }
-      const title = document.createElement('h2'); title.className='episode-title'; title.textContent = ep.title || 'Untitled'; card.appendChild(title);
-      if(ep.date){ const meta = document.createElement('div'); meta.className='meta'; meta.textContent = ep.date; card.appendChild(meta); }
-      if(ep.description){ const desc = document.createElement('p'); desc.className='episode-desc'; desc.textContent = ep.description; card.appendChild(desc); }
-      if(ep.file){
-        const audio = document.createElement('audio'); audio.controls=true; audio.preload='metadata';
-        const src = document.createElement('source'); src.src = ep.file; src.type='audio/mpeg'; audio.appendChild(src); card.appendChild(audio);
-        const controls = document.createElement('div'); controls.className='controls';
-        const download = document.createElement('a'); download.className='btn-ghost'; download.href = ep.file; download.download=''; download.textContent = T_LISTEN[getSavedLang()].download;
-        controls.appendChild(download); card.appendChild(controls);
-      } else {
-        const note = document.createElement('div'); note.className='note'; note.textContent = 'Audio file not available.'; card.appendChild(note);
-      }
-      return card;
-    }
-
-    async function loadEpisodes(){
-      try{
-        const res = await fetch(DATA_URL, { cache: 'no-store' });
-        if(!res.ok) throw new Error('Data not found');
-        const data = await res.json();
-        const episodes = (data.episodes || []).filter(e => e.enabled);
-        const container = document.getElementById('episodes');
-        const none = document.getElementById('noEpisodes');
-        container.innerHTML = '';
-        if(episodes.length === 0){ none.classList.remove('hidden'); return; }
-        none.classList.add('hidden');
-        episodes.forEach(ep => { const card = createEpisodeCard(ep); container.appendChild(card); });
-      }catch(err){
-        console.warn('Failed to load episodes', err);
-        document.getElementById('noEpisodes').classList.remove('hidden');
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => { buildLangSwitcher(); applyListenTranslations(); loadEpisodes(); });
+    document.addEventListener('DOMContentLoaded', () => { buildLangSwitcher(); applyListenTranslations(); });
   </script>
 </body>
 </html>
