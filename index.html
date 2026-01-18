@@ -230,6 +230,25 @@
         </section>
       </div>
 
+      <!-- LATEST SERMONS -->
+      <section id="latestSermonCard" class="card" aria-labelledby="latestSermonHeading">
+  <h3 id="latestSermonHeading" style="margin:0 0 12px 0;">Latest Sermon</h3>
+
+  <div id="sermonVideoWrap" style="width:100%; aspect-ratio:16/9; background:#000; border-radius:10px; overflow:hidden;"></div>
+
+  <div id="sermonMeta" style="margin-top:10px;">
+    <div id="sermonTitle" style="font-weight:700; font-size:16px;"></div>
+    <div id="sermonDetails" style="color:#6b7280; font-size:13px; margin-top:4px;"></div>
+  </div>
+
+  <div id="sermonActions" style="margin-top:10px; display:flex; gap:8px; align-items:center;">
+    <button id="shareSermonBtn" class="btn-ghost" aria-label="Share sermon">Share</button>
+    <button id="copySermonLinkBtn" class="btn-ghost" aria-label="Copy link">Copy link</button>
+    <a id="openSermonOnYT" class="btn-ghost" target="_blank" rel="noopener" aria-label="Open on YouTube">Open on YouTube</a>
+  </div>
+</section>
+
+
       <!-- RIGHT COLUMN: Announcements -->
       <aside class="right-col" aria-label="Right column">
         <div class="card" id="announcementsCard" aria-live="polite" data-accent="true">
@@ -602,6 +621,81 @@
       // refresh announcements periodically
       setInterval(loadAndRenderAnnouncements, 5 * 60 * 1000);
     });
+
+    // SERMONS JS
+  
+async function loadSingleLatestSermon() {
+  const wrap = document.getElementById('sermonVideoWrap');
+  const titleEl = document.getElementById('sermonTitle');
+  const detailsEl = document.getElementById('sermonDetails');
+  const openBtn = document.getElementById('openSermonOnYT');
+  const shareBtn = document.getElementById('shareSermonBtn');
+  const copyBtn = document.getElementById('copySermonLinkBtn');
+
+  try {
+    const res = await fetch('/sermons.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error('Failed to load sermons.json');
+    const data = await res.json();
+    const items = (data.items || []).filter(i => i.videoId && i.date);
+    if (!items.length) throw new Error('No sermons found');
+
+    // sort newest first and take the first item only
+    items.sort((a,b) => new Date(b.date) - new Date(a.date));
+    const latest = items[0];
+
+    // render iframe
+    wrap.innerHTML = '';
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube.com/embed/${latest.videoId}?rel=0&modestbranding=1`;
+    iframe.title = latest.title || 'Latest sermon';
+    iframe.loading = 'lazy';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    iframe.style.border = '0';
+    wrap.appendChild(iframe);
+
+    // meta
+    titleEl.textContent = latest.title || 'Latest Sermon';
+    const dateStr = latest.date ? new Date(latest.date).toLocaleDateString() : '';
+    detailsEl.textContent = `${latest.preacher || ''}${latest.preacher ? ' • ' : ''}${dateStr}`;
+
+    const videoUrl = `https://www.youtube.com/watch?v=${latest.videoId}`;
+    openBtn.href = videoUrl;
+
+    // share handlers
+    shareBtn.onclick = async () => {
+      const shareData = { title: latest.title, text: latest.title, url: videoUrl };
+      if (navigator.share) {
+        try { await navigator.share(shareData); return; } catch (e) { /* fallback below */ }
+      }
+      // fallback: open Facebook share in new tab
+      const fb = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(videoUrl)}`;
+      window.open(fb, '_blank', 'noopener');
+    };
+
+    copyBtn.onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(videoUrl);
+        copyBtn.textContent = 'Copied';
+        setTimeout(() => copyBtn.textContent = 'Copy link', 1600);
+      } catch (e) {
+        prompt('Copy this link', videoUrl);
+      }
+    };
+
+  } catch (err) {
+    console.error(err);
+    // graceful fallback
+    wrap.innerHTML = '';
+    titleEl.textContent = 'Latest sermon unavailable';
+    detailsEl.textContent = 'Visit our YouTube channel for recent messages.';
+    openBtn.href = '/';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadSingleLatestSermon);
+
   </script>
 </body>
 </html>
