@@ -1,0 +1,25 @@
+{
+  "items": [
+    {
+      "id": "2026-01-18-live",
+      "videoId": "VIDEO_ID_1",
+      "title": "The Power of Presence",
+      "preacher": "Pastor John Doe",
+      "date": "2026-01-18",
+      "thumbnail": "/images/sermons/2026-01-18-step.png",
+      "description": "Live sermon on presence and community. Scripture: Acts 2.",
+      "tags": ["live","presence","community"]
+    },
+    {
+      "id": "2026-01-11",
+      "videoId": "VIDEO_ID_2",
+      "title": "Faith That Moves",
+      "preacher": "Pastor Jane Smith",
+      "date": "2026-01-11",
+      "thumbnail": "/images/sermons/2026-01-11.png",
+      "description": "A message about faith in action.",
+      "tags": ["faith","action"]
+    }
+  ]
+}
+
