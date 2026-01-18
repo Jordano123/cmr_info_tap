@@ -114,7 +114,7 @@
     .btn-primary{ background:var(--accent); color:white; }
 
     /* Serve section: glass cards and centered rows */
-    .serve-card { background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.45)); backdrop-filter: blur(6px); border:1px solid rgba(255,255,255,0.18); box-shadow: 0 8px 30px rgba(15,23,42,0.06); padding:18px; border-radius:12px; }
+    /* .serve-card { background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.45)); backdrop-filter: blur(6px); border:1px solid rgba(255,255,255,0.18); box-shadow: 0 8px 30px rgba(15,23,42,0.06); padding:18px; border-radius:12px; }
 
     .serve-header { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
     .serve-title { margin:0; font-size:18px; font-weight:700; }
@@ -150,7 +150,7 @@
     .btn-ghost { background:#fff; border:1px solid rgba(15,23,42,0.06); color:#111827; padding:8px 12px; border-radius:8px; cursor:pointer; }
 
     /* Hidden state */
-    #serveCard[aria-hidden="true"], #serveCard.hidden { display:none !important; }
+   /* #serveCard[aria-hidden="true"], #serveCard.hidden { display:none !important; } */
 
     .lang-switcher { position:fixed; top:12px; right:12px; display:flex; gap:8px; z-index:9999; }
     .lang-btn { padding:8px 10px; border-radius:8px; border:1px solid rgba(15,23,42,0.06); background:#fff; cursor:pointer; font-weight:700; }
@@ -459,41 +459,7 @@
     }
 
     // EVENTS
-    function downloadICS(event){
-  const start = `${event.date}T${event.startTime.replace(':','')}00`;
-  const end = event.endTime ? `${event.date}T${event.endTime.replace(':','')}00` : `${event.date}T${event.startTime.replace(':','')}0000`;
-  const ics =
-`BEGIN:VCALENDAR
-VERSION:2.0
-BEGIN:VEVENT
-UID:${event.id}@yourdomain
-DTSTAMP:${new Date().toISOString().replace(/[-:]/g,'').split('.')[0]}Z
-DTSTART:${start}
-DTEND:${end}
-SUMMARY:${event.title}
-DESCRIPTION:${event.description || ''}
-LOCATION:${event.location || ''}
-END:VEVENT
-END:VCALENDAR`;
-  const blob = new Blob([ics], { type: 'text/calendar' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${event.id}.ics`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-    const form = document.querySelector('form[name="rsvp-pancake-2026-02-14"]');
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const body = new URLSearchParams(new FormData(form)).toString();
-  const res = await fetch('/', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body
-  });
-  if (res.ok) { /* show success */ }
-});
+
 
     /////////////////////////
 
