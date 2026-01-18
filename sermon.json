@@ -2,11 +2,11 @@
   "items": [
     {
       "id": "2026-01-18-live",
-      "videoId": "e0z-t9knhZA",
-      "title": "The Power of Presence",
-      "preacher": "Pastor John Doe",
+      "videoUrl": "https://www.youtube.com/watch?v=e0z-t9knhZA",
+      "title": "Questions sur l'autorité",
+      "preacher": "Athom's Mbuma",
       "date": "2026-01-18",
-      "thumbnail": "/images/sermons/2026-01-18-step.png",
+      "thumbnail": "/step.png",
       "description": "Live sermon on presence and community. Scripture: Acts 2.",
       "tags": ["live","presence","community"]
     },
