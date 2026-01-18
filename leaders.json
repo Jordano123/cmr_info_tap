@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "id": "leader-john-doe",
+      "name": "John Doe",
+      "role": "Senior Pastor",
+      "photo": "/step.png"
+    },
+    {
+      "id": "leader-jane-smith",
+      "name": "Jane Smith",
+      "role": "Worship Leader",
+      "photo": "/step.png"
+    },
+    {
+      "id": "leader-mary-jones",
+      "name": "Mary Jones",
+      "role": "Youth Director",
+      "photo": "/step.png"
+    }
+  ]
+}
