@@ -1,0 +1,48 @@
+{
+  "items": [
+    {
+      "id": "2026-02-14-pancake-breakfast",
+      "title": "Pancake Breakfast Fundraiser",
+      "date": "2026-02-14",
+      "startTime": "09:00",
+      "endTime": "11:00",
+      "location": "CMR Church Fellowship Hall",
+      "lat": 32.7555,
+      "lng": -97.3308,
+      "description": "Join us for pancakes and fellowship. Donations support youth ministry.",
+      "rsvpFormName": "rsvp-pancake-2026-02-14",
+      "capacity": 120,
+      "thumbnail": "/step.png",
+      "tags": ["fundraiser","community"],
+      "public": true
+    },
+    {
+      "id": "2026-02-21-bible-study",
+      "title": "Midweek Bible Study",
+      "date": "2026-02-21",
+      "startTime": "19:00",
+      "endTime": "20:30",
+      "location": "CMR Church Room 102",
+      "description": "Weekly study and discussion. All are welcome.",
+      "rsvpFormName": "rsvp-biblestudy-2026-02-21",
+      "thumbnail": "/step.png",
+      "tags": ["study","weekly"],
+      "public": true
+    },
+    {
+      "id": "2026-03-07-community-outreach",
+      "title": "Community Outreach Day",
+      "date": "2026-03-07",
+      "startTime": "10:00",
+      "endTime": "14:00",
+      "location": "CMR Church & Neighborhood",
+      "description": "Serve our neighbors: food distribution, yard help, and prayer stations.",
+      "rsvpFormName": "rsvp-outreach-2026-03-07",
+      "capacity": 200,
+      "thumbnail": "/step.png",
+      "tags": ["outreach","service"],
+      "public": true
+    }
+  ]
+}
+
