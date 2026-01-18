@@ -486,84 +486,84 @@
     }
 
     // ---------- SERVE GRID DATA & RENDER (informational only) ----------
-    const SERVE_DATA = [
-      { id: 'production', title: { en: 'Production Team', fr: 'Équipe Production' }, roles: ['Sound Engineer','Video Switcher','Camera Operator','Slide Operator'], enabled: true, badgeText: 'PROD' },
-      { id: 'worship', title: { en: 'Worship Team', fr: 'Équipe de Louange' }, roles: ['Lead Singer','Guitar','Bass','Drums','Keys'], enabled: true, badgeText: 'WOR' },
-      { id: 'kids', title: { en: 'Kids Ministry', fr: 'Ministère des Enfants' }, roles: ['Classroom Helper','Check-In Support','Story Leader'], enabled: true, badgeText: 'KIDS' },
-      { id: 'guest', title: { en: 'Guest Experience', fr: 'Accueil' }, roles: ['Usher','Greeter','Welcome Team'], enabled: true, badgeText: 'GUEST' },
-      { id: 'creative', title: { en: 'Creative & Media', fr: 'Créatif & Médias' }, roles: ['Photography','Social Media','Graphic Support'], enabled: true, badgeText: 'CRE' },
-      { id: 'admin', title: { en: 'Administration', fr: 'Administration' }, roles: ['Office Support','Prayer Follow-up','Hospitality'], enabled: true, badgeText: 'ADMIN' }
-    ];
-    let lastServeData = false;
+    // const SERVE_DATA = [
+    //   { id: 'production', title: { en: 'Production Team', fr: 'Équipe Production' }, roles: ['Sound Engineer','Video Switcher','Camera Operator','Slide Operator'], enabled: true, badgeText: 'PROD' },
+    //   { id: 'worship', title: { en: 'Worship Team', fr: 'Équipe de Louange' }, roles: ['Lead Singer','Guitar','Bass','Drums','Keys'], enabled: true, badgeText: 'WOR' },
+    //   { id: 'kids', title: { en: 'Kids Ministry', fr: 'Ministère des Enfants' }, roles: ['Classroom Helper','Check-In Support','Story Leader'], enabled: true, badgeText: 'KIDS' },
+    //   { id: 'guest', title: { en: 'Guest Experience', fr: 'Accueil' }, roles: ['Usher','Greeter','Welcome Team'], enabled: true, badgeText: 'GUEST' },
+    //   { id: 'creative', title: { en: 'Creative & Media', fr: 'Créatif & Médias' }, roles: ['Photography','Social Media','Graphic Support'], enabled: true, badgeText: 'CRE' },
+    //   { id: 'admin', title: { en: 'Administration', fr: 'Administration' }, roles: ['Office Support','Prayer Follow-up','Hospitality'], enabled: true, badgeText: 'ADMIN' }
+    // ];
+    // let lastServeData = false;
 
-    function renderServeGridFromData(data){
-      lastServeData = data || SERVE_DATA;
-      const grid = document.getElementById('serveGrid');
-      if(!grid) return;
-      grid.innerHTML = '';
-      const lang = getSavedLang();
-      const visible = (lastServeData || []).filter(i => i.enabled !== false);
-      visible.forEach(item => {
-        const card = document.createElement('div'); card.className = 'serve-item'; card.setAttribute('role','listitem');
-        const header = document.createElement('div'); header.style.display='flex'; header.style.alignItems='center'; header.style.gap='10px';
-        const badge = document.createElement('div'); badge.className='serve-badge'; badge.textContent = item.badgeText || (item.title[lang]||item.title.en).slice(0,3).toUpperCase();
-        header.appendChild(badge);
-        const h = document.createElement('h3'); h.textContent = (item.title[lang] || item.title.en || item.title);
-        header.appendChild(h);
-        card.appendChild(header);
-        if(Array.isArray(item.roles) && item.roles.length){
-          const ul = document.createElement('ul');
-          item.roles.forEach(r => { const li = document.createElement('li'); li.textContent = r; ul.appendChild(li); });
-          card.appendChild(ul);
-        }
-        // informational only — no CTAs anywhere
-        grid.appendChild(card);
-      });
-      if(visible.length === 0){
-        const note = document.createElement('div'); note.className='small-muted';
-        note.textContent = translations[getSavedLang()].no_announcements;
-        grid.appendChild(note);
-      }
-    }
+    // function renderServeGridFromData(data){
+    //   lastServeData = data || SERVE_DATA;
+    //   const grid = document.getElementById('serveGrid');
+    //   if(!grid) return;
+    //   grid.innerHTML = '';
+    //   const lang = getSavedLang();
+    //   const visible = (lastServeData || []).filter(i => i.enabled !== false);
+    //   visible.forEach(item => {
+    //     const card = document.createElement('div'); card.className = 'serve-item'; card.setAttribute('role','listitem');
+    //     const header = document.createElement('div'); header.style.display='flex'; header.style.alignItems='center'; header.style.gap='10px';
+    //     const badge = document.createElement('div'); badge.className='serve-badge'; badge.textContent = item.badgeText || (item.title[lang]||item.title.en).slice(0,3).toUpperCase();
+    //     header.appendChild(badge);
+    //     const h = document.createElement('h3'); h.textContent = (item.title[lang] || item.title.en || item.title);
+    //     header.appendChild(h);
+    //     card.appendChild(header);
+    //     if(Array.isArray(item.roles) && item.roles.length){
+    //       const ul = document.createElement('ul');
+    //       item.roles.forEach(r => { const li = document.createElement('li'); li.textContent = r; ul.appendChild(li); });
+    //       card.appendChild(ul);
+    //     }
+    //     // informational only — no CTAs anywhere
+    //     grid.appendChild(card);
+    //   });
+    //   if(visible.length === 0){
+    //     const note = document.createElement('div'); note.className='small-muted';
+    //     note.textContent = translations[getSavedLang()].no_announcements;
+    //     grid.appendChild(note);
+    //   }
+    // }
 
-    function setServeVisible(show){
-      const sec = document.getElementById('serveCard');
-      if(!sec) return;
-      if(show){
-        sec.removeAttribute('aria-hidden');
-        sec.classList.remove('hidden');
-        sec.setAttribute('data-enabled','true');
-      } else {
-        sec.setAttribute('aria-hidden','true');
-        sec.classList.add('hidden');
-        sec.setAttribute('data-enabled','false');
-      }
-    }
+    // function setServeVisible(show){
+    //   const sec = document.getElementById('serveCard');
+    //   if(!sec) return;
+    //   if(show){
+    //     sec.removeAttribute('aria-hidden');
+    //     sec.classList.remove('hidden');
+    //     sec.setAttribute('data-enabled','true');
+    //   } else {
+    //     sec.setAttribute('aria-hidden','true');
+    //     sec.classList.add('hidden');
+    //     sec.setAttribute('data-enabled','false');
+    //   }
+    // }
 
-    // ---------- MOBILE REORDER: Ensure CMR Hub -> Announcements -> Serve on small screens ----------
-    (function manageServeCardPlacement(){
-      const serve = document.getElementById('serveCard');
-      const rightCol = document.querySelector('.right-col');
-      const leftCol = document.querySelector('.left-col');
-      if(!serve || !rightCol || !leftCol) return;
-      const originalParent = serve.parentElement;
-      const originalNext = serve.nextElementSibling;
-      function placeForMobile(){
-        // insert serve after the announcements column (rightCol)
-        if (rightCol && rightCol.parentNode && rightCol.nextSibling !== serve) {
-          rightCol.parentNode.insertBefore(serve, rightCol.nextSibling);
-        }
-      }
-      function restoreForDesktop(){
-        if (originalParent && originalParent !== serve.parentElement) {
-          if (originalNext) originalParent.insertBefore(serve, originalNext);
-          else originalParent.appendChild(serve);
-        }
-      }
-      function checkAndApply(){ if (window.innerWidth <= 980) placeForMobile(); else restoreForDesktop(); }
-      checkAndApply();
-      window.addEventListener('resize', checkAndApply);
-    })();
+    // // ---------- MOBILE REORDER: Ensure CMR Hub -> Announcements -> Serve on small screens ----------
+    // (function manageServeCardPlacement(){
+    //   const serve = document.getElementById('serveCard');
+    //   const rightCol = document.querySelector('.right-col');
+    //   const leftCol = document.querySelector('.left-col');
+    //   if(!serve || !rightCol || !leftCol) return;
+    //   const originalParent = serve.parentElement;
+    //   const originalNext = serve.nextElementSibling;
+    //   function placeForMobile(){
+    //     // insert serve after the announcements column (rightCol)
+    //     if (rightCol && rightCol.parentNode && rightCol.nextSibling !== serve) {
+    //       rightCol.parentNode.insertBefore(serve, rightCol.nextSibling);
+    //     }
+    //   }
+    //   function restoreForDesktop(){
+    //     if (originalParent && originalParent !== serve.parentElement) {
+    //       if (originalNext) originalParent.insertBefore(serve, originalNext);
+    //       else originalParent.appendChild(serve);
+    //     }
+    //   }
+    //   function checkAndApply(){ if (window.innerWidth <= 980) placeForMobile(); else restoreForDesktop(); }
+    //   checkAndApply();
+    //   window.addEventListener('resize', checkAndApply);
+    // })();
 
     // ---------- SITE CONFIG LOADER (optional) ----------
     async function loadSiteConfig(){
