@@ -458,6 +458,45 @@
       }
     }
 
+    // EVENTS
+    function downloadICS(event){
+  const start = `${event.date}T${event.startTime.replace(':','')}00`;
+  const end = event.endTime ? `${event.date}T${event.endTime.replace(':','')}00` : `${event.date}T${event.startTime.replace(':','')}0000`;
+  const ics =
+`BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+UID:${event.id}@yourdomain
+DTSTAMP:${new Date().toISOString().replace(/[-:]/g,'').split('.')[0]}Z
+DTSTART:${start}
+DTEND:${end}
+SUMMARY:${event.title}
+DESCRIPTION:${event.description || ''}
+LOCATION:${event.location || ''}
+END:VEVENT
+END:VCALENDAR`;
+  const blob = new Blob([ics], { type: 'text/calendar' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${event.id}.ics`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+    const form = document.querySelector('form[name="rsvp-pancake-2026-02-14"]');
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const body = new URLSearchParams(new FormData(form)).toString();
+  const res = await fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body
+  });
+  if (res.ok) { /* show success */ }
+});
+
+    /////////////////////////
+
     // Robust loader with fallback and clear logging
     async function loadAndRenderAnnouncements(){
       const url = ANNOUNCEMENT_JSON_PATH + '?t=' + Date.now();
