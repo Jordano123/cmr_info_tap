@@ -48,6 +48,19 @@
       position: relative;
     }
 
+    /* Contact card styles */
+.contact-card { display:flex; flex-direction:column; gap:10px; border-radius:10px; padding:14px; background:#fff; border:1px solid rgba(15,23,42,0.04); box-shadow:0 6px 18px rgba(15,23,42,0.03); }
+.contact-card .contact-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.contact-card .contact-btn {
+  display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:8px; text-decoration:none; font-weight:700; font-size:14px;
+  border:1px solid rgba(15,23,42,0.06); background:#fff; color:#111827;
+}
+.contact-card .contact-btn.phone { background:linear-gradient(90deg,#10b981,#06b6d4); color:#fff; border:1px solid rgba(0,0,0,0.04); }
+.contact-card .contact-btn.email { background:linear-gradient(90deg,#6366f1,#8b5cf6); color:#fff; border:1px solid rgba(0,0,0,0.04); }
+.contact-card .contact-btn.map { background:linear-gradient(90deg,#f97316,#f43f5e); color:#fff; border:1px solid rgba(0,0,0,0.04); }
+.contact-card .contact-meta { color:var(--muted); font-size:13px; }
+
+
     @supports not (padding: env(safe-area-inset-left)) {
       .wrap {
         padding-left: var(--container-padding);
@@ -777,6 +790,102 @@ END:VCALENDAR`;
         openBtn.href = '/';
       }
     }
+    // createContactCard (email removed)
+function createContactCard() {
+  if (document.getElementById('contactCard')) return document.getElementById('contactCard');
+
+  const CONTACT_PHONE = '+1-817-555-0123';
+  const CONTACT_ADDRESS = '123 Church St, Fort Worth, TX';
+  const MAP_QUERY = encodeURIComponent(CONTACT_ADDRESS);
+
+  const card = document.createElement('div');
+  card.id = 'contactCard';
+  card.className = 'card contact-card';
+  card.setAttribute('aria-labelledby','contactHeading');
+
+  card.innerHTML = `
+    <h3 id="contactHeading" style="margin:0 0 12px 0;">Contact</h3>
+    <div class="contact-meta" style="margin-bottom:6px;">
+      <div style="font-weight:700;">Get in touch</div>
+      <div style="margin-top:4px;">${CONTACT_ADDRESS}</div>
+    </div>
+    <div class="contact-row" role="group" aria-label="Contact actions">
+      <a class="contact-btn phone" href="tel:${CONTACT_PHONE.replace(/\s+/g,'')}" aria-label="Call ${CONTACT_PHONE}">Call</a>
+      <a class="contact-btn map" href="https://www.google.com/maps/search/?api=1&query=${MAP_QUERY}" target="_blank" rel="noopener" aria-label="Open map">Map</a>
+    </div>
+  `;
+  return card;
+}
+
+// ---------- CONTACT CARD + responsive placement ----------
+
+  // Move Visit Us under Leaders (left) on desktop, restore on mobile
+  function repositionVisitAndContact() {
+    const desktop = window.innerWidth >= 981;
+    const leadersSection = document.getElementById('leadersSection');
+    const addressSection = document.getElementById('addressSection');
+    const serviceTimes = document.getElementById('serviceTimes');
+    const wrap = document.getElementById('pageWrap');
+    const contactCard = createContactCard();
+
+    // Ensure addressSection exists
+    if (!addressSection) return;
+
+    if (desktop) {
+      // Move Visit Us under Leaders (left column)
+      if (leadersSection && leadersSection.parentElement) {
+        // insert after leadersSection
+        if (leadersSection.nextSibling !== addressSection) {
+          leadersSection.parentElement.insertBefore(addressSection, leadersSection.nextSibling);
+        }
+      }
+
+      // Place Contact under Service Times (right column)
+      if (serviceTimes && serviceTimes.parentElement) {
+        // insert contact after serviceTimes
+        if (serviceTimes.nextSibling !== contactCard) {
+          // remove if already elsewhere
+          if (contactCard.parentElement) contactCard.parentElement.removeChild(contactCard);
+          serviceTimes.parentElement.insertBefore(contactCard, serviceTimes.nextSibling);
+        }
+      }
+    } else {
+      // Mobile: ensure Visit Us stays in original flow (we'll place contact below Visit Us)
+      // If original order had addressSection in left-col near end, keep it there.
+      // Place contact below Visit Us
+      if (addressSection.parentElement) {
+        // insert contact after addressSection
+        if (addressSection.nextSibling !== contactCard) {
+          if (contactCard.parentElement) contactCard.parentElement.removeChild(contactCard);
+          addressSection.parentElement.insertBefore(contactCard, addressSection.nextSibling);
+        }
+      }
+    }
+  }
+
+  // Run on load and on resize (debounced)
+  let _resizeTimer = null;
+  function onResize() {
+    clearTimeout(_resizeTimer);
+    _resizeTimer = setTimeout(repositionVisitAndContact, 120);
+  }
+
+  // Expose a safe init function and run after DOM ready
+  function initContactPlacement() {
+    createContactCard(); // ensure element exists
+    repositionVisitAndContact();
+    window.addEventListener('resize', onResize);
+  }
+
+  // If DOM already loaded, init now; otherwise wait
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initContactPlacement);
+  } else {
+    initContactPlacement();
+  }
+})();
+
+    
   </script>
 </body>
 </html>
