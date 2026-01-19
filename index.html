@@ -123,6 +123,7 @@
       border:1px solid rgba(15,23,42,0.06); background:#fff; color:#111827;
     }
     .contact-card .contact-btn.phone { background:linear-gradient(90deg,#10b981,#06b6d4); color:#fff; border:1px solid rgba(0,0,0,0.04); }
+    .contact-card .contact-btn.email { background:linear-gradient(90deg,#6366f1,#8b5cf6); color:#fff; border:1px solid rgba(0,0,0,0.04); }
     .contact-card .contact-btn.map { background:linear-gradient(90deg,#f97316,#f43f5e); color:#fff; border:1px solid rgba(0,0,0,0.04); }
     .contact-card .contact-meta { color:var(--muted); font-size:13px; }
 
@@ -242,9 +243,23 @@
             <div class="small-muted">Loading leaders…</div>
           </div>
         </section>
+
+        <!-- Visit Us (kept in left column by default; JS will reposition on desktop if needed) -->
+        <section id="addressSection" class="card" aria-labelledby="addressHeading" style="margin-top:12px;">
+          <h3 id="addressHeading" style="margin:0 0 12px 0;">Visit Us</h3>
+          <div class="address-row">
+            <div>
+              <div style="font-weight:700;">Christ Missionary Revival Church</div>
+              <div class="small-muted">123 Church St, Fort Worth, TX</div>
+            </div>
+            <div>
+              <button id="directionsBtn" class="btn btn-primary" aria-label="Get directions">Directions</button>
+            </div>
+          </div>
+        </section>
       </div>
 
-      <!-- RIGHT COLUMN: Announcements, Upcoming Event, Service Times, Visit Us -->
+      <!-- RIGHT COLUMN: Announcements, Upcoming Event, Service Times, Contact -->
       <aside class="right-col" aria-label="Right column">
         <!-- ANNOUNCEMENTS (primary) -->
         <div class="card" id="announcementsCardPrimary" aria-live="polite" data-accent="true">
@@ -270,6 +285,9 @@
             <div class="small-muted" style="margin-top:8px;">Childcare available at both services</div>
           </div>
         </section>
+
+        <!-- CONTACT (phone, address, email) - JS will reposition on desktop/mobile per your rules -->
+        <div id="contactPlaceholder"></div>
 
         <!-- tertiary slot (hidden by default) -->
         <div class="card" id="announcementsCard3" aria-live="polite" style="display:none; margin-top:12px;">
@@ -320,7 +338,8 @@
         contactHeading: "Contact",
         contactGetInTouch: "Get in touch",
         contactMap: "Map",
-        contactCall: "Call"
+        contactCall: "Call",
+        contactEmail: "Email"
       },
       fr: {
         hubTitle: "Centre CMR",
@@ -345,7 +364,8 @@
         contactHeading: "Contact",
         contactGetInTouch: "Entrer en contact",
         contactMap: "Carte",
-        contactCall: "Appeler"
+        contactCall: "Appeler",
+        contactEmail: "Courriel"
       }
     };
 
@@ -395,6 +415,7 @@
       contactBtns.forEach(btn => {
         if(btn.classList.contains('phone')) btn.textContent = t.contactCall || 'Call';
         if(btn.classList.contains('map')) btn.textContent = t.contactMap || 'Map';
+        if(btn.classList.contains('email')) btn.textContent = t.contactEmail || 'Email';
       });
       const contactMeta = document.querySelector('#contactCard .contact-meta div:first-child');
       if(contactMeta) contactMeta.textContent = t.contactGetInTouch || 'Get in touch';
@@ -689,10 +710,11 @@ END:VCALENDAR`;
       }
     });
 
-    // ---------- CONTACT CARD + responsive placement (email removed) ----------
+    // ---------- CONTACT CARD + responsive placement (phone, address, email) ----------
     (function(){
       // Config: update these values to your real contact info
       const CONTACT_PHONE = '+1-817-555-0123';
+      const CONTACT_EMAIL = 'info@cmrestauration.org';
       const CONTACT_ADDRESS = '123 Church St, Fort Worth, TX';
       const MAP_QUERY = encodeURIComponent(CONTACT_ADDRESS);
 
@@ -713,6 +735,7 @@ END:VCALENDAR`;
           </div>
           <div class="contact-row" role="group" aria-label="Contact actions">
             <a class="contact-btn phone" href="tel:${CONTACT_PHONE.replace(/\s+/g,'')}" aria-label="Call ${CONTACT_PHONE}">Call</a>
+            <a class="contact-btn email" href="mailto:${CONTACT_EMAIL}" aria-label="Email ${CONTACT_EMAIL}">Email</a>
             <a class="contact-btn map" href="https://www.google.com/maps/search/?api=1&query=${MAP_QUERY}" target="_blank" rel="noopener" aria-label="Open map">Map</a>
           </div>
         `;
@@ -767,6 +790,12 @@ END:VCALENDAR`;
 
       function initContactPlacement() {
         createContactCard(); // ensure element exists
+        // If there's a placeholder in the right column, replace it with the contact card by default
+        const placeholder = document.getElementById('contactPlaceholder');
+        if (placeholder && !placeholder.firstChild) {
+          const card = createContactCard();
+          placeholder.appendChild(card);
+        }
         repositionVisitAndContact();
         window.addEventListener('resize', onResize);
       }
