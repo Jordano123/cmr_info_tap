@@ -181,7 +181,7 @@
   </div>
 
   <script>
-    // --- small helpers & config
+    // ---------- Basic config & translations ----------
     document.getElementById('currentYear').textContent = new Date().getFullYear();
     const ANNOUNCEMENT_JSON_PATH = '/announcement.json';
     const SITE_CONFIG_PATH = '/site-config.json';
@@ -256,7 +256,7 @@
       });
     }
 
-    // --- Announcements renderer (keeps your logic)
+    // ---------- ANNOUNCEMENTS ----------
     let lastAnnouncementData = null;
     function isExpired(expireDateStr){ if(!expireDateStr) return false; const now = new Date(); const expire = new Date(expireDateStr + 'T23:59:59'); return now > expire; }
 
@@ -312,7 +312,42 @@
       }
     }
 
-    // --- Leaders
+    // ---------- SITE CONFIG (optional) ----------
+    async function loadSiteConfig(){
+      try {
+        const res = await fetch(SITE_CONFIG_PATH, { cache: 'no-store' });
+        if(!res.ok) return;
+        const cfg = await res.json();
+        if('showSecondAnnouncement' in cfg) window.SHOW_SECOND_ANNOUNCEMENT = cfg.showSecondAnnouncement;
+        if('showThirdAnnouncement' in cfg) window.SHOW_THIRD_ANNOUNCEMENT = cfg.showThirdAnnouncement;
+      } catch (e) { /* ignore */ }
+    }
+
+    // ---------- APP LINK HELPER ----------
+    function tryOpenAppThenFallback(anchor, event){
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.button === 1) return;
+      const appHref = anchor.getAttribute('data-app-href');
+      const webHref = anchor.href;
+      const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      if(!isMobile || !appHref) return;
+      event.preventDefault();
+      let didHide = false;
+      function onVisibilityChange() { didHide = document.hidden; }
+      document.addEventListener('visibilitychange', onVisibilityChange);
+      const timeout = setTimeout(() => {
+        document.removeEventListener('visibilitychange', onVisibilityChange);
+        if (!didHide) window.location = webHref;
+      }, 1200);
+      try { window.location = appHref; } catch (e) { clearTimeout(timeout); document.removeEventListener('visibilitychange', onVisibilityChange); window.location = webHref; }
+    }
+
+    function wireAppLinks(){
+      document.querySelectorAll('.hub-button[data-app-href]').forEach(a=>{
+        a.addEventListener('click', function(e){ tryOpenAppThenFallback(a, e); });
+      });
+    }
+
+    // ---------- LEADERS ----------
     async function loadLeaders(){
       const grid = document.getElementById('leadersGrid');
       try {
@@ -333,7 +368,7 @@
       } catch (e) { grid.innerHTML = '<div class="small-muted">Could not load leaders.</div>'; applyTranslations(); }
     }
 
-    // --- Events
+    // ---------- EVENTS ----------
     async function loadNextEvent(){
       const container = document.getElementById('upcomingEventCard');
       if(!container) return;
@@ -387,7 +422,7 @@ END:VCALENDAR`;
       const a = document.createElement('a'); a.href = url; a.download = `${event.id || 'event'}.ics`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     }
 
-    // --- Contact card creation and placement
+    // ---------- CONTACT card ----------
     (function(){
       const CONTACT_PHONE = '+1-817-555-0123';
       const CONTACT_EMAIL = 'info@cmrestauration.org';
@@ -416,7 +451,7 @@ END:VCALENDAR`;
       window.createContactCard = createContactCard;
     })();
 
-    // --- Prayer card creation and placement
+    // ---------- PRAYER card ----------
     (function(){
       const PRAYER_EMAIL = 'info@cmrestauration.org';
       const PRAYER_SUBJECT = encodeURIComponent('Prayer Request');
@@ -436,7 +471,7 @@ END:VCALENDAR`;
       window.createPrayerCard = createPrayerCard;
     })();
 
-    // --- enforce mobile order strictly
+    // ---------- enforce mobile order strictly ----------
     function enforceMobileOrder(){
       const desktop = window.innerWidth >= 981;
       const left = document.getElementById('leftColumn');
@@ -451,38 +486,33 @@ END:VCALENDAR`;
       const contactCard = window.createContactCard ? window.createContactCard() : document.getElementById('contactCard');
       const prayerCard = window.createPrayerCard ? window.createPrayerCard() : document.getElementById('prayerCard');
 
+      if(!left || !right) return;
+
       if(!desktop){
         // Mobile strict order:
         // Hub, Latest Sermon, Bible, Announcements, Upcoming, Leaders, Prayer, Service Times, Contact
-        if(hub && left) left.appendChild(hub);
-        if(latest && left) left.appendChild(latest);
-        if(bible && left) left.appendChild(bible);
-        if(announcements && left) left.appendChild(announcements);
-        if(upcoming && left) left.appendChild(upcoming);
-        if(leaders && left) left.appendChild(leaders);
-        if(prayerCard && left) left.appendChild(prayerCard);
-        if(serviceTimes && left) left.appendChild(serviceTimes);
-        if(contactCard && left) left.appendChild(contactCard);
+        const order = [hub, latest, bible, announcements, upcoming, leaders, prayerCard, serviceTimes, contactCard];
+        order.forEach(el => { if(el) left.appendChild(el); });
       } else {
         // Desktop:
         // Left: Hub, Latest Sermon, Bible, Leaders, Contact
         // Right: Announcements, More Announcements, Upcoming, Service Times, Prayer
-        if(left && hub) left.appendChild(hub);
-        if(left && latest) left.appendChild(latest);
-        if(left && bible) left.appendChild(bible);
-        if(left && leaders) left.appendChild(leaders);
-        if(left && contactCard && leaders) leaders.parentElement.insertBefore(contactCard, leaders.nextSibling);
-
-        if(right && announcements) right.appendChild(announcements);
-        const ann2 = document.getElementById('announcementsCard2'); if(right && ann2) right.appendChild(ann2);
-        if(right && upcoming) right.appendChild(upcoming);
-        if(right && serviceTimes) right.appendChild(serviceTimes);
-        if(right && prayerCard && serviceTimes) serviceTimes.parentElement.insertBefore(prayerCard, serviceTimes.nextSibling);
+        // Left column
+        [hub, latest, bible, leaders].forEach(el => { if(el) left.appendChild(el); });
+        if(contactCard && leaders) {
+          if(leaders.parentElement) leaders.parentElement.insertBefore(contactCard, leaders.nextSibling);
+        } else if(contactCard) left.appendChild(contactCard);
+        // Right column
+        if(announcements) right.appendChild(announcements);
+        const ann2 = document.getElementById('announcementsCard2'); if(ann2) right.appendChild(ann2);
+        if(upcoming) right.appendChild(upcoming);
+        if(serviceTimes) right.appendChild(serviceTimes);
+        if(prayerCard && serviceTimes) serviceTimes.parentElement.insertBefore(prayerCard, serviceTimes.nextSibling);
       }
       applyTranslations();
     }
 
-    // --- Sermon loader: thumbnail-first behavior
+    // ---------- Sermon loader (thumbnail-first) ----------
     async function loadSingleLatestSermon(){
       const wrap = document.getElementById('sermonVideoWrap');
       const titleEl = document.getElementById('sermonTitle');
@@ -508,15 +538,15 @@ END:VCALENDAR`;
 
         shareBtn.onclick = async () => {
           const shareData = { title: latest.title, text: latest.title, url: videoUrl };
-          if(navigator.share){ try{ await navigator.share(shareData); return; }catch(e){} }
+          if (navigator.share) { try { await navigator.share(shareData); return; } catch (e) {} }
           const fb = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(videoUrl)}`;
           window.open(fb, '_blank', 'noopener');
         };
+
         copyBtn.onclick = async () => {
-          try{ await navigator.clipboard.writeText(videoUrl); copyBtn.textContent='Copied'; setTimeout(()=>copyBtn.textContent='Copy link',1600); } catch(e){ prompt('Copy this link', videoUrl); }
+          try { await navigator.clipboard.writeText(videoUrl); copyBtn.textContent = 'Copied'; setTimeout(()=>copyBtn.textContent='Copy link',1600); } catch (e) { prompt('Copy this link', videoUrl); }
         };
 
-        // thumbnail-first: only embed iframe after click
         if(latest.thumbnail){
           wrap.innerHTML = '';
           const thumbWrap = document.createElement('div'); thumbWrap.className='video-thumb'; thumbWrap.style.width='100%'; thumbWrap.style.height='100%';
@@ -548,55 +578,55 @@ END:VCALENDAR`;
         applyTranslations();
       } catch (err) {
         console.error(err);
-        wrap.innerHTML = '';
-        titleEl.textContent = 'Latest sermon unavailable';
-        detailsEl.textContent = 'Visit our YouTube channel for recent messages.';
+        if(wrap) wrap.innerHTML = '<div style="padding:18px;color:#fff">Latest sermon unavailable</div>';
+        if(titleEl) titleEl.textContent = 'Latest sermon unavailable';
+        if(detailsEl) detailsEl.textContent = '';
         applyTranslations();
       }
     }
 
-    // --- app link helper
-    function wireAppLinks(){
-      document.querySelectorAll('.hub-button[data-app-href]').forEach(a=>{
-        a.addEventListener('click', function(e){
-          if(e.metaKey||e.ctrlKey||e.shiftKey||e.button===1) return;
-          const appHref = a.getAttribute('data-app-href'); const webHref = a.href;
-          const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-          if(!isMobile || !appHref) return;
-          e.preventDefault();
-          let didHide=false;
-          function onVisibilityChange(){ didHide = document.hidden; }
-          document.addEventListener('visibilitychange', onVisibilityChange);
-          const timeout = setTimeout(()=>{ document.removeEventListener('visibilitychange', onVisibilityChange); if(!didHide) window.location = webHref; }, 1200);
-          try{ window.location = appHref; } catch(e){ clearTimeout(timeout); document.removeEventListener('visibilitychange', onVisibilityChange); window.location = webHref; }
-        });
-      });
-    }
+    // ---------- Resize handling ----------
+    let _placementTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(_placementTimer);
+      _placementTimer = setTimeout(() => { enforceMobileOrder(); }, 120);
+    });
 
-    // --- init
-    let _resizeTimer = null;
-    window.addEventListener('resize', ()=>{ clearTimeout(_resizeTimer); _resizeTimer = setTimeout(()=>{ enforceMobileOrder(); }, 120); });
+    // ---------- Init ----------
+    document.addEventListener('DOMContentLoaded', async () => {
+      buildLangSwitcher();
+      applyTranslations();
+      wireAppLinks();
 
-    document.addEventListener('DOMContentLoaded', async ()=>{
-      buildLangSwitcher(); applyTranslations(); wireAppLinks();
-      // create contact & prayer elements so placement can move them
+      // create contact & prayer elements so they can be moved
       if(window.createContactCard) window.createContactCard();
       if(window.createPrayerCard) window.createPrayerCard();
-      // load dynamic content
-      await (typeof loadSiteConfig === 'function' ? loadSiteConfig() : Promise.resolve());
-      loadAndRenderAnnouncements(); setInterval(loadAndRenderAnnouncements, 5*60*1000);
-      loadLeaders(); loadSingleLatestSermon(); loadNextEvent();
-      // enforce mobile order immediately and after a short delay
+
+      await loadSiteConfig();
+      loadAndRenderAnnouncements();
+      setInterval(loadAndRenderAnnouncements, 5 * 60 * 1000);
+
+      loadLeaders();
+      loadSingleLatestSermon();
+      loadNextEvent();
+
+      // enforce mobile order immediately and shortly after to ensure DOM ready
       enforceMobileOrder();
       setTimeout(enforceMobileOrder, 160);
-      // bible plan share wiring
+
+      // Bible plan share wiring
       const planUrl = 'https://bibleinayearonline.com/chronological-bible-custom-reading-plan/';
-      const shareBtn = document.getElementById('shareTodayBtn'); const status = document.getElementById('biblePlanStatus');
-      if(shareBtn){ shareBtn.addEventListener('click', async ()=>{
-        try{ if(navigator.share){ await navigator.share({ title:'CMR — Bible in a Year', text:'Read today’s chronological Bible in a Year reading from CMR Hub', url:planUrl }); status.textContent='Shared'; setTimeout(()=>status.textContent='',1600); return; }
-          if(navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(planUrl); status.textContent='Link copied'; setTimeout(()=>status.textContent='',1600); return; }
-          window.prompt('Copy this link to share', planUrl);
-        } catch(e){ try{ await navigator.clipboard.writeText(planUrl); status.textContent='Link copied'; setTimeout(()=>status.textContent='',1600);}catch(e){ window.prompt('Copy this link to share', planUrl); } }); }
+      const shareBtn = document.getElementById('shareTodayBtn');
+      const status = document.getElementById('biblePlanStatus');
+      if(shareBtn){
+        shareBtn.addEventListener('click', async () => {
+          try {
+            if(navigator.share){ await navigator.share({ title:'CMR — Bible in a Year', text:'Read today’s chronological Bible in a Year reading from CMR Hub', url:planUrl }); status.textContent='Shared'; setTimeout(()=>status.textContent='',1600); return; }
+            if(navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(planUrl); status.textContent='Link copied'; setTimeout(()=>status.textContent='',1600); return; }
+            window.prompt('Copy this link to share', planUrl);
+          } catch (e) { try{ await navigator.clipboard.writeText(planUrl); status.textContent='Link copied'; setTimeout(()=>status.textContent='',1600);}catch(e){ window.prompt('Copy this link to share', planUrl); } }
+        });
+      }
     });
   </script>
 </body>
