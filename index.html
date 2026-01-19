@@ -5,16 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>CMR Hub</title>
   <link rel="icon" type="image/png" sizes="512x512" href="/cmr512.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/cmr192.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/cmr180.png">
-  
-  <!-- <link rel="icon" type="image/x-icon" href="/cmr512.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/cmr32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/cmr32.png">
-  <link rel="icon" type="image/svg+xml" href="/cmrsvg.svg">
-  <link rel="apple-touch-icon" sizes="180x180" href="/cmr180.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="/cmr180.png"> -->
-
   <style>
     :root{
       --accent:#2b6cb0;
@@ -62,7 +52,6 @@
       }
     }
 
-    /* Layout: desktop two-column, mobile single column with explicit order */
     .layout-fixed{
       display:grid;
       grid-template-columns: 1fr 360px;
@@ -124,8 +113,6 @@
       .card{ padding:14px; }
     }
   </style>
-
-  <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <body>
   <div class="lang-switcher" id="globalLangSwitcher" aria-hidden="false"></div>
@@ -133,7 +120,7 @@
   <div class="wrap" id="pageWrap">
     <div class="layout-fixed" id="mainLayout">
 
-      <!-- LEFT COLUMN: Mobile-first order preserved here -->
+      <!-- LEFT COLUMN -->
       <div class="left-col">
         <!-- CMR HUB CARD -->
         <div class="card" id="hubCard" aria-label="CMR Hub">
@@ -149,32 +136,32 @@
 
           <div class="hub-grid" role="navigation" aria-label="Main actions">
             <a class="hub-button" href="give.html" id="giveBtn" title="Give">
-              <div class="hub-icon"><i data-feather="heart"></i></div>
+              <div class="hub-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.8 4.6c-1.6-1.6-4.2-1.6-5.8 0L12 7.6 9 4.6C7.4 3 4.8 3 3.2 4.6 1.6 6.2 1.6 8.8 3.2 10.4L12 19.2l8.8-8.8c1.6-1.6 1.6-4.2 0-5.8z"/></svg></div>
               <div><div class="hub-label" id="giveLabel">Give</div><div class="hub-sub" id="giveSub">Support online</div></div>
             </a>
 
             <a class="hub-button" href="https://www.youtube.com/@CentreMissionnaireRestauration" id="sermonsBtn" title="Sermons" data-app-href="https://www.youtube.com/@CentreMissionnaireRestauration" data-android-intent="intent://www.youtube.com/@CentreMissionnaireRestauration#Intent;package=com.google.android.youtube;scheme=https;end">
-              <div class="hub-icon"><i data-feather="video"></i></div>
+              <div class="hub-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M23 7L16 12 23 17 23 7zM1 5h14v14H1z"/></svg></div>
               <div><div class="hub-label" id="sermonsLabel">Sermons</div><div class="hub-sub" id="sermonsSub">Watch on YouTube</div></div>
             </a>
 
             <a class="hub-button" href="listen.html" id="listenBtn" title="Listen">
-              <div class="hub-icon"><i data-feather="headphones"></i></div>
+              <div class="hub-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 1v22M4 7v10M20 7v10"/></svg></div>
               <div><div class="hub-label" id="listenLabel">Listen</div><div class="hub-sub" id="listenSub">Audio highlights</div></div>
             </a>
 
             <a class="hub-button" href="connect.html" id="connectBtn" title="Connect">
-              <div class="hub-icon"><i data-feather="user-plus"></i></div>
+              <div class="hub-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM8 11c1.657 0 3-1.343 3-3S9.657 5 8 5 5 6.343 5 8s1.343 3 3 3zM8 13c-2.667 0-8 1.333-8 4v2h16v-2c0-2.667-5.333-4-8-4zM16 13c-.667 0-2 0-2 1v3h6v-3c0-1-1.333-1-2-1z"/></svg></div>
               <div><div class="hub-label" id="connectLabel">Connect</div><div class="hub-sub" id="connectSub">Fill out the form</div></div>
             </a>
 
             <a class="hub-button" href="https://cmrestauration.org" id="visitBtn" title="Visit Website">
-              <div class="hub-icon"><i data-feather="globe"></i></div>
+              <div class="hub-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/></svg></div>
               <div><div class="hub-label" id="visitLabel">Visit Website</div><div class="hub-sub" id="visitSub">More info online</div></div>
             </a>
 
             <a class="hub-button" href="https://linktr.ee/cmrmediaconnect" id="followBtn" title="Follow Us">
-              <div class="hub-icon"><i data-feather="share-2"></i></div>
+              <div class="hub-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 12h16M4 6h16M4 18h16"/></svg></div>
               <div><div class="hub-label" id="followLabel">Follow Us</div><div class="hub-sub" id="followSub">Social links</div></div>
             </a>
           </div>
@@ -194,11 +181,9 @@
           </div>
 
           <div id="sermonActions" style="margin-top:10px; display:flex; gap:8px; align-items:center;">
-            <!-- Share and Copy use blue primary like announcement Learn more -->
             <button id="shareSermonBtn" class="btn btn-primary" aria-label="Share sermon">Share</button>
             <button id="copySermonLinkBtn" class="btn btn-primary" aria-label="Copy link">Copy link</button>
-            <!-- Open on YouTube styled red like YouTube and no underline -->
-            <a id="openSermonOnYT" class="btn-youtube" target="_blank" rel="noopener" aria-label="Open on YouTube">Open on YouTube</a>
+            <a id="openSermonOnYT" class="btn btn-youtube" target="_blank" rel="noopener" aria-label="Open on YouTube">Open on YouTube</a>
           </div>
         </section>
 
@@ -208,14 +193,37 @@
           <div id="announcementContainer"></div>
         </div>
 
-        <!-- MORE ANNOUNCEMENTS (moved under primary) -->
-        <div class="card" id="announcementsCard2" aria-live="polite" style="">
+        <!-- MORE ANNOUNCEMENTS (under primary) -->
+        <div class="card" id="announcementsCard2" aria-live="polite">
           <h3 style="margin:0 0 12px 0;">More Announcements</h3>
           <div id="announcementContainer2"></div>
         </div>
 
-        <!-- UPCOMING EVENT (placed after More Announcements) -->
+        <!-- UPCOMING EVENT -->
         <div id="upcomingEventCard" style="margin-top:0;"></div>
+
+        <!-- BIBLE IN A YEAR (placed under Upcoming Event) -->
+        <div class="card" id="biblePlanCard" aria-labelledby="biblePlanHeading" style="margin-top:12px;">
+          <h3 id="biblePlanHeading" style="margin:0 0 12px 0;">Bible in a Year</h3>
+
+          <div style="font-size:14px; color:#374151; margin-bottom:10px;">
+            Follow a one‑year chronological reading plan. Open today’s reading with one tap.
+          </div>
+
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <a id="readTodayBtn" class="btn btn-primary"
+               href="https://bibleinayearonline.com/chronological-bible-custom-reading-plan/"
+               target="_blank" rel="noopener" aria-label="Open Bible in a Year reading plan">
+              Read Today
+            </a>
+
+            <button id="shareTodayBtn" class="btn btn-ghost" aria-label="Share today's reading">
+              Share Today
+            </button>
+
+            <div id="biblePlanStatus" class="small-muted" style="margin-left:6px;"></div>
+          </div>
+        </div>
 
         <!-- LEADERS -->
         <section id="leadersSection" class="card" aria-labelledby="leadersHeading">
@@ -244,16 +252,14 @@
               <div class="small-muted">123 Church St, Fort Worth, TX</div>
             </div>
             <div>
-              <!-- Directions uses blue primary like Learn more -->
               <button id="directionsBtn" class="btn btn-primary" aria-label="Get directions">Directions</button>
             </div>
           </div>
         </section>
       </div>
 
-      <!-- RIGHT COLUMN: kept minimal for desktop; Quick Links removed per request -->
+      <!-- RIGHT COLUMN (minimal) -->
       <aside class="right-col" aria-label="Right column">
-        <!-- Optional additional announcement slot for desktop only -->
         <div class="card" id="announcementsCard3" aria-live="polite" style="display:none;">
           <h3 style="margin:0 0 12px 0;">More</h3>
           <div id="announcementContainer3"></div>
@@ -264,12 +270,11 @@
 
   <script>
     // ---------- CONFIG ----------
-    let SHOW_SECOND_ANNOUNCEMENT = null; // null = auto, true = force show, false = hide
+    let SHOW_SECOND_ANNOUNCEMENT = null;
     let SHOW_THIRD_ANNOUNCEMENT = null;
     const ANNOUNCEMENT_JSON_PATH = '/announcement.json';
     const SITE_CONFIG_PATH = '/site-config.json';
 
-    // translations (serve entries removed to avoid missing IDs)
     const translations = {
       en: {
         hubTitle: "CMR Hub",
@@ -412,7 +417,6 @@
       const secondaryCard = document.getElementById('announcementsCard2');
       const tertiaryCard = document.getElementById('announcementsCard3');
 
-      // Primary visibility (we keep primary in left-col)
       if(primaryCard) primaryCard.style.display = (active.length > 0) ? '' : '';
 
       if (secondaryCard) {
@@ -444,11 +448,9 @@
         primaryContainer.appendChild(placeholder);
       }
 
-      // Also render upcoming event under announcements (if events.json exists)
-      loadNextEvent(); // safe to call even if events.json missing
+      loadNextEvent();
     }
 
-    // Robust loader with fallback and clear logging
     async function loadAndRenderAnnouncements(){
       const url = ANNOUNCEMENT_JSON_PATH + '?t=' + Date.now();
       try {
@@ -512,7 +514,7 @@
       anchors.forEach(a => { a.addEventListener('click', function(e){ tryOpenAppThenFallback(a, e); }); });
     }
 
-    // ---------- LEADERS: load leaders.json and render -->
+    // ---------- LEADERS ----------
     async function loadLeaders() {
       const grid = document.getElementById('leadersGrid');
       try {
@@ -550,7 +552,7 @@
       }
     }
 
-    // ---------- EVENTS: load events.json and render next upcoming event under announcements ----------
+    // ---------- EVENTS ----------
     async function loadNextEvent() {
       const container = document.getElementById('upcomingEventCard');
       if(!container) return;
@@ -582,7 +584,6 @@
       }
     }
 
-    // ---------- Google Calendar link helper ----------
     function toGoogleCalendarUrl(event){
       const start = `${event.date.replace(/-/g,'')}T${(event.startTime||'00:00').replace(':','')}00`;
       const end = event.endTime ? `${event.date.replace(/-/g,'')}T${event.endTime.replace(':','')}00` : `${event.date.replace(/-/g,'')}T${String(Number((event.startTime||'00:00').split(':')[0]) + 1).padStart(2,'0')}${(event.startTime||'00:00').split(':')[1]}00`;
@@ -596,7 +597,6 @@
       return `https://www.google.com/calendar/render?${params.toString()}`;
     }
 
-    // ---------- ICS download generator ----------
     function downloadICS(event){
       const start = `${event.date.replace(/-/g,'')}T${(event.startTime||'00:00').replace(':','')}00`;
       const end = event.endTime ? `${event.date.replace(/-/g,'')}T${event.endTime.replace(':','')}00` : `${event.date.replace(/-/g,'')}T${String(Number((event.startTime||'00:00').split(':')[0]) + 1).padStart(2,'0')}${(event.startTime||'00:00').split(':')[1]}00`;
@@ -642,26 +642,49 @@ END:VCALENDAR`;
 
     // ---------- INIT ----------
     document.addEventListener('DOMContentLoaded', async () => {
-      if (window.feather && typeof feather.replace === 'function') feather.replace();
       buildLangSwitcher();
       applyTranslations();
       wireAppLinks();
 
-      // load site-config (if present) to override toggles without editing code
       await loadSiteConfig();
-
-      // load announcements robustly
       loadAndRenderAnnouncements();
-      // refresh announcements periodically
       setInterval(loadAndRenderAnnouncements, 5 * 60 * 1000);
 
-      // load leaders and sermons and events
       loadLeaders();
       loadSingleLatestSermon();
       loadNextEvent();
+
+      // Bible plan card wiring (Read Today already has href set in markup)
+      const planUrl = 'https://bibleinayearonline.com/chronological-bible-custom-reading-plan/';
+      const shareBtn = document.getElementById('shareTodayBtn');
+      const status = document.getElementById('biblePlanStatus');
+      if (shareBtn) {
+        shareBtn.addEventListener('click', async () => {
+          const shareTitle = 'CMR — Bible in a Year';
+          const shareText = 'Read today’s chronological Bible in a Year reading from CMR Hub';
+          try {
+            if (navigator.share) {
+              await navigator.share({ title: shareTitle, text: shareText, url: planUrl });
+              status.textContent = 'Shared';
+              setTimeout(() => status.textContent = '', 1600);
+              return;
+            }
+            if (navigator.clipboard && window.isSecureContext) {
+              await navigator.clipboard.writeText(planUrl);
+              status.textContent = 'Link copied';
+              setTimeout(() => status.textContent = '', 1600);
+              return;
+            }
+            window.prompt('Copy this link to share', planUrl);
+          } catch (err) {
+            try { await navigator.clipboard.writeText(planUrl); status.textContent = 'Link copied'; setTimeout(() => status.textContent = '', 1600); }
+            catch (e) { window.prompt('Copy this link to share', planUrl); }
+          }
+        });
+      }
     });
 
-    // ---------- SERMONS JS (kept as you provided) ----------
+    // ---------- SERMONS JS ----------
     async function loadSingleLatestSermon() {
       const wrap = document.getElementById('sermonVideoWrap');
       const titleEl = document.getElementById('sermonTitle');
@@ -677,11 +700,9 @@ END:VCALENDAR`;
         const items = (data.items || []).filter(i => i.videoId && i.date);
         if (!items.length) throw new Error('No sermons found');
 
-        // sort newest first and take the first item only
         items.sort((a,b) => new Date(b.date) - new Date(a.date));
         const latest = items[0];
 
-        // render iframe
         wrap.innerHTML = '';
         const iframe = document.createElement('iframe');
         iframe.src = `https://www.youtube.com/embed/${latest.videoId}?rel=0&modestbranding=1`;
@@ -693,7 +714,6 @@ END:VCALENDAR`;
         iframe.style.border = '0';
         wrap.appendChild(iframe);
 
-        // meta
         titleEl.textContent = latest.title || 'Latest Sermon';
         const dateStr = latest.date ? new Date(latest.date).toLocaleDateString() : '';
         detailsEl.textContent = `${latest.preacher || ''}${latest.preacher ? ' • ' : ''}${dateStr}`;
@@ -701,13 +721,11 @@ END:VCALENDAR`;
         const videoUrl = `https://www.youtube.com/watch?v=${latest.videoId}`;
         openBtn.href = videoUrl;
 
-        // share handlers
         shareBtn.onclick = async () => {
           const shareData = { title: latest.title, text: latest.title, url: videoUrl };
           if (navigator.share) {
             try { await navigator.share(shareData); return; } catch (e) { /* fallback below */ }
           }
-          // fallback: open Facebook share in new tab
           const fb = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(videoUrl)}`;
           window.open(fb, '_blank', 'noopener');
         };
@@ -724,7 +742,6 @@ END:VCALENDAR`;
 
       } catch (err) {
         console.error(err);
-        // graceful fallback
         wrap.innerHTML = '';
         titleEl.textContent = 'Latest sermon unavailable';
         detailsEl.textContent = 'Visit our YouTube channel for recent messages.';
