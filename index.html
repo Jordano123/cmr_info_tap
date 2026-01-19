@@ -1050,74 +1050,77 @@ END:VCALENDAR`;
     });
 
     // ---------- ENFORCE MOBILE LAYOUT & FORCE TRANSLATIONS ----------
-    (function enforceMobileLayout() {
-      const MOBILE_BREAK = 981;
+   // ---------- USER MOBILE ORDER PATCH ----------
+(function enforceUserMobileOrder() {
+  const BREAK = 981;
 
-      function moveInOrderForMobile() {
-        const isDesktop = window.innerWidth >= BREAK;
-        const left = document.getElementById('leftColumn');
-        const right = document.getElementById('rightColumn');
-        if (!left || !right) return;
+  function applyOrder() {
+    const isDesktop = window.innerWidth >= BREAK;
+    const left = document.getElementById('leftColumn');
+    const right = document.getElementById('rightColumn');
+    if (!left || !right) return;
 
-        // Ensure prayer/contact elements exist
-        const prayer = (window.createPrayerCard && window.createPrayerCard()) || document.getElementById('prayerCard');
-        const contact = (window.createContactCard && window.createContactCard()) || document.getElementById('contactCard');
+    // Ensure prayer/contact exist (use your creators if available)
+    const prayer = (window.createPrayerCard && window.createPrayerCard()) || document.getElementById('prayerCard');
+    const contact = (window.createContactCard && window.createContactCard()) || document.getElementById('contactCard');
 
-        // Elements we will place
-        const hub = document.getElementById('hubCard');
-        const latest = document.getElementById('latestSermonCard');
-        const announcements = document.getElementById('announcementsCardPrimary');
-        const annMore = document.getElementById('announcementsCard2');
-        const upcoming = document.getElementById('upcomingEventCard');
-        const leaders = document.getElementById('leadersSection');
-        const bible = document.getElementById('biblePlanCard');
-        const serviceTimes = document.getElementById('serviceTimes');
+    // Elements by id (as in your markup)
+    const hub = document.getElementById('hubCard');
+    const latest = document.getElementById('latestSermonCard');
+    const annPrimary = document.getElementById('announcementsCardPrimary');
+    const annMore = document.getElementById('announcementsCard2');
+    const upcoming = document.getElementById('upcomingEventCard');
+    const leaders = document.getElementById('leadersSection');
+    const bible = document.getElementById('biblePlanCard');
+    const serviceTimes = document.getElementById('serviceTimes');
 
-        if (!isDesktop) {
-          // Mobile strict order:
-          // CMR Hub, Latest Sermon, Bible in a year, Announcement, Upcoming event,
-          // Leaders, Prayer request, Service times, Contact
-          const order = [hub, latest, bible, announcements, upcoming, leaders, prayer, serviceTimes, contact];
-          order.forEach(el => { if (el && el.parentElement !== left) left.appendChild(el); });
-        } else {
-          // Desktop: restore desktop placements without changing styles
-          if (hub) left.appendChild(hub);
-          if (latest) left.appendChild(latest);
-          if (bible) left.appendChild(bible);
-          if (leaders) left.appendChild(leaders);
-
-          if (contact) {
-            if (leaders && leaders.parentElement) leaders.parentElement.insertBefore(contact, leaders.nextSibling);
-            else left.appendChild(contact);
-          }
-
-          if (announcements) right.appendChild(announcements);
-          const ann2 = document.getElementById('announcementsCard2'); if (ann2) right.appendChild(ann2);
-          if (upcoming) right.appendChild(upcoming);
-          if (serviceTimes) right.appendChild(serviceTimes);
-
-          if (prayer && serviceTimes && serviceTimes.parentElement) serviceTimes.parentElement.insertBefore(prayer, serviceTimes.nextSibling);
-          else if (prayer) right.appendChild(prayer);
-        }
-
-        try { applyTranslations(); } catch (e) {}
+    if (!isDesktop) {
+      // Mobile exact order requested by you:
+      // CMR Hub, Latest Sermon, Announcement, More Announcement, Upcoming event,
+      // Leaders, Bible in a year, Prayer request, Service times, Contact
+      const order = [hub, latest, annPrimary, annMore, upcoming, leaders, bible, prayer, serviceTimes, contact];
+      order.forEach(el => { if (el) left.appendChild(el); });
+    } else {
+      // Desktop: restore sensible desktop placements without altering markup
+      // Left: hub, latest, bible, leaders, contact (contact after leaders)
+      if (hub) left.appendChild(hub);
+      if (latest) left.appendChild(latest);
+      if (bible) left.appendChild(bible);
+      if (leaders) left.appendChild(leaders);
+      if (contact) {
+        if (leaders && leaders.parentElement) leaders.parentElement.insertBefore(contact, leaders.nextSibling);
+        else left.appendChild(contact);
       }
 
-      let _deb = null;
-      function onResize() {
-        clearTimeout(_deb);
-        _deb = setTimeout(moveInOrderForMobile, 120);
+      // Right: announcements, announcementsCard2, upcoming, serviceTimes, prayer (after serviceTimes)
+      if (annPrimary) right.appendChild(annPrimary);
+      if (annMore) right.appendChild(annMore);
+      if (upcoming) right.appendChild(upcoming);
+      if (serviceTimes) right.appendChild(serviceTimes);
+      if (prayer) {
+        if (serviceTimes && serviceTimes.parentElement) serviceTimes.parentElement.insertBefore(prayer, serviceTimes.nextSibling);
+        else right.appendChild(prayer);
       }
+    }
 
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => { moveInOrderForMobile(); window.addEventListener('resize', onResize); });
-      } else {
-        moveInOrderForMobile();
-        window.addEventListener('resize', onResize);
-      }
+    // Force translations after moves
+    try { applyTranslations(); } catch (e) { /* no-op */ }
+  }
 
-      window.enforceMobileLayout = moveInOrderForMobile;
-    })();
+  // Run now and on resize (debounced)
+  let _t = null;
+  function onResize() { clearTimeout(_t); _t = setTimeout(applyOrder, 120); }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => { applyOrder(); window.addEventListener('resize', onResize); });
+  } else {
+    applyOrder();
+    window.addEventListener('resize', onResize);
+  }
+
+  // Expose for manual invocation
+  window.enforceUserMobileOrder = applyOrder;
+})();
   </script>
 </body>
 </html>
