@@ -55,6 +55,7 @@
       }
     }
 
+    /* Desktop two-column layout (centered container) */
     .layout-fixed{
       display:grid;
       grid-template-columns: 1fr 360px;
@@ -70,15 +71,17 @@
     @media (max-width:980px){
       .layout-fixed{ grid-template-columns: 1fr; }
       .right-col{ order:2; }
-      .left-col{ order:1; } 
+      .left-col{ order:1; }
     }
 
     .card{ background:var(--card-bg); border-radius:var(--radius); padding:20px; box-shadow:0 6px 18px rgba(15,23,42,0.06); border:1px solid rgba(15,23,42,0.04); }
+    /* Hub header: larger logo but flexible title so logo doesn't push text */
     .hub-header{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+    .hub-logo{ width:88px; height:88px; border-radius:10px; background:transparent; display:flex; align-items:center; justify-content:center; overflow:hidden; flex:0 0 88px; }
+    .hub-logo img{ width:100%; height:100%; object-fit:contain; display:block; }
 
-    .hub-title{ font-size:20px; font-weight:700; margin:0; }
+    .hub-title{ font-size:20px; font-weight:700; margin:0; display:flex; align-items:center; gap:8px; flex:1; }
     .hub-subtitle{ font-size:13px; color:var(--muted); margin:0; }
-    .hub-logo img{ width:100px; height:95px; object-fit:contain; display:flex; align-items:center; justify-content:center; }
 
     .hub-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
     @media(max-width:640px){ .hub-grid{ grid-template-columns:repeat(2,1fr); } }
@@ -96,7 +99,7 @@
     .announce-title{ font-size:18px; font-weight:700; margin:0; }
     .announce-desc{ font-size:14px; color:#111827; line-height:1.45; }
     .small-muted{ font-size:13px; color:var(--muted); }
-    .cta-row{ display:flex; gap:10px; margin-top:8px; }
+    .cta-row{ display:flex; gap:10px; margin-top:8px; flex-wrap:wrap; }
     .btn{ padding:10px 12px; border-radius:8px; border:1px solid transparent; cursor:pointer; font-weight:600; font-size:14px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
     .btn-primary{ background:var(--accent); color:white; text-decoration:none; border:1px solid rgba(0,0,0,0.04); }
     .btn-ghost { background:#fff; border:1px solid rgba(15,23,42,0.06); color:#111827; padding:8px 12px; border-radius:8px; cursor:pointer; text-decoration:none; }
@@ -112,9 +115,16 @@
 
     .address-row { display:flex; justify-content:space-between; align-items:center; gap:12px; }
 
+    /* subtle desktop tweaks to keep content centered visually */
+    @media (min-width:981px) {
+      body { display:flex; justify-content:center; }
+      .wrap { box-shadow: 0 8px 30px rgba(2,6,23,0.04); border-radius:12px; background:transparent; }
+    }
+
     @media (max-width:420px){
       .wrap{ padding-left: calc(12px + env(safe-area-inset-left)); padding-right: calc(12px + env(safe-area-inset-right)); }
       .card{ padding:14px; }
+      .hub-logo{ width:72px; height:72px; flex:0 0 72px; }
     }
   </style>
 </head>
@@ -124,7 +134,7 @@
   <div class="wrap" id="pageWrap">
     <div class="layout-fixed" id="mainLayout">
 
-      <!-- LEFT COLUMN -->
+      <!-- LEFT COLUMN: CMR Hub, Latest Sermon, Bible in a Year, Leaders -->
       <div class="left-col">
         <!-- CMR HUB CARD -->
         <div class="card" id="hubCard" aria-label="CMR Hub">
@@ -132,7 +142,7 @@
             <div class="hub-logo">
               <img src="logo.png" alt="CMR logo" id="connectLogo">
             </div>
-            <div>
+            <div style="flex:1;">
               <h1 class="hub-title" id="hubTitle">CMR Hub</h1>
               <p class="hub-subtitle" id="hubSubtitle">One place for everything happening at CMR.</p>
             </div>
@@ -191,22 +201,7 @@
           </div>
         </section>
 
-        <!-- ANNOUNCEMENTS (primary) -->
-        <div class="card" id="announcementsCardPrimary" aria-live="polite" data-accent="true">
-          <h3 id="announcementsTitle" style="margin:0 0 12px 0;">Announcements</h3>
-          <div id="announcementContainer"></div>
-        </div>
-
-        <!-- MORE ANNOUNCEMENTS (under primary) -->
-        <div class="card" id="announcementsCard2" aria-live="polite">
-          <h3 style="margin:0 0 12px 0;">More Announcements</h3>
-          <div id="announcementContainer2"></div>
-        </div>
-
-        <!-- UPCOMING EVENT -->
-        <div id="upcomingEventCard" style="margin-top:0;"></div>
-
-        <!-- BIBLE IN A YEAR (placed under Upcoming Event) -->
+        <!-- BIBLE IN A YEAR (left column) -->
         <div class="card" id="biblePlanCard" aria-labelledby="biblePlanHeading" style="margin-top:12px;">
           <h3 id="biblePlanHeading" style="margin:0 0 12px 0;">Bible in a Year</h3>
 
@@ -230,15 +225,33 @@
         </div>
 
         <!-- LEADERS -->
-        <section id="leadersSection" class="card" aria-labelledby="leadersHeading">
+        <section id="leadersSection" class="card" aria-labelledby="leadersHeading" style="margin-top:12px;">
           <h3 id="leadersHeading" style="margin:0 0 12px 0;">Leaders</h3>
           <div id="leadersGrid" class="leaders-grid" aria-live="polite">
             <div class="small-muted">Loading leaders…</div>
           </div>
         </section>
+      </div>
+
+      <!-- RIGHT COLUMN: Announcements, Upcoming Event, Service Times, Visit Us -->
+      <aside class="right-col" aria-label="Right column">
+        <!-- ANNOUNCEMENTS (primary) -->
+        <div class="card" id="announcementsCardPrimary" aria-live="polite" data-accent="true">
+          <h3 id="announcementsTitle" style="margin:0 0 12px 0;">Announcements</h3>
+          <div id="announcementContainer"></div>
+        </div>
+
+        <!-- MORE ANNOUNCEMENTS (secondary) -->
+        <div class="card" id="announcementsCard2" aria-live="polite">
+          <h3 style="margin:0 0 12px 0;">More Announcements</h3>
+          <div id="announcementContainer2"></div>
+        </div>
+
+        <!-- UPCOMING EVENT -->
+        <div id="upcomingEventCard" style="margin-top:0;"></div>
 
         <!-- SERVICE TIMES -->
-        <section id="serviceTimes" class="card" aria-labelledby="serviceTimesHeading">
+        <section id="serviceTimes" class="card" aria-labelledby="serviceTimesHeading" style="margin-top:12px;">
           <h3 id="serviceTimesHeading" style="margin:0 0 12px 0;">Service Times</h3>
           <div>
             <div style="font-weight:700;">Sunday • 9:00 AM</div>
@@ -247,8 +260,8 @@
           </div>
         </section>
 
-        <!-- ADDRESS + DIRECTIONS (LAST) -->
-        <section id="addressSection" class="card" aria-labelledby="addressHeading">
+        <!-- ADDRESS + DIRECTIONS -->
+        <section id="addressSection" class="card" aria-labelledby="addressHeading" style="margin-top:12px;">
           <h3 id="addressHeading" style="margin:0 0 12px 0;">Visit Us</h3>
           <div class="address-row">
             <div>
@@ -260,27 +273,26 @@
             </div>
           </div>
         </section>
-      </div>
 
-      <!-- RIGHT COLUMN (minimal) -->
-      <aside class="right-col" aria-label="Right column">
-        <div class="card" id="announcementsCard3" aria-live="polite" style="display:none;">
+        <!-- tertiary slot (hidden by default) -->
+        <div class="card" id="announcementsCard3" aria-live="polite" style="display:none; margin-top:12px;">
           <h3 style="margin:0 0 12px 0;">More</h3>
           <div id="announcementContainer3"></div>
         </div>
       </aside>
     </div>
+
+    <!-- Footer / Copyright -->
+    <footer class="site-footer" role="contentinfo">
+      <div>© <span id="currentYear"></span> Christ Missionary Revival Church. All rights reserved.</div>
+      <div style="margin-top:6px; color:var(--muted); font-size:12px;">Designed for the CMR community.</div>
+    </footer>
   </div>
-<!-- Footer / Copyright --> 
-  <footer class="site-footer" role="contentinfo"> <div>© 
-    <span id="currentYear"></span> Christ Missionary Revival Church. All rights reserved.
-  </div> <div style="margin-top:6px; color:var(--muted); font-size:12px;">Designed for the CMR community.
-  </div> 
-  </footer> 
-</div>
+
   <script>
-    // set copyright year 
+    // set copyright year
     document.getElementById('currentYear').textContent = new Date().getFullYear();
+
     // ---------- CONFIG ----------
     let SHOW_SECOND_ANNOUNCEMENT = null;
     let SHOW_THIRD_ANNOUNCEMENT = null;
@@ -346,6 +358,8 @@
 
     function applyTranslations(){
       const lang = getSavedLang();
+      // set html lang attribute so screen readers and browsers know the language
+      try { document.documentElement.lang = lang; } catch(e){}
       const t = translations[lang] || translations.en;
       const safeSet = (id, text) => { const el = document.getElementById(id); if(el) el.textContent = text; };
       safeSet('hubTitle', t.hubTitle);
@@ -459,6 +473,9 @@
         placeholder.textContent = translations[lang].no_announcements;
         primaryContainer.appendChild(placeholder);
       }
+
+      // ensure translations are applied after announcements render
+      applyTranslations();
 
       loadNextEvent();
     }
