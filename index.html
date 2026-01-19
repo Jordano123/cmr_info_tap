@@ -78,7 +78,7 @@
 
     .hub-title{ font-size:20px; font-weight:700; margin:0; }
     .hub-subtitle{ font-size:13px; color:var(--muted); margin:0; }
-    .hub-logo img{ width:32px; height:32px; object-fit:contain; display:block; }
+    .hub-logo img{ width:50px; height:50px; object-fit:contain; display:block; }
 
     .hub-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
     @media(max-width:640px){ .hub-grid{ grid-template-columns:repeat(2,1fr); } }
@@ -270,8 +270,16 @@
       </aside>
     </div>
   </div>
-
+<!-- Footer / Copyright --> 
+  <footer class="site-footer" role="contentinfo"> <div>© 
+    <span id="currentYear"></span> Christ Missionary Revival Church. All rights reserved.
+  </div> <div style="margin-top:6px; color:var(--muted); font-size:12px;">Designed for the CMR community.
+  </div> 
+  </footer> 
+</div>
   <script>
+    // set copyright year 
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
     // ---------- CONFIG ----------
     let SHOW_SECOND_ANNOUNCEMENT = null;
     let SHOW_THIRD_ANNOUNCEMENT = null;
