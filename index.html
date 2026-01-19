@@ -181,8 +181,8 @@
   </div>
 
   <script>
+    // --- small helpers & config
     document.getElementById('currentYear').textContent = new Date().getFullYear();
-
     const ANNOUNCEMENT_JSON_PATH = '/announcement.json';
     const SITE_CONFIG_PATH = '/site-config.json';
 
@@ -241,6 +241,7 @@
       safeSet('followLabel', t.followLabel); safeSet('followSub', t.followSub);
       const annTitle = document.getElementById('announcementsTitle'); if(annTitle) annTitle.textContent = t.announcements;
       const secH = document.querySelector('#announcementsCard2 h3'); if(secH) secH.textContent = t.more_announcements;
+      // contact & prayer translations (if present)
       const prayerHeading = document.querySelector('#prayerCard #prayerHeading'); if(prayerHeading) prayerHeading.textContent = t.prayerHeading;
       const prayerMeta = document.querySelector('#prayerCard .prayer-meta'); if(prayerMeta) prayerMeta.textContent = t.prayerSub;
       const prayerBtn = document.querySelector('#prayerCard .prayer-btn'); if(prayerBtn) prayerBtn.textContent = t.prayerBtn;
@@ -255,6 +256,7 @@
       });
     }
 
+    // --- Announcements renderer (keeps your logic)
     let lastAnnouncementData = null;
     function isExpired(expireDateStr){ if(!expireDateStr) return false; const now = new Date(); const expire = new Date(expireDateStr + 'T23:59:59'); return now > expire; }
 
@@ -310,6 +312,7 @@
       }
     }
 
+    // --- Leaders
     async function loadLeaders(){
       const grid = document.getElementById('leadersGrid');
       try {
@@ -330,6 +333,7 @@
       } catch (e) { grid.innerHTML = '<div class="small-muted">Could not load leaders.</div>'; applyTranslations(); }
     }
 
+    // --- Events
     async function loadNextEvent(){
       const container = document.getElementById('upcomingEventCard');
       if(!container) return;
@@ -378,11 +382,12 @@ DESCRIPTION:${(event.description||'').replace(/\n/g,' ')}
 LOCATION:${event.location || ''}
 END:VEVENT
 END:VCALENDAR`;
-      const blob = new Blob([ics], { type:'text/calendar' });
+      const blob = new Blob([ics], { type: 'text/calendar' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a'); a.href = url; a.download = `${event.id || 'event'}.ics`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     }
 
+    // --- Contact card creation and placement
     (function(){
       const CONTACT_PHONE = '+1-817-555-0123';
       const CONTACT_EMAIL = 'info@cmrestauration.org';
@@ -408,24 +413,30 @@ END:VCALENDAR`;
         return card;
       }
 
+      window.createContactCard = createContactCard;
+    })();
+
+    // --- Prayer card creation and placement
+    (function(){
+      const PRAYER_EMAIL = 'info@cmrestauration.org';
+      const PRAYER_SUBJECT = encodeURIComponent('Prayer Request');
+      const PRAYER_BODY = encodeURIComponent('Prayer Request');
+
       function createPrayerCard(){
         if(document.getElementById('prayerCard')) return document.getElementById('prayerCard');
         const card = document.createElement('div'); card.id='prayerCard'; card.className='card prayer-card';
-        const mail = encodeURIComponent('info@cmrestauration.org');
-        const subj = encodeURIComponent('Prayer Request');
-        const body = encodeURIComponent('Prayer Request');
         card.innerHTML = `
           <h3 id="prayerHeading" style="margin:0 0 12px 0;">Prayer Request</h3>
           <div class="prayer-meta" style="margin-bottom:6px;">Share a request and we will pray for you</div>
-          <div><a class="btn btn-primary prayer-btn" href="mailto:${mail}?subject=${subj}&body=${body}" aria-label="Request Prayer">Request Prayer</a></div>`;
+          <div><a class="btn btn-primary prayer-btn" href="mailto:${PRAYER_EMAIL}?subject=${PRAYER_SUBJECT}&body=${PRAYER_BODY}" aria-label="Request Prayer">Request Prayer</a></div>`;
         document.body.appendChild(card);
         return card;
       }
 
-      window.createContactCard = createContactCard;
       window.createPrayerCard = createPrayerCard;
     })();
 
+    // --- enforce mobile order strictly
     function enforceMobileOrder(){
       const desktop = window.innerWidth >= 981;
       const left = document.getElementById('leftColumn');
@@ -443,19 +454,19 @@ END:VCALENDAR`;
       if(!desktop){
         // Mobile strict order:
         // Hub, Latest Sermon, Bible, Announcements, Upcoming, Leaders, Prayer, Service Times, Contact
-        if(hub && hub.parentElement) hub.parentElement.insertBefore(hub, left.firstChild);
-        if(latest && hub && hub.parentElement) hub.parentElement.insertBefore(latest, hub.nextSibling);
-        if(bible && latest && latest.parentElement) latest.parentElement.insertBefore(bible, latest.nextSibling);
-        if(announcements && bible && bible.parentElement) bible.parentElement.insertBefore(announcements, bible.nextSibling);
-        if(upcoming && announcements && announcements.parentElement) announcements.parentElement.insertBefore(upcoming, announcements.nextSibling);
-        if(leaders && upcoming && upcoming.parentElement) upcoming.parentElement.insertBefore(leaders, upcoming.nextSibling);
-        if(prayerCard && leaders && leaders.parentElement) leaders.parentElement.insertBefore(prayerCard, leaders.nextSibling);
-        if(serviceTimes && prayerCard && prayerCard.parentElement) prayerCard.parentElement.insertBefore(serviceTimes, prayerCard.nextSibling);
-        if(contactCard && serviceTimes && serviceTimes.parentElement) serviceTimes.parentElement.insertBefore(contactCard, serviceTimes.nextSibling);
+        if(hub && left) left.appendChild(hub);
+        if(latest && left) left.appendChild(latest);
+        if(bible && left) left.appendChild(bible);
+        if(announcements && left) left.appendChild(announcements);
+        if(upcoming && left) left.appendChild(upcoming);
+        if(leaders && left) left.appendChild(leaders);
+        if(prayerCard && left) left.appendChild(prayerCard);
+        if(serviceTimes && left) left.appendChild(serviceTimes);
+        if(contactCard && left) left.appendChild(contactCard);
       } else {
-        // Desktop placements:
-        // Left column: Hub, Latest Sermon, Bible, Leaders, Contact (contact under leaders)
-        // Right column: Announcements, More Announcements, Upcoming, Service Times, Prayer (prayer under serviceTimes)
+        // Desktop:
+        // Left: Hub, Latest Sermon, Bible, Leaders, Contact
+        // Right: Announcements, More Announcements, Upcoming, Service Times, Prayer
         if(left && hub) left.appendChild(hub);
         if(left && latest) left.appendChild(latest);
         if(left && bible) left.appendChild(bible);
@@ -471,6 +482,7 @@ END:VCALENDAR`;
       applyTranslations();
     }
 
+    // --- Sermon loader: thumbnail-first behavior
     async function loadSingleLatestSermon(){
       const wrap = document.getElementById('sermonVideoWrap');
       const titleEl = document.getElementById('sermonTitle');
@@ -504,6 +516,7 @@ END:VCALENDAR`;
           try{ await navigator.clipboard.writeText(videoUrl); copyBtn.textContent='Copied'; setTimeout(()=>copyBtn.textContent='Copy link',1600); } catch(e){ prompt('Copy this link', videoUrl); }
         };
 
+        // thumbnail-first: only embed iframe after click
         if(latest.thumbnail){
           wrap.innerHTML = '';
           const thumbWrap = document.createElement('div'); thumbWrap.className='video-thumb'; thumbWrap.style.width='100%'; thumbWrap.style.height='100%';
@@ -534,6 +547,7 @@ END:VCALENDAR`;
         }
         applyTranslations();
       } catch (err) {
+        console.error(err);
         wrap.innerHTML = '';
         titleEl.textContent = 'Latest sermon unavailable';
         detailsEl.textContent = 'Visit our YouTube channel for recent messages.';
@@ -541,6 +555,7 @@ END:VCALENDAR`;
       }
     }
 
+    // --- app link helper
     function wireAppLinks(){
       document.querySelectorAll('.hub-button[data-app-href]').forEach(a=>{
         a.addEventListener('click', function(e){
@@ -558,21 +573,23 @@ END:VCALENDAR`;
       });
     }
 
+    // --- init
     let _resizeTimer = null;
     window.addEventListener('resize', ()=>{ clearTimeout(_resizeTimer); _resizeTimer = setTimeout(()=>{ enforceMobileOrder(); }, 120); });
 
     document.addEventListener('DOMContentLoaded', async ()=>{
       buildLangSwitcher(); applyTranslations(); wireAppLinks();
-      await loadSiteConfig?.();
-      loadAndRenderAnnouncements(); setInterval(loadAndRenderAnnouncements, 5*60*1000);
-      loadLeaders(); loadSingleLatestSermon(); loadNextEvent();
+      // create contact & prayer elements so placement can move them
       if(window.createContactCard) window.createContactCard();
       if(window.createPrayerCard) window.createPrayerCard();
-      // enforce mobile order immediately
+      // load dynamic content
+      await (typeof loadSiteConfig === 'function' ? loadSiteConfig() : Promise.resolve());
+      loadAndRenderAnnouncements(); setInterval(loadAndRenderAnnouncements, 5*60*1000);
+      loadLeaders(); loadSingleLatestSermon(); loadNextEvent();
+      // enforce mobile order immediately and after a short delay
       enforceMobileOrder();
-      // small delay to ensure DOM moves settle
       setTimeout(enforceMobileOrder, 160);
-      // Bible plan share wiring
+      // bible plan share wiring
       const planUrl = 'https://bibleinayearonline.com/chronological-bible-custom-reading-plan/';
       const shareBtn = document.getElementById('shareTodayBtn'); const status = document.getElementById('biblePlanStatus');
       if(shareBtn){ shareBtn.addEventListener('click', async ()=>{
