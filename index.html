@@ -55,7 +55,6 @@
       }
     }
 
-    /* Desktop two-column layout (centered container) */
     .layout-fixed{
       display:grid;
       grid-template-columns: 1fr 360px;
@@ -75,7 +74,6 @@
     }
 
     .card{ background:var(--card-bg); border-radius:var(--radius); padding:20px; box-shadow:0 6px 18px rgba(15,23,42,0.06); border:1px solid rgba(15,23,42,0.04); }
-    /* Hub header: larger logo but flexible title so logo doesn't push text */
     .hub-header{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
     .hub-logo{ width:88px; height:88px; border-radius:10px; background:transparent; display:flex; align-items:center; justify-content:center; overflow:hidden; flex:0 0 88px; }
     .hub-logo img{ width:100%; height:100%; object-fit:contain; display:block; }
@@ -127,7 +125,6 @@
     .contact-card .contact-btn.map { background:linear-gradient(90deg,#f97316,#f43f5e); color:#fff; border:1px solid rgba(0,0,0,0.04); }
     .contact-card .contact-meta { color:var(--muted); font-size:13px; }
 
-    /* subtle desktop tweaks to keep content centered visually */
     @media (min-width:981px) {
       body { display:flex; justify-content:center; }
       .wrap { box-shadow: 0 8px 30px rgba(2,6,23,0.04); border-radius:12px; background:transparent; }
@@ -146,8 +143,8 @@
   <div class="wrap" id="pageWrap">
     <div class="layout-fixed" id="mainLayout">
 
-      <!-- LEFT COLUMN: CMR Hub, Latest Sermon, Bible in a Year, Leaders -->
-      <div class="left-col">
+      <!-- LEFT COLUMN: CMR Hub, Latest Sermon, Bible in a Year, Leaders, Contact (desktop placement) -->
+      <div class="left-col" id="leftColumn">
         <!-- CMR HUB CARD -->
         <div class="card" id="hubCard" aria-label="CMR Hub">
           <div class="hub-header">
@@ -243,24 +240,10 @@
             <div class="small-muted">Loading leaders…</div>
           </div>
         </section>
-
-        <!-- Visit Us (kept in left column by default; JS will reposition on desktop if needed) -->
-        <section id="addressSection" class="card" aria-labelledby="addressHeading" style="margin-top:12px;">
-          <h3 id="addressHeading" style="margin:0 0 12px 0;">Visit Us</h3>
-          <div class="address-row">
-            <div>
-              <div style="font-weight:700;">Christ Missionary Revival Church</div>
-              <div class="small-muted">123 Church St, Fort Worth, TX</div>
-            </div>
-            <div>
-              <button id="directionsBtn" class="btn btn-primary" aria-label="Get directions">Directions</button>
-            </div>
-          </div>
-        </section>
       </div>
 
-      <!-- RIGHT COLUMN: Announcements, Upcoming Event, Service Times, Contact -->
-      <aside class="right-col" aria-label="Right column">
+      <!-- RIGHT COLUMN: Announcements, Upcoming Event, Service Times -->
+      <aside class="right-col" id="rightColumn" aria-label="Right column">
         <!-- ANNOUNCEMENTS (primary) -->
         <div class="card" id="announcementsCardPrimary" aria-live="polite" data-accent="true">
           <h3 id="announcementsTitle" style="margin:0 0 12px 0;">Announcements</h3>
@@ -286,7 +269,7 @@
           </div>
         </section>
 
-        <!-- CONTACT (phone, address, email) - JS will reposition on desktop/mobile per your rules -->
+        <!-- placeholder for contact on mobile (JS will move the contact card here on mobile so it becomes last) -->
         <div id="contactPlaceholder"></div>
 
         <!-- tertiary slot (hidden by default) -->
@@ -339,7 +322,10 @@
         contactGetInTouch: "Get in touch",
         contactMap: "Map",
         contactCall: "Call",
-        contactEmail: "Email"
+        contactEmail: "Email",
+        visitUsName: "Christ Missionary Revival Church",
+        visitUsAddress: "123 Church St, Fort Worth, TX",
+        directionsBtn: "Directions"
       },
       fr: {
         hubTitle: "Centre CMR",
@@ -365,7 +351,10 @@
         contactGetInTouch: "Entrer en contact",
         contactMap: "Carte",
         contactCall: "Appeler",
-        contactEmail: "Courriel"
+        contactEmail: "Courriel",
+        visitUsName: "Christ Missionary Revival Church",
+        visitUsAddress: "123 Church St, Fort Worth, TX",
+        directionsBtn: "Itinéraire"
       }
     };
 
@@ -417,8 +406,14 @@
         if(btn.classList.contains('map')) btn.textContent = t.contactMap || 'Map';
         if(btn.classList.contains('email')) btn.textContent = t.contactEmail || 'Email';
       });
-      const contactMeta = document.querySelector('#contactCard .contact-meta div:first-child');
-      if(contactMeta) contactMeta.textContent = t.contactGetInTouch || 'Get in touch';
+      const contactMetaTitle = document.querySelector('#contactCard .contact-meta .meta-title');
+      if(contactMetaTitle) contactMetaTitle.textContent = t.contactGetInTouch || 'Get in touch';
+
+      // Visit/address text inside contact (if present)
+      const visitName = document.querySelector('#contactCard .visit-name');
+      const visitAddr = document.querySelector('#contactCard .visit-addr');
+      if(visitName) visitName.textContent = t.visitUsName || 'Christ Missionary Revival Church';
+      if(visitAddr) visitAddr.textContent = t.visitUsAddress || '123 Church St, Fort Worth, TX';
     }
 
     // ---------- ANNOUNCEMENTS RENDERER ----------
@@ -510,9 +505,7 @@
         primaryContainer.appendChild(placeholder);
       }
 
-      // ensure translations are applied after announcements render
       applyTranslations();
-
       loadNextEvent();
     }
 
@@ -694,22 +687,6 @@ END:VCALENDAR`;
       URL.revokeObjectURL(url);
     }
 
-    // ---------- DIRECTIONS ----------
-    const CHURCH_LAT = 32.7555;
-    const CHURCH_LNG = -97.3308;
-    const CHURCH_LABEL = 'Christ Missionary Revival Church';
-    function openDirections(lat, lng, label) {
-      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-      const apple = `maps://?q=${encodeURIComponent(label)}&ll=${lat},${lng}`;
-      const google = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-      window.location.href = isIOS ? apple : google;
-    }
-    document.addEventListener('click', (e) => {
-      if(e.target && e.target.id === 'directionsBtn') {
-        openDirections(CHURCH_LAT, CHURCH_LNG, CHURCH_LABEL);
-      }
-    });
-
     // ---------- CONTACT CARD + responsive placement (phone, address, email) ----------
     (function(){
       // Config: update these values to your real contact info
@@ -730,8 +707,9 @@ END:VCALENDAR`;
         card.innerHTML = `
           <h3 id="contactHeading" style="margin:0 0 12px 0;">Contact</h3>
           <div class="contact-meta" style="margin-bottom:6px;">
-            <div style="font-weight:700;">Get in touch</div>
-            <div style="margin-top:4px;">${CONTACT_ADDRESS}</div>
+            <div class="meta-title" style="font-weight:700;">Get in touch</div>
+            <div class="visit-name" style="margin-top:4px; font-weight:700;">Christ Missionary Revival Church</div>
+            <div class="visit-addr small-muted" style="margin-top:4px;">${CONTACT_ADDRESS}</div>
           </div>
           <div class="contact-row" role="group" aria-label="Contact actions">
             <a class="contact-btn phone" href="tel:${CONTACT_PHONE.replace(/\s+/g,'')}" aria-label="Call ${CONTACT_PHONE}">Call</a>
@@ -742,61 +720,59 @@ END:VCALENDAR`;
         return card;
       }
 
-      // Move Visit Us under Leaders (left) on desktop, restore on mobile
-      function repositionVisitAndContact() {
+      // Place contact below Leaders on desktop; on mobile place it after Service Times (so it's last)
+      function repositionContact() {
         const desktop = window.innerWidth >= 981;
         const leadersSection = document.getElementById('leadersSection');
-        const addressSection = document.getElementById('addressSection');
         const serviceTimes = document.getElementById('serviceTimes');
+        const rightColumn = document.getElementById('rightColumn');
+        const leftColumn = document.getElementById('leftColumn');
+        const placeholder = document.getElementById('contactPlaceholder');
         const contactCard = createContactCard();
 
-        if (!addressSection) return;
-
         if (desktop) {
-          // Move Visit Us under Leaders (left column)
+          // Insert contact after leadersSection in left column
           if (leadersSection && leadersSection.parentElement) {
-            if (leadersSection.nextSibling !== addressSection) {
-              leadersSection.parentElement.insertBefore(addressSection, leadersSection.nextSibling);
+            if (leadersSection.nextSibling !== contactCard) {
+              if (contactCard.parentElement) contactCard.parentElement.removeChild(contactCard);
+              leadersSection.parentElement.insertBefore(contactCard, leadersSection.nextSibling);
             }
           }
-
-          // Place Contact under Service Times (right column)
+        } else {
+          // Mobile: ensure contact is after serviceTimes (in right column) so it becomes last
           if (serviceTimes && serviceTimes.parentElement) {
             if (serviceTimes.nextSibling !== contactCard) {
               if (contactCard.parentElement) contactCard.parentElement.removeChild(contactCard);
               serviceTimes.parentElement.insertBefore(contactCard, serviceTimes.nextSibling);
             }
-          }
-        } else {
-          // Mobile: place contact below Visit Us
-          if (addressSection.parentElement) {
-            if (addressSection.nextSibling !== contactCard) {
+          } else if (placeholder && placeholder.parentElement) {
+            // fallback: append to placeholder
+            if (placeholder.firstChild !== contactCard) {
               if (contactCard.parentElement) contactCard.parentElement.removeChild(contactCard);
-              addressSection.parentElement.insertBefore(contactCard, addressSection.nextSibling);
+              placeholder.appendChild(contactCard);
             }
           }
         }
 
-        // Ensure translations are applied to contact after placement
         applyTranslations();
       }
 
-      // Run on load and on resize (debounced)
+      // Debounced resize
       let _resizeTimer = null;
       function onResize() {
         clearTimeout(_resizeTimer);
-        _resizeTimer = setTimeout(repositionVisitAndContact, 120);
+        _resizeTimer = setTimeout(repositionContact, 120);
       }
 
       function initContactPlacement() {
-        createContactCard(); // ensure element exists
-        // If there's a placeholder in the right column, replace it with the contact card by default
+        createContactCard();
+        // If placeholder exists, seed it so mobile has a place to move into
         const placeholder = document.getElementById('contactPlaceholder');
         if (placeholder && !placeholder.firstChild) {
           const card = createContactCard();
           placeholder.appendChild(card);
         }
-        repositionVisitAndContact();
+        repositionContact();
         window.addEventListener('resize', onResize);
       }
 
@@ -806,6 +782,18 @@ END:VCALENDAR`;
         initContactPlacement();
       }
     })();
+
+    // ---------- DIRECTIONS (legacy click handler removed; map handled by contact map button) ----------
+    // kept for compatibility if you still use a directions button elsewhere
+    const CHURCH_LAT = 32.7555;
+    const CHURCH_LNG = -97.3308;
+    const CHURCH_LABEL = 'Christ Missionary Revival Church';
+    function openDirections(lat, lng, label) {
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const apple = `maps://?q=${encodeURIComponent(label)}&ll=${lat},${lng}`;
+      const google = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+      window.location.href = isIOS ? apple : google;
+    }
 
     // ---------- INIT ----------
     document.addEventListener('DOMContentLoaded', async () => {
