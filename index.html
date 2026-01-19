@@ -48,19 +48,6 @@
       position: relative;
     }
 
-    /* Contact card styles */
-.contact-card { display:flex; flex-direction:column; gap:10px; border-radius:10px; padding:14px; background:#fff; border:1px solid rgba(15,23,42,0.04); box-shadow:0 6px 18px rgba(15,23,42,0.03); }
-.contact-card .contact-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
-.contact-card .contact-btn {
-  display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:8px; text-decoration:none; font-weight:700; font-size:14px;
-  border:1px solid rgba(15,23,42,0.06); background:#fff; color:#111827;
-}
-.contact-card .contact-btn.phone { background:linear-gradient(90deg,#10b981,#06b6d4); color:#fff; border:1px solid rgba(0,0,0,0.04); }
-.contact-card .contact-btn.email { background:linear-gradient(90deg,#6366f1,#8b5cf6); color:#fff; border:1px solid rgba(0,0,0,0.04); }
-.contact-card .contact-btn.map { background:linear-gradient(90deg,#f97316,#f43f5e); color:#fff; border:1px solid rgba(0,0,0,0.04); }
-.contact-card .contact-meta { color:var(--muted); font-size:13px; }
-
-
     @supports not (padding: env(safe-area-inset-left)) {
       .wrap {
         padding-left: var(--container-padding);
@@ -127,6 +114,17 @@
     footer.site-footer { margin-top:18px; padding:18px 0; text-align:center; color:var(--muted); font-size:13px; }
 
     .address-row { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+
+    /* Contact card styles */
+    .contact-card { display:flex; flex-direction:column; gap:10px; border-radius:10px; padding:14px; background:#fff; border:1px solid rgba(15,23,42,0.04); box-shadow:0 6px 18px rgba(15,23,42,0.03); }
+    .contact-card .contact-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .contact-card .contact-btn {
+      display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:8px; text-decoration:none; font-weight:700; font-size:14px;
+      border:1px solid rgba(15,23,42,0.06); background:#fff; color:#111827;
+    }
+    .contact-card .contact-btn.phone { background:linear-gradient(90deg,#10b981,#06b6d4); color:#fff; border:1px solid rgba(0,0,0,0.04); }
+    .contact-card .contact-btn.map { background:linear-gradient(90deg,#f97316,#f43f5e); color:#fff; border:1px solid rgba(0,0,0,0.04); }
+    .contact-card .contact-meta { color:var(--muted); font-size:13px; }
 
     /* subtle desktop tweaks to keep content centered visually */
     @media (min-width:981px) {
@@ -273,20 +271,6 @@
           </div>
         </section>
 
-        <!-- ADDRESS + DIRECTIONS -->
-        <section id="addressSection" class="card" aria-labelledby="addressHeading" style="margin-top:12px;">
-          <h3 id="addressHeading" style="margin:0 0 12px 0;">Visit Us</h3>
-          <div class="address-row">
-            <div>
-              <div style="font-weight:700;">Christ Missionary Revival Church</div>
-              <div class="small-muted">123 Church St, Fort Worth, TX</div>
-            </div>
-            <div>
-              <button id="directionsBtn" class="btn btn-primary" aria-label="Get directions">Directions</button>
-            </div>
-          </div>
-        </section>
-
         <!-- tertiary slot (hidden by default) -->
         <div class="card" id="announcementsCard3" aria-live="polite" style="display:none; margin-top:12px;">
           <h3 style="margin:0 0 12px 0;">More</h3>
@@ -332,7 +316,11 @@
         more_announcements: "More Announcements",
         more: "More",
         learn_more: "Learn more",
-        no_announcements: "No current announcements"
+        no_announcements: "No current announcements",
+        contactHeading: "Contact",
+        contactGetInTouch: "Get in touch",
+        contactMap: "Map",
+        contactCall: "Call"
       },
       fr: {
         hubTitle: "Centre CMR",
@@ -353,7 +341,11 @@
         more_announcements: "Plus d'annonces",
         more: "Plus",
         learn_more: "En savoir plus",
-        no_announcements: "Aucune annonce en cours"
+        no_announcements: "Aucune annonce en cours",
+        contactHeading: "Contact",
+        contactGetInTouch: "Entrer en contact",
+        contactMap: "Carte",
+        contactCall: "Appeler"
       }
     };
 
@@ -371,7 +363,6 @@
 
     function applyTranslations(){
       const lang = getSavedLang();
-      // set html lang attribute so screen readers and browsers know the language
       try { document.documentElement.lang = lang; } catch(e){}
       const t = translations[lang] || translations.en;
       const safeSet = (id, text) => { const el = document.getElementById(id); if(el) el.textContent = text; };
@@ -396,6 +387,17 @@
       if(secH) secH.textContent = t.more_announcements;
       const terH = document.querySelector('#announcementsCard3 h3');
       if(terH) terH.textContent = t.more;
+
+      // Contact translations (if contact card exists)
+      const contactHeading = document.getElementById('contactHeading');
+      if(contactHeading) contactHeading.textContent = t.contactHeading;
+      const contactBtns = document.querySelectorAll('#contactCard .contact-btn');
+      contactBtns.forEach(btn => {
+        if(btn.classList.contains('phone')) btn.textContent = t.contactCall || 'Call';
+        if(btn.classList.contains('map')) btn.textContent = t.contactMap || 'Map';
+      });
+      const contactMeta = document.querySelector('#contactCard .contact-meta div:first-child');
+      if(contactMeta) contactMeta.textContent = t.contactGetInTouch || 'Get in touch';
     }
 
     // ---------- ANNOUNCEMENTS RENDERER ----------
@@ -566,6 +568,7 @@
         const items = (data.items || []).filter(Boolean);
         if (!items.length) {
           grid.innerHTML = '<div class="small-muted">No leaders listed.</div>';
+          applyTranslations();
           return;
         }
         grid.innerHTML = '';
@@ -588,9 +591,11 @@
           card.appendChild(role);
           grid.appendChild(card);
         });
+        applyTranslations();
       } catch (err) {
         console.error(err);
         grid.innerHTML = '<div class="small-muted">Could not load leaders.</div>';
+        applyTranslations();
       }
     }
 
@@ -600,7 +605,7 @@
       if(!container) return;
       try {
         const res = await fetch('/events.json', { cache: 'no-store' });
-        if (!res.ok) { container.innerHTML = ''; return; }
+        if (!res.ok) { container.innerHTML = ''; applyTranslations(); return; }
         const data = await res.json();
         const items = (data.items || []).filter(e => e.public !== false);
         const now = new Date();
@@ -608,7 +613,7 @@
           .map(e => ({...e, start: new Date(`${e.date}T${e.startTime || '00:00'}`)}))
           .filter(e => e.start >= now)
           .sort((a,b) => a.start - b.start);
-        if (!upcoming.length) { container.innerHTML = ''; return; }
+        if (!upcoming.length) { container.innerHTML = ''; applyTranslations(); return; }
         const next = upcoming[0];
         container.innerHTML = `<div class="card" style="padding:12px;">
           <div style="font-weight:700;">Upcoming Event</div>
@@ -620,9 +625,11 @@
             <button class="btn btn-ghost" onclick='downloadICS(${JSON.stringify(next).replace(/'/g,"\\'")})'>Add to Apple/Outlook</button>
           </div>
         </div>`;
+        applyTranslations();
       } catch (err) {
         console.error('Failed to load events.json', err);
         container.innerHTML = '';
+        applyTranslations();
       }
     }
 
@@ -681,6 +688,95 @@ END:VCALENDAR`;
         openDirections(CHURCH_LAT, CHURCH_LNG, CHURCH_LABEL);
       }
     });
+
+    // ---------- CONTACT CARD + responsive placement (email removed) ----------
+    (function(){
+      // Config: update these values to your real contact info
+      const CONTACT_PHONE = '+1-817-555-0123';
+      const CONTACT_ADDRESS = '123 Church St, Fort Worth, TX';
+      const MAP_QUERY = encodeURIComponent(CONTACT_ADDRESS);
+
+      // Create contact card element (id used for safe re-use)
+      function createContactCard() {
+        if (document.getElementById('contactCard')) return document.getElementById('contactCard');
+
+        const card = document.createElement('div');
+        card.id = 'contactCard';
+        card.className = 'card contact-card';
+        card.setAttribute('aria-labelledby','contactHeading');
+
+        card.innerHTML = `
+          <h3 id="contactHeading" style="margin:0 0 12px 0;">Contact</h3>
+          <div class="contact-meta" style="margin-bottom:6px;">
+            <div style="font-weight:700;">Get in touch</div>
+            <div style="margin-top:4px;">${CONTACT_ADDRESS}</div>
+          </div>
+          <div class="contact-row" role="group" aria-label="Contact actions">
+            <a class="contact-btn phone" href="tel:${CONTACT_PHONE.replace(/\s+/g,'')}" aria-label="Call ${CONTACT_PHONE}">Call</a>
+            <a class="contact-btn map" href="https://www.google.com/maps/search/?api=1&query=${MAP_QUERY}" target="_blank" rel="noopener" aria-label="Open map">Map</a>
+          </div>
+        `;
+        return card;
+      }
+
+      // Move Visit Us under Leaders (left) on desktop, restore on mobile
+      function repositionVisitAndContact() {
+        const desktop = window.innerWidth >= 981;
+        const leadersSection = document.getElementById('leadersSection');
+        const addressSection = document.getElementById('addressSection');
+        const serviceTimes = document.getElementById('serviceTimes');
+        const contactCard = createContactCard();
+
+        if (!addressSection) return;
+
+        if (desktop) {
+          // Move Visit Us under Leaders (left column)
+          if (leadersSection && leadersSection.parentElement) {
+            if (leadersSection.nextSibling !== addressSection) {
+              leadersSection.parentElement.insertBefore(addressSection, leadersSection.nextSibling);
+            }
+          }
+
+          // Place Contact under Service Times (right column)
+          if (serviceTimes && serviceTimes.parentElement) {
+            if (serviceTimes.nextSibling !== contactCard) {
+              if (contactCard.parentElement) contactCard.parentElement.removeChild(contactCard);
+              serviceTimes.parentElement.insertBefore(contactCard, serviceTimes.nextSibling);
+            }
+          }
+        } else {
+          // Mobile: place contact below Visit Us
+          if (addressSection.parentElement) {
+            if (addressSection.nextSibling !== contactCard) {
+              if (contactCard.parentElement) contactCard.parentElement.removeChild(contactCard);
+              addressSection.parentElement.insertBefore(contactCard, addressSection.nextSibling);
+            }
+          }
+        }
+
+        // Ensure translations are applied to contact after placement
+        applyTranslations();
+      }
+
+      // Run on load and on resize (debounced)
+      let _resizeTimer = null;
+      function onResize() {
+        clearTimeout(_resizeTimer);
+        _resizeTimer = setTimeout(repositionVisitAndContact, 120);
+      }
+
+      function initContactPlacement() {
+        createContactCard(); // ensure element exists
+        repositionVisitAndContact();
+        window.addEventListener('resize', onResize);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initContactPlacement);
+      } else {
+        initContactPlacement();
+      }
+    })();
 
     // ---------- INIT ----------
     document.addEventListener('DOMContentLoaded', async () => {
@@ -782,110 +878,16 @@ END:VCALENDAR`;
           }
         };
 
+        applyTranslations();
       } catch (err) {
         console.error(err);
         wrap.innerHTML = '';
         titleEl.textContent = 'Latest sermon unavailable';
         detailsEl.textContent = 'Visit our YouTube channel for recent messages.';
         openBtn.href = '/';
+        applyTranslations();
       }
     }
-    // createContactCard (email removed)
-function createContactCard() {
-  if (document.getElementById('contactCard')) return document.getElementById('contactCard');
-
-  const CONTACT_PHONE = '+1-817-555-0123';
-  const CONTACT_ADDRESS = '123 Church St, Fort Worth, TX';
-  const MAP_QUERY = encodeURIComponent(CONTACT_ADDRESS);
-
-  const card = document.createElement('div');
-  card.id = 'contactCard';
-  card.className = 'card contact-card';
-  card.setAttribute('aria-labelledby','contactHeading');
-
-  card.innerHTML = `
-    <h3 id="contactHeading" style="margin:0 0 12px 0;">Contact</h3>
-    <div class="contact-meta" style="margin-bottom:6px;">
-      <div style="font-weight:700;">Get in touch</div>
-      <div style="margin-top:4px;">${CONTACT_ADDRESS}</div>
-    </div>
-    <div class="contact-row" role="group" aria-label="Contact actions">
-      <a class="contact-btn phone" href="tel:${CONTACT_PHONE.replace(/\s+/g,'')}" aria-label="Call ${CONTACT_PHONE}">Call</a>
-      <a class="contact-btn map" href="https://www.google.com/maps/search/?api=1&query=${MAP_QUERY}" target="_blank" rel="noopener" aria-label="Open map">Map</a>
-    </div>
-  `;
-  return card;
-}
-
-// ---------- CONTACT CARD + responsive placement ----------
-
-  // Move Visit Us under Leaders (left) on desktop, restore on mobile
-  function repositionVisitAndContact() {
-    const desktop = window.innerWidth >= 981;
-    const leadersSection = document.getElementById('leadersSection');
-    const addressSection = document.getElementById('addressSection');
-    const serviceTimes = document.getElementById('serviceTimes');
-    const wrap = document.getElementById('pageWrap');
-    const contactCard = createContactCard();
-
-    // Ensure addressSection exists
-    if (!addressSection) return;
-
-    if (desktop) {
-      // Move Visit Us under Leaders (left column)
-      if (leadersSection && leadersSection.parentElement) {
-        // insert after leadersSection
-        if (leadersSection.nextSibling !== addressSection) {
-          leadersSection.parentElement.insertBefore(addressSection, leadersSection.nextSibling);
-        }
-      }
-
-      // Place Contact under Service Times (right column)
-      if (serviceTimes && serviceTimes.parentElement) {
-        // insert contact after serviceTimes
-        if (serviceTimes.nextSibling !== contactCard) {
-          // remove if already elsewhere
-          if (contactCard.parentElement) contactCard.parentElement.removeChild(contactCard);
-          serviceTimes.parentElement.insertBefore(contactCard, serviceTimes.nextSibling);
-        }
-      }
-    } else {
-      // Mobile: ensure Visit Us stays in original flow (we'll place contact below Visit Us)
-      // If original order had addressSection in left-col near end, keep it there.
-      // Place contact below Visit Us
-      if (addressSection.parentElement) {
-        // insert contact after addressSection
-        if (addressSection.nextSibling !== contactCard) {
-          if (contactCard.parentElement) contactCard.parentElement.removeChild(contactCard);
-          addressSection.parentElement.insertBefore(contactCard, addressSection.nextSibling);
-        }
-      }
-    }
-  }
-
-  // Run on load and on resize (debounced)
-  let _resizeTimer = null;
-  function onResize() {
-    clearTimeout(_resizeTimer);
-    _resizeTimer = setTimeout(repositionVisitAndContact, 120);
-  }
-
-  // Expose a safe init function and run after DOM ready
-  function initContactPlacement() {
-    createContactCard(); // ensure element exists
-    repositionVisitAndContact();
-    window.addEventListener('resize', onResize);
-  }
-
-  // If DOM already loaded, init now; otherwise wait
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initContactPlacement);
-  } else {
-    initContactPlacement();
-  }
-})();
-
-    
   </script>
 </body>
 </html>
