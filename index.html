@@ -154,55 +154,88 @@
 /* Larger logo but still responsive and centered */
 /* Mobile: pull header to top and tighten spacing */
 /* Header spacing & logo sizing tweaks */
+/* HEADER WRAPPER — ensures centering on ALL devices */
 .hub-header--stacked {
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:6px;               /* smaller gap between logo and title/subtitle */
+  justify-content:flex-start;
   text-align:center;
+  gap:10px;          /* comfortable spacing */
+  padding-top:20px;  /* fixes “logo stuck to top” issue */
+  width:100%;
+  box-sizing:border-box;
 }
 
-/* Larger logo but still responsive and centered */
-/* Code-based logo box */
+/* RESPONSIVE LOGO BOX */
 .code-logo-box {
-  width: 120px;
-  height: 70px;
-  background: #0a0f1a; /* deep navy/black */
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 12px;
-  box-sizing: border-box;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  width:110px;
+  height:56px;
+  background:#071022; /* deep navy/black */
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:4px 10px;  /* reduced vertical padding */
+  box-shadow:0 6px 18px rgba(0,0,0,0.15);
+  box-sizing:border-box;
+  margin:0 auto;     /* forces centering */
 }
 
-/* CMR text */
+/* CMR TEXT */
 .code-logo-cmr {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 900;
-  font-size: 26px;
-  color: #ffffff;
-  letter-spacing: 0.04em;
+  font-family:"Montserrat", sans-serif;
+  font-weight:900;
+  font-size:20px;   /* slightly smaller for better fit */
+  color:#ffffff;
+  letter-spacing:0.02em;
 }
 
-/* hub gradient text */
+/* HUB TEXT — larger & more visible */
 .code-logo-hub {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 300;
-  font-size: 14px;
-  margin-left: 6px;
-
-  background: linear-gradient(90deg, #73b3cf 0%, #800000 60%, #ffffff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+  font-family:"Montserrat", sans-serif;
+  font-weight:300;
+  font-size:14px;   /* increased visibility */
+  margin-left:6px;
+  background:linear-gradient(90deg, #73b3cf 0%, #800000 60%, #ffffff 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  -webkit-text-fill-color:transparent;
 }
+
+/* MOBILE (small phones) */
+@media (max-width:420px) {
+  .code-logo-box {
+    width:95px;
+    height:48px;
+    padding:3px 8px;
+  }
+  .code-logo-cmr { font-size:18px; }
+  .code-logo-hub { font-size:12px; }
+  .hub-header--stacked { padding-top:14px; gap:8px; }
+}
+
+/* LARGE SCREENS + FOLDABLE OPEN */
+@media (min-width:900px) {
+  .code-logo-box {
+    width:140px;
+    height:70px;
+    padding:6px 14px;
+  }
+  .code-logo-cmr { font-size:26px; }
+  .code-logo-hub { font-size:16px; }
+  .hub-header--stacked { padding-top:26px; gap:12px; }
+}
+  
 
 /* Reduce gap between logo and title */
 .hub-header--stacked {
   gap: 4px !important;
+  display:flex; 
+  flex-direction:column; 
+  align-items:center; 
+  text-align:center;
 }
 
 
@@ -222,24 +255,6 @@
   margin-bottom:12px;    /* increases spacing between subtitle and the buttons below */
 }
 
-/* Responsive adjustments */
-@media (min-width:981px) {
-  .hub-logo { width:220px; height:220px; } /* larger on desktop */
-}
-@media (max-width:420px) {
-  .hub-logo { width:140px; height:140px; } /* slightly smaller on very small screens */
-  .hub-subtitle { margin-bottom:10px; }
-}
-
-
-
-
-    /* .hub-header{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
-    .hub-logo{ width:88px; height:88px; border-radius:10px; background:transparent; display:flex; align-items:center; justify-content:center; overflow:hidden; flex:0 0 88px; }
-    .hub-logo img{ width:100%; height:100%; object-fit:contain; display:block; }
-
-    .hub-title{ font-size:20px; font-weight:700; margin:0; display:flex; align-items:center; gap:8px; flex:1; }
-    .hub-subtitle{ font-size:13px; color:var(--muted); margin:0; } */
 
     .hub-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
     @media(max-width:640px){ .hub-grid{ grid-template-columns:repeat(2,1fr); } }
@@ -327,20 +342,20 @@
               <p class="hub-subtitle" id="hubSubtitle">One place for everything happening at CMR.</p>
             </div>
           </div> -->
-          <div class="hub-header hub-header--stacked" aria-hidden="false">
-  <div class="hub-logo">
-  <div class="code-logo-box">
-    <span class="code-logo-cmr">CMR</span>
-    <span class="code-logo-hub">hub</span>
+         <div class="logo-stack" aria-hidden="false">
+  <div class="code-logo-wrapper">
+    <div class="code-logo-box" role="img" aria-label="CMR hub logo">
+      <span class="code-logo-cmr">CMR</span>
+      <span class="code-logo-hub">hub</span>
+    </div>
+  </div>
+
+  <div class="title-block" style="align-items:center;">
+    <div class="intro-text" id="connectIntro">Tell us about yourself and how you'd like to get involved.</div>
+    <h1 id="connectHeading">Connect</h1>
   </div>
 </div>
 
-
-  <div class="hub-text">
-    <h1 class="hub-title" id="hubTitle">Centre Missionnaire La Restauration</h1>
-    <p class="hub-subtitle" id="hubSubtitle">One place for everything happening at CMR.</p>
-  </div>
-</div>
 
 
           <div class="hub-grid" role="navigation" aria-label="Main actions">
