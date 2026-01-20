@@ -24,28 +24,30 @@
     .wrap{ width:100%; max-width:var(--max-width); margin:28px auto; padding:var(--pad); box-sizing:border-box; }
     .card{ background:linear-gradient(180deg,#fff,#fbfbfb); border-radius:var(--radius); padding:22px; box-shadow:0 8px 30px rgba(15,23,42,0.06); border:1px solid rgba(15,23,42,0.04); }
     .header{ display:flex; gap:14px; align-items:flex-start; margin-bottom:12px; }
-    /* Logo above title layout */
-    .logo-stack { display:flex; flex-direction:column; align-items:center; gap:8px; flex:0 0 96px; }
-    .logo{ width:96px; height:96px; border-radius:12px; background:#ffffff; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .logo-stack { display:flex; flex-direction:column; align-items:center; gap:8px; flex:0 0 120px; }
+    .logo{ width:120px; height:120px; border-radius:12px; background:#ffffff; display:flex; align-items:center; justify-content:center; overflow:hidden; }
     .logo img{ width:100%; height:100%; object-fit:contain; display:block; }
-    .title-block{ display:flex; flex-direction:column; gap:4px; align-items:flex-start; }
-    h1{ margin:0; font-size:20px; font-weight:800; color:#0f172a; text-transform:none; }
+    .title-block{ display:flex; flex-direction:column; gap:6px; align-items:flex-start; }
+    .intro-text { font-size:14px; color:var(--muted); text-align:center; max-width:220px; }
+    h1{ margin:0; font-size:20px; font-weight:800; color:#0f172a; text-transform:none; text-align:center; }
     .subtitle{ margin:0; color:var(--muted); font-size:14px; }
 
     form { margin-top:14px; display:grid; gap:12px; }
     .row { display:flex; gap:12px; }
     .col { flex:1; display:flex; flex-direction:column; gap:6px; }
     label { font-weight:700; font-size:13px; color:#0f172a; }
-    input[type="text"], input[type="tel"], input[type="email"], textarea, select {
+    input[type="text"], input[type="tel"], input[type="email"], textarea, select, input[type="number"] {
       padding:10px 12px; border-radius:10px; border:1px solid rgba(15,23,42,0.06); background:#fff; font-size:14px; color:#0f172a;
       box-sizing:border-box;
     }
-    textarea { min-height:120px; resize:vertical; }
+    textarea { min-height:220px; resize:vertical; width:100%; }
+    .large-textarea { min-height:260px; font-size:15px; padding:14px; }
+
     .small-muted{ font-size:13px; color:var(--muted); }
 
     .group { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
-    .checkbox { display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:10px; background:#fff; border:1px solid rgba(15,23,42,0.04); cursor:pointer; }
-    .checkbox input { margin:0; }
+    .checkbox, .radio { display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:10px; background:#fff; border:1px solid rgba(15,23,42,0.04); cursor:pointer; }
+    .checkbox input, .radio input { margin:0; }
 
     .actions { display:flex; gap:12px; align-items:center; margin-top:6px; }
     .btn { background:var(--accent); color:#fff; padding:10px 14px; border-radius:10px; border:0; cursor:pointer; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; gap:8px; }
@@ -67,14 +69,19 @@
     .lang-switcher { position:fixed; top:12px; right:12px; display:flex; gap:8px; z-index:9999; }
     .lang-btn { padding:8px 10px; border-radius:8px; border:1px solid rgba(15,23,42,0.06); background:#fff; cursor:pointer; font-weight:700; }
 
-    .address-row { display:flex; gap:8px; align-items:center; }
+    .address-row { display:flex; gap:8px; align-items:center; position:relative; }
+    .suggestions { position:absolute; top:44px; left:0; right:0; background:#fff; border:1px solid rgba(15,23,42,0.08); border-radius:8px; max-height:220px; overflow:auto; z-index:40; box-shadow:0 8px 20px rgba(15,23,42,0.06); }
+    .suggestion-item { padding:8px 10px; cursor:pointer; border-bottom:1px solid rgba(15,23,42,0.03); }
+    .suggestion-item:last-child { border-bottom:0; }
+    .suggestion-item:hover { background:rgba(43,108,176,0.04); }
+
     .kids-block { margin-top:8px; padding:10px; border-radius:10px; background:linear-gradient(180deg,#fff,#fbfbfb); border:1px solid rgba(15,23,42,0.04); }
     .kid-row { display:flex; gap:8px; align-items:center; margin-top:8px; }
-    .kid-row input[type="text"], .kid-row input[type="number"] { padding:8px 10px; }
+    .kid-row input[type="text"], .kid-row input[type="number"], .kid-row select { padding:8px 10px; }
 
     @media (max-width:640px){
       .row { flex-direction:column; }
-      .logo{ width:72px; height:72px; }
+      .logo{ width:96px; height:96px; }
       .logo-stack { flex:0 0 auto; }
     }
   </style>
@@ -85,21 +92,21 @@
   <div class="wrap">
     <div class="card" role="main" aria-labelledby="connectHeading">
       <div class="header">
-        <!-- logo stacked above title -->
         <div class="logo-stack" aria-hidden="false">
-          <!-- Replace with the same logo you used in index.html -->
           <div class="logo">
             <img src="/cmr180.png" alt="CMR logo" id="connectLogo">
           </div>
-          <!-- Title below the logo (user requested "Coonect") -->
+
+          <!-- Intro text below logo -->
           <div class="title-block" style="align-items:center;">
-            <h1 id="connectHeading">Coonect</h1>
+            <div class="intro-text" id="connectIntro">Tell us about yourself and how you'd like to get involved.</div>
+            <!-- Title below intro -->
+            <h1 id="connectHeading">Connect</h1>
           </div>
         </div>
 
-        <!-- Intro text sits to the right of the logo stack on wide screens -->
         <div style="flex:1;">
-          <p class="subtitle" id="connectIntro">Tell us about yourself and how you'd like to get involved.</p>
+          <!-- optional right-side content left empty to keep layout balanced -->
         </div>
       </div>
 
@@ -138,44 +145,48 @@
           <div class="col">
             <label for="address" id="labelAddress">Address (optional)</label>
             <div class="address-row">
-              <input id="address" name="address" type="text" placeholder="Start typing address..." aria-describedby="addressHelp" />
-              <button type="button" class="btn-ghost" id="addressLookupBtn">Lookup</button>
+              <input id="address" name="address" type="text" placeholder="Start typing address..." aria-describedby="addressHelp" autocomplete="off" />
+              <input id="apt" name="apt" type="text" placeholder="Apt / Bldg" style="width:140px;" />
+              <div class="suggestions" id="addressSuggestions" style="display:none;"></div>
             </div>
-            <div id="addressHelp" class="small-muted">Use lookup to auto-complete your address.</div>
+            <div id="addressHelp" class="small-muted">Select an address to auto-fill city, state and ZIP.</div>
           </div>
 
           <div class="col">
             <label for="status" id="labelStatus">Status</label>
-            <select id="status" name="status" aria-describedby="statusHelp">
-              <!-- options populated by JS translations -->
-            </select>
+            <select id="status" name="status" aria-describedby="statusHelp"></select>
             <div id="statusHelp" class="small-muted">Choose the option that best describes you.</div>
+
+            <div style="margin-top:10px;">
+              <label id="labelGender">Gender</label>
+              <div class="group" role="radiogroup" aria-labelledby="labelGender" style="margin-top:8px;">
+                <label class="radio"><input type="radio" name="gender" value="F" checked> <span id="genderF">F</span></label>
+                <label class="radio"><input type="radio" name="gender" value="M"> <span id="genderM">M</span></label>
+              </div>
+            </div>
           </div>
         </div>
 
         <div>
           <label id="labelInterest">I'd like to learn</label>
           <div class="group" role="group" aria-labelledby="labelInterest">
-            <label class="checkbox"><input type="checkbox" name="interest" value="baptism"> Baptism</label>
-            <label class="checkbox"><input type="checkbox" name="interest" value="serve"> Serving</label>
-            <label class="checkbox"><input type="checkbox" name="interest" value="learn"> Learn about CMR</label>
-            <label class="checkbox"><input type="checkbox" name="interest" value="follow"> Talk about following Jesus</label>
-            <label class="checkbox"><input type="checkbox" name="interest" value="other"> Giving</label>
+            <label class="checkbox"><input type="checkbox" name="interest" value="baptism"> <span class="interestText" data-key="baptism">Baptism</span></label>
+            <label class="checkbox"><input type="checkbox" name="interest" value="serve"> <span class="interestText" data-key="serve">Serving</span></label>
+            <label class="checkbox"><input type="checkbox" name="interest" value="learn"> <span class="interestText" data-key="learn">Learn about CMR</span></label>
+            <label class="checkbox"><input type="checkbox" name="interest" value="follow"> <span class="interestText" data-key="follow">Talk about following Jesus</span></label>
+            <label class="checkbox"><input type="checkbox" name="interest" value="other"> <span class="interestText" data-key="other">Giving</span></label>
           </div>
         </div>
 
-        <!-- Kids question -->
         <div style="margin-top:12px;">
           <label id="labelKids">Do you have kids?</label>
           <div class="group" role="radiogroup" aria-labelledby="labelKids" style="margin-top:8px;">
-            <label class="checkbox" style="padding:8px 12px;"><input type="radio" name="hasKids" value="no" checked> <span id="kidsNoLabel">No</span></label>
-            <label class="checkbox" style="padding:8px 12px;"><input type="radio" name="hasKids" value="yes"> <span id="kidsYesLabel">Yes</span></label>
+            <label class="radio"><input type="radio" name="hasKids" value="no" checked> <span id="kidsNoLabel">No</span></label>
+            <label class="radio"><input type="radio" name="hasKids" value="yes"> <span id="kidsYesLabel">Yes</span></label>
           </div>
 
           <div id="kidsContainer" class="kids-block" style="display:none;">
-            <div id="kidsList">
-              <!-- kid rows inserted here (max 2) -->
-            </div>
+            <div id="kidsList"></div>
             <div style="margin-top:8px;">
               <button type="button" class="btn-ghost" id="addKidBtn">Add child</button>
               <button type="button" class="btn-ghost" id="removeKidBtn" style="display:none;">Remove child</button>
@@ -184,10 +195,9 @@
           </div>
         </div>
 
-        <!-- Prayer request -->
         <div style="margin-top:12px;">
-          <label for="prayer" id="labelPrayer">Prayer request</label>
-          <textarea id="prayer" name="prayer" placeholder="Share your request here"></textarea>
+          <label id="labelPrayerSubtle" style="font-weight:600; color:var(--muted);">Prayer Request</label>
+          <textarea id="prayer" name="prayer" class="large-textarea" placeholder="Share your request here"></textarea>
         </div>
 
         <div class="actions">
@@ -203,21 +213,24 @@
   </div>
 
   <script>
-    // Translations (English + French) - all visible strings included
+    // Translations (English + French) - every visible string included
     const T = {
       en: {
-        connectHeading: "Coonect",
         connectIntro: "Tell us about yourself and how you'd like to get involved.",
+        connectHeading: "Connect",
         labelFirst: "First name",
         labelLast: "Last name",
         labelPhone: "Phone",
         labelEmail: "Email (optional)",
         labelAddress: "Address (optional)",
         addressPlaceholder: "Start typing address...",
-        addressLookupBtn: "Lookup",
+        addressHelp: "Select an address to auto-fill city, state and ZIP.",
         labelStatus: "Status",
         statusHelp: "Choose the option that best describes you.",
         statusOptions: { first_visit: "First visit", second_visit: "Second visit", regular: "Regular attendee", member: "Member" },
+        labelGender: "Gender",
+        genderF: "F",
+        genderM: "M",
         labelInterest: "I'd like to learn",
         interestOptions: { baptism: "Baptism", serve: "Serving", learn: "Learn about CMR", follow: "Talk about following Jesus", other: "Giving" },
         labelKids: "Do you have kids?",
@@ -226,7 +239,10 @@
         addKidBtn: "Add child",
         removeKidBtn: "Remove child",
         kidsHint: "You can add up to 2 children.",
-        labelPrayer: "Prayer request",
+        kidNamePlaceholder: "Name",
+        kidAgePlaceholder: "Age",
+        kidSexLabel: "Sex",
+        prayerSubtle: "Prayer Request",
         prayerPlaceholder: "Share your request here",
         submitBtn: "Submit",
         resetBtn: "Reset",
@@ -238,18 +254,21 @@
         }
       },
       fr: {
-        connectHeading: "Coonect",
         connectIntro: "Parlez-nous de vous et comment vous souhaitez vous impliquer.",
+        connectHeading: "Connect",
         labelFirst: "Prénom",
         labelLast: "Nom",
         labelPhone: "Téléphone",
         labelEmail: "E-mail (optionnel)",
         labelAddress: "Adresse (optionnel)",
         addressPlaceholder: "Commencez à taper l'adresse...",
-        addressLookupBtn: "Rechercher",
+        addressHelp: "Sélectionnez une adresse pour remplir automatiquement la ville, l'état et le code postal.",
         labelStatus: "Statut",
         statusHelp: "Choisissez l'option qui vous décrit le mieux.",
         statusOptions: { first_visit: "Première visite", second_visit: "Deuxième visite", regular: "Participant régulier", member: "Membre" },
+        labelGender: "Genre",
+        genderF: "F",
+        genderM: "M",
         labelInterest: "Je suis intéressé par",
         interestOptions: { baptism: "Baptême", serve: "Servir", learn: "En savoir plus sur CMR", follow: "Parler de suivre Jésus", other: "Donner" },
         labelKids: "Avez-vous des enfants ?",
@@ -258,7 +277,10 @@
         addKidBtn: "Ajouter un enfant",
         removeKidBtn: "Supprimer l'enfant",
         kidsHint: "Vous pouvez ajouter jusqu'à 2 enfants.",
-        labelPrayer: "Demande de prière",
+        kidNamePlaceholder: "Nom",
+        kidAgePlaceholder: "Âge",
+        kidSexLabel: "Sexe",
+        prayerSubtle: "Demande de prière",
         prayerPlaceholder: "Partagez votre demande ici",
         submitBtn: "Soumettre",
         resetBtn: "Réinitialiser",
@@ -289,29 +311,29 @@
       const lang = getSavedLang();
       const t = T[lang] || T.en;
 
-      // headings and intro
-      const maybeSet = (id, value) => {
+      const setText = (id, value) => {
         const el = document.getElementById(id);
         if(!el || typeof value !== 'string') return;
         el.textContent = value;
       };
 
-      maybeSet('connectHeading', t.connectHeading);
-      maybeSet('connectIntro', t.connectIntro);
+      // header
+      setText('connectIntro', t.connectIntro);
+      setText('connectHeading', t.connectHeading);
 
-      // labels and placeholders
-      maybeSet('labelFirst', t.labelFirst);
-      maybeSet('labelLast', t.labelLast);
-      maybeSet('labelPhone', t.labelPhone);
-      maybeSet('labelEmail', t.labelEmail);
-      maybeSet('labelAddress', t.labelAddress);
+      // basic labels
+      setText('labelFirst', t.labelFirst);
+      setText('labelLast', t.labelLast);
+      setText('labelPhone', t.labelPhone);
+      setText('labelEmail', t.labelEmail);
+      setText('labelAddress', t.labelAddress);
       const addr = document.getElementById('address');
       if(addr) addr.placeholder = t.addressPlaceholder || '';
-      maybeSet('addressLookupBtn', t.addressLookupBtn);
-      maybeSet('labelStatus', t.labelStatus);
-      maybeSet('statusHelp', t.statusHelp);
+      setText('addressHelp', t.addressHelp);
 
-      // status options
+      // status
+      setText('labelStatus', t.labelStatus);
+      setText('statusHelp', t.statusHelp);
       const sel = document.getElementById('status');
       if(sel){
         sel.innerHTML = '';
@@ -323,38 +345,50 @@
         }
       }
 
-      maybeSet('labelInterest', t.labelInterest);
-      // interest labels (checkboxes)
-      const interestLabels = document.querySelectorAll('.group .checkbox');
-      const interestKeys = ['baptism','serve','learn','follow','other'];
-      interestLabels.forEach((lbl, idx) => {
-        const key = interestKeys[idx];
-        const input = lbl.querySelector('input');
-        if(input) input.value = key;
-        // remove existing text nodes and append translated text
-        Array.from(lbl.childNodes).forEach(node => {
-          if(node.nodeType === Node.TEXT_NODE) node.remove();
-        });
-        lbl.appendChild(document.createTextNode(' ' + ((t.interestOptions && t.interestOptions[key]) || key)));
+      // gender
+      setText('labelGender', t.labelGender);
+      setText('genderF', t.genderF);
+      setText('genderM', t.genderM);
+
+      // interest checkboxes
+      setText('labelInterest', t.labelInterest);
+      document.querySelectorAll('.interestText').forEach(el => {
+        const key = el.getAttribute('data-key');
+        el.textContent = (t.interestOptions && t.interestOptions[key]) || key;
       });
 
-      // kids labels
-      maybeSet('labelKids', t.labelKids);
-      maybeSet('kidsYesLabel', t.kidsYesLabel);
-      maybeSet('kidsNoLabel', t.kidsNoLabel);
-      maybeSet('addKidBtn', t.addKidBtn);
-      maybeSet('removeKidBtn', t.removeKidBtn);
-      maybeSet('kidsHint', t.kidsHint);
+      // kids
+      setText('labelKids', t.labelKids);
+      setText('kidsYesLabel', t.kidsYesLabel);
+      setText('kidsNoLabel', t.kidsNoLabel);
+      setText('addKidBtn', t.addKidBtn);
+      setText('removeKidBtn', t.removeKidBtn);
+      setText('kidsHint', t.kidsHint);
 
       // prayer
-      maybeSet('labelPrayer', t.labelPrayer);
+      setText('labelPrayerSubtle', t.prayerSubtle);
       const prayer = document.getElementById('prayer');
       if(prayer) prayer.placeholder = t.prayerPlaceholder || '';
 
       // buttons and thank you
-      maybeSet('submitBtn', t.submitBtn);
-      maybeSet('resetBtn', t.resetBtn);
-      maybeSet('thankyou', t.thankYou);
+      setText('submitBtn', t.submitBtn);
+      setText('resetBtn', t.resetBtn);
+      setText('thankyou', t.thankYou);
+
+      // kids placeholders if any exist
+      document.querySelectorAll('#kidsList .kid-row').forEach((r) => {
+        const name = r.querySelector('input[type="text"]');
+        const age = r.querySelector('input[type="number"]');
+        const sex = r.querySelector('select');
+        if(name) name.placeholder = t.kidNamePlaceholder || '';
+        if(age) age.placeholder = t.kidAgePlaceholder || '';
+        if(sex){
+          sex.innerHTML = '';
+          const optM = document.createElement('option'); optM.value='M'; optM.textContent = t.genderM || 'M';
+          const optF = document.createElement('option'); optF.value='F'; optF.textContent = t.genderF || 'F';
+          sex.appendChild(optM); sex.appendChild(optF);
+        }
+      });
     }
 
     // Validation helpers
@@ -388,19 +422,65 @@
       return true;
     }
 
-    // Address lookup using Nominatim (OpenStreetMap). Lightweight, no API key required.
-    async function addressLookup(query){
-      if(!query) return [];
-      const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(query)}&addressdetails=1&limit=5`;
+    // Address autocomplete using Nominatim with suggestion dropdown
+    let addressTimer = null;
+    async function fetchAddressSuggestions(q){
+      if(!q) return [];
+      const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(q)}&addressdetails=1&limit=6`;
       try {
         const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
         if(!res.ok) return [];
         const data = await res.json();
-        return data.map(item => item.display_name);
+        return data;
       } catch (err) {
         console.warn('Address lookup failed', err);
         return [];
       }
+    }
+
+    function renderSuggestions(items){
+      const box = document.getElementById('addressSuggestions');
+      box.innerHTML = '';
+      if(!items || items.length === 0){ box.style.display = 'none'; return; }
+      items.forEach(it => {
+        const div = document.createElement('div');
+        div.className = 'suggestion-item';
+        div.textContent = it.display_name;
+        div.dataset.raw = JSON.stringify(it);
+        div.addEventListener('click', () => {
+          selectAddressItem(it);
+        });
+        box.appendChild(div);
+      });
+      box.style.display = 'block';
+    }
+
+    function selectAddressItem(item){
+      const addrInput = document.getElementById('address');
+      const aptInput = document.getElementById('apt');
+      addrInput.value = item.display_name;
+      // parse address details for city/state/postcode
+      const ad = item.address || {};
+      // create hidden fields or visible fields for city/state/postcode
+      // We'll append or set values to inputs with ids city, state, zip if present, otherwise create them
+      setOrCreateField('city', ad.city || ad.town || ad.village || ad.county || '');
+      setOrCreateField('state', ad.state || ad.region || '');
+      setOrCreateField('zip', ad.postcode || '');
+      // keep apt input for user to fill
+      document.getElementById('addressSuggestions').style.display = 'none';
+    }
+
+    function setOrCreateField(id, value){
+      let el = document.getElementById(id);
+      if(!el){
+        // create a hidden input appended to the form
+        el = document.createElement('input');
+        el.type = 'hidden';
+        el.id = id;
+        el.name = id;
+        document.getElementById('connectForm').appendChild(el);
+      }
+      el.value = value || '';
     }
 
     // Kids UI helpers (max 2)
@@ -408,40 +488,56 @@
       const row = document.createElement('div');
       row.className = 'kid-row';
       row.dataset.index = index;
+
       const nameInput = document.createElement('input');
       nameInput.type = 'text';
       nameInput.name = `kid_name_${index}`;
-      nameInput.placeholder = (getSavedLang() === 'fr') ? 'Nom' : 'Name';
+      nameInput.placeholder = T[getSavedLang()].kidNamePlaceholder || 'Name';
       nameInput.style.flex = '1';
+
       const ageInput = document.createElement('input');
       ageInput.type = 'number';
       ageInput.name = `kid_age_${index}`;
-      ageInput.placeholder = (getSavedLang() === 'fr') ? 'Âge' : 'Age';
+      ageInput.placeholder = T[getSavedLang()].kidAgePlaceholder || 'Age';
       ageInput.min = 0;
       ageInput.max = 25;
       ageInput.style.width = '90px';
+
+      const sexSelect = document.createElement('select');
+      sexSelect.name = `kid_sex_${index}`;
+      sexSelect.style.width = '90px';
+      const optM = document.createElement('option'); optM.value='M'; optM.textContent = T[getSavedLang()].genderM || 'M';
+      const optF = document.createElement('option'); optF.value='F'; optF.textContent = T[getSavedLang()].genderF || 'F';
+      sexSelect.appendChild(optM); sexSelect.appendChild(optF);
+
       row.appendChild(nameInput);
       row.appendChild(ageInput);
+      row.appendChild(sexSelect);
       return row;
     }
 
     function updateKidsPlaceholders(){
       const lang = getSavedLang();
-      const rows = document.querySelectorAll('#kidsList .kid-row');
-      rows.forEach(r => {
+      document.querySelectorAll('#kidsList .kid-row').forEach(r => {
         const name = r.querySelector('input[type="text"]');
         const age = r.querySelector('input[type="number"]');
-        if(name) name.placeholder = (lang === 'fr') ? 'Nom' : 'Name';
-        if(age) age.placeholder = (lang === 'fr') ? 'Âge' : 'Age';
+        const sex = r.querySelector('select');
+        if(name) name.placeholder = T[lang].kidNamePlaceholder || '';
+        if(age) age.placeholder = T[lang].kidAgePlaceholder || '';
+        if(sex){
+          sex.innerHTML = '';
+          const optM = document.createElement('option'); optM.value='M'; optM.textContent = T[lang].genderM || 'M';
+          const optF = document.createElement('option'); optF.value='F'; optF.textContent = T[lang].genderF || 'F';
+          sex.appendChild(optM); sex.appendChild(optF);
+        }
       });
     }
 
-    // Submit handler and DOM wiring
+    // Wire up DOM and events
     document.addEventListener('DOMContentLoaded', function(){
       buildLangSwitcher();
       applyTranslations();
 
-      // wire inputs
       const form = document.getElementById('connectForm');
       if(!form) return;
 
@@ -452,22 +548,28 @@
 
       [first,last,phone,email].forEach(f => { if(!f) return; f.addEventListener('input', ()=> validateField(f)); f.addEventListener('blur', ()=> validateField(f)); });
 
-      // Address lookup button
+      // Address autocomplete wiring
       const addressInput = document.getElementById('address');
-      const addressBtn = document.getElementById('addressLookupBtn');
-      addressBtn.addEventListener('click', async function(){
-        const q = (addressInput.value || '').trim();
-        if(!q) return;
-        addressBtn.textContent = (getSavedLang() === 'fr') ? '...' : '...';
-        const results = await addressLookup(q);
-        // if results, pick the first and set it
-        if(results && results.length){
-          addressInput.value = results[0];
-        }
-        applyTranslations(); // restore button label
+      const suggestionsBox = document.getElementById('addressSuggestions');
+
+      addressInput.addEventListener('input', () => {
+        const q = addressInput.value.trim();
+        if(addressTimer) clearTimeout(addressTimer);
+        if(!q){ suggestionsBox.style.display = 'none'; return; }
+        addressTimer = setTimeout(async () => {
+          const items = await fetchAddressSuggestions(q);
+          renderSuggestions(items);
+        }, 300);
       });
 
-      // Kids radio handling
+      // close suggestions when clicking outside
+      document.addEventListener('click', (e) => {
+        if(!document.querySelector('.address-row')?.contains(e.target)) {
+          suggestionsBox.style.display = 'none';
+        }
+      });
+
+      // Kids handling
       const kidsRadios = Array.from(document.querySelectorAll('input[name="hasKids"]'));
       const kidsContainer = document.getElementById('kidsContainer');
       const kidsList = document.getElementById('kidsList');
@@ -500,7 +602,7 @@
         if(kidCount() === 0) removeKidBtn.style.display = 'none';
       });
 
-      // form submit
+      // Submit handler
       form.addEventListener('submit', async function(e){
         e.preventDefault();
         // validate required fields
@@ -514,67 +616,65 @@
 
         // collect form data
         const fd = new FormData(form);
-        // collect interests (checkboxes)
+        // interests
         const interests = Array.from(form.querySelectorAll('input[name="interest"]:checked')).map(i => i.value);
         fd.delete('interest');
         interests.forEach(i => fd.append('interest', i));
 
-        // collect kids if present
+        // kids
         if(document.querySelector('input[name="hasKids"]:checked')?.value === 'yes'){
           const kids = Array.from(kidsList.querySelectorAll('.kid-row')).map((r, idx) => {
             const name = r.querySelector('input[type="text"]')?.value || '';
             const age = r.querySelector('input[type="number"]')?.value || '';
-            return { name, age };
+            const sex = r.querySelector('select')?.value || '';
+            return { name, age, sex };
           });
-          // append kids to form data as kid_name_1, kid_age_1, ...
           kids.forEach((k, i) => {
             fd.append(`kid_name_${i+1}`, k.name);
             fd.append(`kid_age_${i+1}`, k.age);
+            fd.append(`kid_sex_${i+1}`, k.sex);
           });
         }
 
-        // show thank you message immediately
+        // show thank you
         const thank = document.getElementById('thankyou');
         thank.style.display = 'block';
         thank.setAttribute('aria-hidden','false');
 
-        // try to POST to Netlify (best-effort). If it fails, we still keep the thank-you visible.
+        // attempt to POST to Netlify (best-effort)
         try {
           await fetch('/', { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } });
         } catch (err) {
-          console.warn('Netlify submit failed (this is non-blocking):', err);
+          console.warn('Netlify submit failed (non-blocking):', err);
         }
 
-        // Optionally clear the form after submit
+        // reset UI
         form.reset();
         kidsList.innerHTML = '';
         removeKidBtn.style.display = 'none';
         addKidBtn.style.display = 'inline-flex';
         setKidsVisibility();
-        // hide validation errors if any
         [first,last,phone,email].forEach(f => { if(f) clearError(f); });
 
-        // keep thank you visible for a while then hide (optional)
         setTimeout(()=>{ thank.style.display = 'none'; thank.setAttribute('aria-hidden','true'); }, 8000);
       });
 
-      // reset handler: clear kids area and errors
+      // Reset handler
       const resetBtn = document.getElementById('resetBtn');
       resetBtn.addEventListener('click', () => {
-        kidsList.innerHTML = '';
-        removeKidBtn.style.display = 'none';
-        addKidBtn.style.display = 'inline-flex';
-        setKidsVisibility();
+        document.getElementById('kidsList').innerHTML = '';
+        document.querySelectorAll('#city,#state,#zip').forEach(el => { if(el) el.value = ''; });
         [first,last,phone,email].forEach(f => { if(f) clearError(f); });
+        setTimeout(() => applyTranslations(), 40);
       });
 
-      // ensure placeholders for kids reflect language
-      updateKidsPlaceholders();
-
-      // reapply translations if language changes externally
+      // Reapply translations on storage change
       window.addEventListener('storage', (e) => {
         if(e.key === 'cmr_lang') applyTranslations();
       });
+
+      // Ensure placeholders and dynamic labels reflect language
+      updateKidsPlaceholders();
     });
   </script>
 </body>
