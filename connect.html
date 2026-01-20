@@ -23,11 +23,13 @@
     html,body{ margin:0; padding:0; background:var(--page-bg); color:#0f172a; -webkit-font-smoothing:antialiased; }
     .wrap{ width:100%; max-width:var(--max-width); margin:28px auto; padding:var(--pad); box-sizing:border-box; }
     .card{ background:linear-gradient(180deg,#fff,#fbfbfb); border-radius:var(--radius); padding:22px; box-shadow:0 8px 30px rgba(15,23,42,0.06); border:1px solid rgba(15,23,42,0.04); }
-    .header{ display:flex; gap:14px; align-items:center; margin-bottom:12px; }
-    .logo{ width:70px; height:70px; border-radius:10px; background:#ffffff; display:flex; align-items:center; justify-content:center; overflow:hidden; flex:0 0 64px; }
+    .header{ display:flex; gap:14px; align-items:flex-start; margin-bottom:12px; }
+    /* Logo above title layout */
+    .logo-stack { display:flex; flex-direction:column; align-items:center; gap:8px; flex:0 0 96px; }
+    .logo{ width:96px; height:96px; border-radius:12px; background:#ffffff; display:flex; align-items:center; justify-content:center; overflow:hidden; }
     .logo img{ width:100%; height:100%; object-fit:contain; display:block; }
-    .title-block{ display:flex; flex-direction:column; gap:4px; }
-    h1{ margin:0; font-size:22px; font-weight:800; color:#0f172a; }
+    .title-block{ display:flex; flex-direction:column; gap:4px; align-items:flex-start; }
+    h1{ margin:0; font-size:20px; font-weight:800; color:#0f172a; text-transform:none; }
     .subtitle{ margin:0; color:var(--muted); font-size:14px; }
 
     form { margin-top:14px; display:grid; gap:12px; }
@@ -65,9 +67,15 @@
     .lang-switcher { position:fixed; top:12px; right:12px; display:flex; gap:8px; z-index:9999; }
     .lang-btn { padding:8px 10px; border-radius:8px; border:1px solid rgba(15,23,42,0.06); background:#fff; cursor:pointer; font-weight:700; }
 
+    .address-row { display:flex; gap:8px; align-items:center; }
+    .kids-block { margin-top:8px; padding:10px; border-radius:10px; background:linear-gradient(180deg,#fff,#fbfbfb); border:1px solid rgba(15,23,42,0.04); }
+    .kid-row { display:flex; gap:8px; align-items:center; margin-top:8px; }
+    .kid-row input[type="text"], .kid-row input[type="number"] { padding:8px 10px; }
+
     @media (max-width:640px){
       .row { flex-direction:column; }
-      .logo{ width:56px; height:56px; }
+      .logo{ width:72px; height:72px; }
+      .logo-stack { flex:0 0 auto; }
     }
   </style>
 </head>
@@ -77,12 +85,20 @@
   <div class="wrap">
     <div class="card" role="main" aria-labelledby="connectHeading">
       <div class="header">
-        <div class="logo" aria-hidden="false">
-          <!-- Replace with your PNG logo file path -->
-          <img src="logo.png" alt="CMR logo" id="connectLogo">
+        <!-- logo stacked above title -->
+        <div class="logo-stack" aria-hidden="false">
+          <!-- Replace with the same logo you used in index.html -->
+          <div class="logo">
+            <img src="/cmr180.png" alt="CMR logo" id="connectLogo">
+          </div>
+          <!-- Title below the logo (user requested "Coonect") -->
+          <div class="title-block" style="align-items:center;">
+            <h1 id="connectHeading">Coonect</h1>
+          </div>
         </div>
-        <div class="title-block">
-          <h1 id="connectHeading">Connect</h1>
+
+        <!-- Intro text sits to the right of the logo stack on wide screens -->
+        <div style="flex:1;">
           <p class="subtitle" id="connectIntro">Tell us about yourself and how you'd like to get involved.</p>
         </div>
       </div>
@@ -121,16 +137,17 @@
         <div class="row">
           <div class="col">
             <label for="address" id="labelAddress">Address (optional)</label>
-            <input id="address" name="address" type="text" />
+            <div class="address-row">
+              <input id="address" name="address" type="text" placeholder="Start typing address..." aria-describedby="addressHelp" />
+              <button type="button" class="btn-ghost" id="addressLookupBtn">Lookup</button>
+            </div>
+            <div id="addressHelp" class="small-muted">Use lookup to auto-complete your address.</div>
           </div>
 
           <div class="col">
             <label for="status" id="labelStatus">Status</label>
             <select id="status" name="status" aria-describedby="statusHelp">
-              <option value="first_visit">First visit</option>
-              <option value="second_visit">Second visit</option>
-              <option value="regular">Regular attendee</option>
-              <option value="member">Member</option>
+              <!-- options populated by JS translations -->
             </select>
             <div id="statusHelp" class="small-muted">Choose the option that best describes you.</div>
           </div>
@@ -147,7 +164,28 @@
           </div>
         </div>
 
-        <div>
+        <!-- Kids question -->
+        <div style="margin-top:12px;">
+          <label id="labelKids">Do you have kids?</label>
+          <div class="group" role="radiogroup" aria-labelledby="labelKids" style="margin-top:8px;">
+            <label class="checkbox" style="padding:8px 12px;"><input type="radio" name="hasKids" value="no" checked> <span id="kidsNoLabel">No</span></label>
+            <label class="checkbox" style="padding:8px 12px;"><input type="radio" name="hasKids" value="yes"> <span id="kidsYesLabel">Yes</span></label>
+          </div>
+
+          <div id="kidsContainer" class="kids-block" style="display:none;">
+            <div id="kidsList">
+              <!-- kid rows inserted here (max 2) -->
+            </div>
+            <div style="margin-top:8px;">
+              <button type="button" class="btn-ghost" id="addKidBtn">Add child</button>
+              <button type="button" class="btn-ghost" id="removeKidBtn" style="display:none;">Remove child</button>
+            </div>
+            <div class="small-muted" style="margin-top:8px;" id="kidsHint">You can add up to 2 children.</div>
+          </div>
+        </div>
+
+        <!-- Prayer request -->
+        <div style="margin-top:12px;">
           <label for="prayer" id="labelPrayer">Prayer request</label>
           <textarea id="prayer" name="prayer" placeholder="Share your request here"></textarea>
         </div>
@@ -165,22 +203,31 @@
   </div>
 
   <script>
-    // Translations (English + French)
+    // Translations (English + French) - all visible strings included
     const T = {
       en: {
-        connectHeading: "Connect",
+        connectHeading: "Coonect",
         connectIntro: "Tell us about yourself and how you'd like to get involved.",
         labelFirst: "First name",
         labelLast: "Last name",
         labelPhone: "Phone",
         labelEmail: "Email (optional)",
         labelAddress: "Address (optional)",
+        addressPlaceholder: "Start typing address...",
+        addressLookupBtn: "Lookup",
         labelStatus: "Status",
         statusHelp: "Choose the option that best describes you.",
         statusOptions: { first_visit: "First visit", second_visit: "Second visit", regular: "Regular attendee", member: "Member" },
         labelInterest: "I'd like to learn",
         interestOptions: { baptism: "Baptism", serve: "Serving", learn: "Learn about CMR", follow: "Talk about following Jesus", other: "Giving" },
-        labelPrayer: "Prayer request (optional)",
+        labelKids: "Do you have kids?",
+        kidsYesLabel: "Yes",
+        kidsNoLabel: "No",
+        addKidBtn: "Add child",
+        removeKidBtn: "Remove child",
+        kidsHint: "You can add up to 2 children.",
+        labelPrayer: "Prayer request",
+        prayerPlaceholder: "Share your request here",
         submitBtn: "Submit",
         resetBtn: "Reset",
         thankYou: "Thank you — we received your submission and will get back to you soon.",
@@ -191,19 +238,28 @@
         }
       },
       fr: {
-        connectHeading: "Se connecter",
+        connectHeading: "Coonect",
         connectIntro: "Parlez-nous de vous et comment vous souhaitez vous impliquer.",
         labelFirst: "Prénom",
         labelLast: "Nom",
         labelPhone: "Téléphone",
         labelEmail: "E-mail (optionnel)",
         labelAddress: "Adresse (optionnel)",
+        addressPlaceholder: "Commencez à taper l'adresse...",
+        addressLookupBtn: "Rechercher",
         labelStatus: "Statut",
         statusHelp: "Choisissez l'option qui vous décrit le mieux.",
         statusOptions: { first_visit: "Première visite", second_visit: "Deuxième visite", regular: "Participant régulier", member: "Membre" },
         labelInterest: "Je suis intéressé par",
         interestOptions: { baptism: "Baptême", serve: "Servir", learn: "En savoir plus sur CMR", follow: "Parler de suivre Jésus", other: "Donner" },
-        labelPrayer: "Demande de prière (optionnel)",
+        labelKids: "Avez-vous des enfants ?",
+        kidsYesLabel: "Oui",
+        kidsNoLabel: "Non",
+        addKidBtn: "Ajouter un enfant",
+        removeKidBtn: "Supprimer l'enfant",
+        kidsHint: "Vous pouvez ajouter jusqu'à 2 enfants.",
+        labelPrayer: "Demande de prière",
+        prayerPlaceholder: "Partagez votre demande ici",
         submitBtn: "Soumettre",
         resetBtn: "Réinitialiser",
         thankYou: "Merci — nous avons reçu votre message et nous vous contacterons bientôt.",
@@ -228,18 +284,33 @@
       container.appendChild(enBtn); container.appendChild(frBtn);
     }
 
+    // Apply translations to all elements (force translate everything)
     function applyTranslations(){
       const lang = getSavedLang();
       const t = T[lang] || T.en;
-      document.getElementById('connectHeading').textContent = t.connectHeading;
-      document.getElementById('connectIntro').textContent = t.connectIntro;
-      document.getElementById('labelFirst').textContent = t.labelFirst;
-      document.getElementById('labelLast').textContent = t.labelLast;
-      document.getElementById('labelPhone').textContent = t.labelPhone;
-      document.getElementById('labelEmail').textContent = t.labelEmail;
-      document.getElementById('labelAddress').textContent = t.labelAddress;
-      document.getElementById('labelStatus').textContent = t.labelStatus;
-      document.getElementById('statusHelp').textContent = t.statusHelp;
+
+      // headings and intro
+      const maybeSet = (id, value) => {
+        const el = document.getElementById(id);
+        if(!el || typeof value !== 'string') return;
+        el.textContent = value;
+      };
+
+      maybeSet('connectHeading', t.connectHeading);
+      maybeSet('connectIntro', t.connectIntro);
+
+      // labels and placeholders
+      maybeSet('labelFirst', t.labelFirst);
+      maybeSet('labelLast', t.labelLast);
+      maybeSet('labelPhone', t.labelPhone);
+      maybeSet('labelEmail', t.labelEmail);
+      maybeSet('labelAddress', t.labelAddress);
+      const addr = document.getElementById('address');
+      if(addr) addr.placeholder = t.addressPlaceholder || '';
+      maybeSet('addressLookupBtn', t.addressLookupBtn);
+      maybeSet('labelStatus', t.labelStatus);
+      maybeSet('statusHelp', t.statusHelp);
+
       // status options
       const sel = document.getElementById('status');
       if(sel){
@@ -247,28 +318,43 @@
         for(const key of ['first_visit','second_visit','regular','member']){
           const o = document.createElement('option');
           o.value = key;
-          o.textContent = t.statusOptions[key];
+          o.textContent = (t.statusOptions && t.statusOptions[key]) || key;
           sel.appendChild(o);
         }
       }
-      document.getElementById('labelInterest').textContent = t.labelInterest;
-      // interest labels
+
+      maybeSet('labelInterest', t.labelInterest);
+      // interest labels (checkboxes)
       const interestLabels = document.querySelectorAll('.group .checkbox');
       const interestKeys = ['baptism','serve','learn','follow','other'];
       interestLabels.forEach((lbl, idx) => {
         const key = interestKeys[idx];
         const input = lbl.querySelector('input');
         if(input) input.value = key;
-        // update visible text (keep checkbox input inside label)
-        lbl.childNodes.forEach(node => {
+        // remove existing text nodes and append translated text
+        Array.from(lbl.childNodes).forEach(node => {
           if(node.nodeType === Node.TEXT_NODE) node.remove();
         });
-        lbl.appendChild(document.createTextNode(' ' + t.interestOptions[key]));
+        lbl.appendChild(document.createTextNode(' ' + ((t.interestOptions && t.interestOptions[key]) || key)));
       });
-      document.getElementById('labelPrayer').textContent = t.labelPrayer;
-      document.getElementById('submitBtn').textContent = t.submitBtn;
-      document.getElementById('resetBtn').textContent = t.resetBtn;
-      document.getElementById('thankyou').textContent = t.thankYou;
+
+      // kids labels
+      maybeSet('labelKids', t.labelKids);
+      maybeSet('kidsYesLabel', t.kidsYesLabel);
+      maybeSet('kidsNoLabel', t.kidsNoLabel);
+      maybeSet('addKidBtn', t.addKidBtn);
+      maybeSet('removeKidBtn', t.removeKidBtn);
+      maybeSet('kidsHint', t.kidsHint);
+
+      // prayer
+      maybeSet('labelPrayer', t.labelPrayer);
+      const prayer = document.getElementById('prayer');
+      if(prayer) prayer.placeholder = t.prayerPlaceholder || '';
+
+      // buttons and thank you
+      maybeSet('submitBtn', t.submitBtn);
+      maybeSet('resetBtn', t.resetBtn);
+      maybeSet('thankyou', t.thankYou);
     }
 
     // Validation helpers
@@ -302,11 +388,60 @@
       return true;
     }
 
-    // Submit handler: show inline thank you and attempt to POST to Netlify endpoint (graceful)
+    // Address lookup using Nominatim (OpenStreetMap). Lightweight, no API key required.
+    async function addressLookup(query){
+      if(!query) return [];
+      const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(query)}&addressdetails=1&limit=5`;
+      try {
+        const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+        if(!res.ok) return [];
+        const data = await res.json();
+        return data.map(item => item.display_name);
+      } catch (err) {
+        console.warn('Address lookup failed', err);
+        return [];
+      }
+    }
+
+    // Kids UI helpers (max 2)
+    function createKidRow(index){
+      const row = document.createElement('div');
+      row.className = 'kid-row';
+      row.dataset.index = index;
+      const nameInput = document.createElement('input');
+      nameInput.type = 'text';
+      nameInput.name = `kid_name_${index}`;
+      nameInput.placeholder = (getSavedLang() === 'fr') ? 'Nom' : 'Name';
+      nameInput.style.flex = '1';
+      const ageInput = document.createElement('input');
+      ageInput.type = 'number';
+      ageInput.name = `kid_age_${index}`;
+      ageInput.placeholder = (getSavedLang() === 'fr') ? 'Âge' : 'Age';
+      ageInput.min = 0;
+      ageInput.max = 25;
+      ageInput.style.width = '90px';
+      row.appendChild(nameInput);
+      row.appendChild(ageInput);
+      return row;
+    }
+
+    function updateKidsPlaceholders(){
+      const lang = getSavedLang();
+      const rows = document.querySelectorAll('#kidsList .kid-row');
+      rows.forEach(r => {
+        const name = r.querySelector('input[type="text"]');
+        const age = r.querySelector('input[type="number"]');
+        if(name) name.placeholder = (lang === 'fr') ? 'Nom' : 'Name';
+        if(age) age.placeholder = (lang === 'fr') ? 'Âge' : 'Age';
+      });
+    }
+
+    // Submit handler and DOM wiring
     document.addEventListener('DOMContentLoaded', function(){
       buildLangSwitcher();
       applyTranslations();
 
+      // wire inputs
       const form = document.getElementById('connectForm');
       if(!form) return;
 
@@ -317,6 +452,55 @@
 
       [first,last,phone,email].forEach(f => { if(!f) return; f.addEventListener('input', ()=> validateField(f)); f.addEventListener('blur', ()=> validateField(f)); });
 
+      // Address lookup button
+      const addressInput = document.getElementById('address');
+      const addressBtn = document.getElementById('addressLookupBtn');
+      addressBtn.addEventListener('click', async function(){
+        const q = (addressInput.value || '').trim();
+        if(!q) return;
+        addressBtn.textContent = (getSavedLang() === 'fr') ? '...' : '...';
+        const results = await addressLookup(q);
+        // if results, pick the first and set it
+        if(results && results.length){
+          addressInput.value = results[0];
+        }
+        applyTranslations(); // restore button label
+      });
+
+      // Kids radio handling
+      const kidsRadios = Array.from(document.querySelectorAll('input[name="hasKids"]'));
+      const kidsContainer = document.getElementById('kidsContainer');
+      const kidsList = document.getElementById('kidsList');
+      const addKidBtn = document.getElementById('addKidBtn');
+      const removeKidBtn = document.getElementById('removeKidBtn');
+
+      function setKidsVisibility(){
+        const val = document.querySelector('input[name="hasKids"]:checked').value;
+        if(val === 'yes'){ kidsContainer.style.display = 'block'; } else { kidsContainer.style.display = 'none'; }
+      }
+      kidsRadios.forEach(r => r.addEventListener('change', setKidsVisibility));
+      setKidsVisibility();
+
+      function kidCount(){ return kidsList.querySelectorAll('.kid-row').length; }
+
+      addKidBtn.addEventListener('click', () => {
+        if(kidCount() >= 2) return;
+        const idx = kidCount() + 1;
+        kidsList.appendChild(createKidRow(idx));
+        if(kidCount() >= 1) removeKidBtn.style.display = 'inline-flex';
+        if(kidCount() >= 2) addKidBtn.style.display = 'none';
+        updateKidsPlaceholders();
+      });
+
+      removeKidBtn.addEventListener('click', () => {
+        const rows = kidsList.querySelectorAll('.kid-row');
+        if(rows.length === 0) return;
+        rows[rows.length - 1].remove();
+        if(kidCount() < 2) addKidBtn.style.display = 'inline-flex';
+        if(kidCount() === 0) removeKidBtn.style.display = 'none';
+      });
+
+      // form submit
       form.addEventListener('submit', async function(e){
         e.preventDefault();
         // validate required fields
@@ -332,8 +516,22 @@
         const fd = new FormData(form);
         // collect interests (checkboxes)
         const interests = Array.from(form.querySelectorAll('input[name="interest"]:checked')).map(i => i.value);
-        fd.delete('interest'); // remove single entries if any
+        fd.delete('interest');
         interests.forEach(i => fd.append('interest', i));
+
+        // collect kids if present
+        if(document.querySelector('input[name="hasKids"]:checked')?.value === 'yes'){
+          const kids = Array.from(kidsList.querySelectorAll('.kid-row')).map((r, idx) => {
+            const name = r.querySelector('input[type="text"]')?.value || '';
+            const age = r.querySelector('input[type="number"]')?.value || '';
+            return { name, age };
+          });
+          // append kids to form data as kid_name_1, kid_age_1, ...
+          kids.forEach((k, i) => {
+            fd.append(`kid_name_${i+1}`, k.name);
+            fd.append(`kid_age_${i+1}`, k.age);
+          });
+        }
 
         // show thank you message immediately
         const thank = document.getElementById('thankyou');
@@ -344,17 +542,38 @@
         try {
           await fetch('/', { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } });
         } catch (err) {
-          // ignore network errors — user still sees thank you
           console.warn('Netlify submit failed (this is non-blocking):', err);
         }
 
         // Optionally clear the form after submit
         form.reset();
+        kidsList.innerHTML = '';
+        removeKidBtn.style.display = 'none';
+        addKidBtn.style.display = 'inline-flex';
+        setKidsVisibility();
         // hide validation errors if any
         [first,last,phone,email].forEach(f => { if(f) clearError(f); });
 
         // keep thank you visible for a while then hide (optional)
         setTimeout(()=>{ thank.style.display = 'none'; thank.setAttribute('aria-hidden','true'); }, 8000);
+      });
+
+      // reset handler: clear kids area and errors
+      const resetBtn = document.getElementById('resetBtn');
+      resetBtn.addEventListener('click', () => {
+        kidsList.innerHTML = '';
+        removeKidBtn.style.display = 'none';
+        addKidBtn.style.display = 'inline-flex';
+        setKidsVisibility();
+        [first,last,phone,email].forEach(f => { if(f) clearError(f); });
+      });
+
+      // ensure placeholders for kids reflect language
+      updateKidsPlaceholders();
+
+      // reapply translations if language changes externally
+      window.addEventListener('storage', (e) => {
+        if(e.key === 'cmr_lang') applyTranslations();
       });
     });
   </script>
