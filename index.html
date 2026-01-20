@@ -163,25 +163,48 @@
 }
 
 /* Larger logo but still responsive and centered */
-.hub-logo {
-  width:180px;           /* increased default display size */
-  height:180px;
-  flex:0 0 auto;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  border-radius:12px;
-  background:transparent;
+/* Code-based logo box */
+.code-logo-box {
+  width: 120px;
+  height: 70px;
+  background: #0a0f1a; /* deep navy/black */
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  box-sizing: border-box;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
-.hub-logo img {
-  width:100%;
-  height:100%;
-  max-width:100%;
-  max-height:100%;
-  object-fit:contain;
-  display:block;
+
+/* CMR text */
+.code-logo-cmr {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 900;
+  font-size: 26px;
+  color: #ffffff;
+  letter-spacing: 0.04em;
 }
+
+/* hub gradient text */
+.code-logo-hub {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  margin-left: 6px;
+
+  background: linear-gradient(90deg, #73b3cf 0%, #800000 60%, #ffffff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Reduce gap between logo and title */
+.hub-header--stacked {
+  gap: 4px !important;
+}
+
 
 /* Keep title visible and centered; remove any old "CMR Hub" text via JS instead of deleting markup */
 .hub-title {
@@ -257,9 +280,9 @@
       display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:8px; text-decoration:none; font-weight:700; font-size:14px;
       border:1px solid rgba(15,23,42,0.06); background:#fff; color:#111827;
     }
-    .contact-card .contact-btn.phone { background:linear-gradient(90deg,#10b981,#06b6d4); color:#fff; border:1px solid rgba(0,0,0,0.04); }
-    .contact-card .contact-btn.email { background:linear-gradient(90deg,#6366f1,#8b5cf6); color:#fff; border:1px solid rgba(0,0,0,0.04); }
-    .contact-card .contact-btn.map { background:linear-gradient(90deg,#f97316,#f43f5e); color:#fff; border:1px solid rgba(0,0,0,0.04); }
+    .contact-card .contact-btn.phone { background:linear-gradient(90deg,#73b3cf,#ffffff); color:#fff; border:1px solid rgba(0,0,0,0.04); }
+    .contact-card .contact-btn.email { background:linear-gradient(90deg,#800000,#ffffff); color:#fff; border:1px solid rgba(0,0,0,0.04); }
+    .contact-card .contact-btn.map { background:linear-gradient(90deg,#b4822b,#ffffff); color:#fff; border:1px solid rgba(0,0,0,0.04); }
     .contact-card .contact-meta { color:var(--muted); font-size:13px; }
 
     /* Sermon thumbnail */
@@ -306,9 +329,12 @@
           </div> -->
           <div class="hub-header hub-header--stacked" aria-hidden="false">
   <div class="hub-logo">
-    <!-- Replace src with your new 512x512 logo file when ready -->
-    <img src="3.png" alt="Centre Missionnaire La Restauration logo" id="connectLogo" width="512" height="512">
+  <div class="code-logo-box">
+    <span class="code-logo-cmr">CMR</span>
+    <span class="code-logo-hub">hub</span>
   </div>
+</div>
+
 
   <div class="hub-text">
     <h1 class="hub-title" id="hubTitle">Centre Missionnaire La Restauration</h1>
