@@ -74,12 +74,63 @@
     }
 
     .card{ background:var(--card-bg); border-radius:var(--radius); padding:20px; box-shadow:0 6px 18px rgba(15,23,42,0.06); border:1px solid rgba(15,23,42,0.04); }
-    .hub-header{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+    /* Stacked header: logo on top, centered text below */
+.hub-header--stacked {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  text-align:center;
+}
+
+/* Ensure logo scales from the 512px source and stays centered */
+.hub-logo {
+  width:128px;            /* default displayed size */
+  height:128px;
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  border-radius:12px;     /* optional, keeps rounded if desired */
+  background:transparent;
+}
+.hub-logo img {
+  width:100%;
+  height:100%;
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+  display:block;
+}
+
+/* Keep original typography sizes but center them */
+.hub-title {
+  font-size:20px;
+  font-weight:700;
+  margin:0;
+  line-height:1.1;
+}
+.hub-subtitle {
+  font-size:13px;
+  color:var(--muted);
+  margin:0;
+}
+
+/* Slightly larger logo on wider screens */
+@media (min-width:981px) {
+  .hub-logo { width:160px; height:160px; }
+}
+@media (max-width:420px) {
+  .hub-logo { width:112px; height:112px; }
+}
+
+    /* .hub-header{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
     .hub-logo{ width:88px; height:88px; border-radius:10px; background:transparent; display:flex; align-items:center; justify-content:center; overflow:hidden; flex:0 0 88px; }
     .hub-logo img{ width:100%; height:100%; object-fit:contain; display:block; }
 
     .hub-title{ font-size:20px; font-weight:700; margin:0; display:flex; align-items:center; gap:8px; flex:1; }
-    .hub-subtitle{ font-size:13px; color:var(--muted); margin:0; }
+    .hub-subtitle{ font-size:13px; color:var(--muted); margin:0; } */
 
     .hub-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
     @media(max-width:640px){ .hub-grid{ grid-template-columns:repeat(2,1fr); } }
@@ -157,7 +208,8 @@
       <div class="left-col" id="leftColumn">
         <!-- CMR HUB CARD -->
         <div class="card" id="hubCard" aria-label="CMR Hub">
-          <div class="hub-header">
+          
+          <!-- <div class="hub-header">
             <div class="hub-logo">
               <img src="logo.png" alt="CMR logo" id="connectLogo">
             </div>
@@ -165,7 +217,19 @@
               <h1 class="hub-title" id="hubTitle">CMR Hub</h1>
               <p class="hub-subtitle" id="hubSubtitle">One place for everything happening at CMR.</p>
             </div>
-          </div>
+          </div> -->
+          <div class="hub-header hub-header--stacked" aria-hidden="false">
+  <div class="hub-logo">
+    <!-- Replace src with your new 512x512 logo file when ready -->
+    <img src="3.png" alt="Centre Missionnaire La Restauration logo" id="connectLogo" width="512" height="512">
+  </div>
+
+  <div class="hub-text">
+    <h1 class="hub-title" id="hubTitle">Centre Missionnaire La Restauration</h1>
+    <p class="hub-subtitle" id="hubSubtitle">One place for everything happening at CMR.</p>
+  </div>
+</div>
+
 
           <div class="hub-grid" role="navigation" aria-label="Main actions">
             <a class="hub-button" href="give.html" id="giveBtn" title="Give">
