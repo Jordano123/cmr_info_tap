@@ -372,10 +372,10 @@
 
         <!-- BIBLE IN A YEAR (left column) -->
         <div class="card" id="biblePlanCard" aria-labelledby="biblePlanHeading" style="margin-top:12px;">
-          <h3 id="biblePlanHeading" style="margin:0 0 12px 0;">Bible in a Year</h3>
+          <h3 id="biblePlanHeading" style="margin:0 0 12px 0;">365 Bible</h3>
 
           <div style="font-size:14px; color:#374151; margin-bottom:10px;">
-            Follow a one‑year chronological reading plan. Open today’s reading with one tap.
+            <span id="bible_text">Follow a one‑year chronological reading plan. Open today’s reading with one tap.</span>
           </div>
 
           <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
@@ -437,9 +437,9 @@
   </h3>
 
   <div>
-    <div style="font-weight:700;">Sunday • 9:00 AM</div>
-    <div style="font-weight:700; margin-top:6px;">Sunday • 11:00 AM</div>
-    <div class="small-muted" style="margin-top:8px;">Childcare available at both services</div>
+    <div id="serviceHD1" style="font-weight:700;">Friday • 7:00 PM</div>
+    <div id="serviceHD2" style="font-weight:700; margin-top:6px;">Sunday • 10:00 AM</div>
+    <div id="serviceHD3" class="small-muted" style="margin-top:8px;">Childcare available at both services</div>
   </div>
 </section>
 
@@ -458,7 +458,7 @@
 
     <!-- Footer / Copyright -->
     <footer class="site-footer" role="contentinfo">
-      <div>© <span id="currentYear"></span> Christ Missionary Revival Church. All rights reserved.</div>
+      <div>© <span id="currentYear"></span> Centre Missionnaire La Restauration. All rights reserved.</div>
       <div style="margin-top:6px; color:var(--muted); font-size:12px;">Designed for the CMR community.</div>
     </footer>
   </div>
@@ -499,12 +499,26 @@
         contactMap: "Map",
         contactCall: "Call",
         contactEmail: "Email",
-        visitUsName: "Christ Missionary Revival Church",
+        visitUsName: "Centre Missionnaire La Restauration",
         visitUsAddress: "123 Church St, Fort Worth, TX",
         directionsBtn: "Directions",
         prayerHeading: "Prayer Request",
         prayerSub: "Share a request and we will pray for you",
-        prayerBtn: "Request Prayer"
+        prayerBtn: "Request Prayer",
+        latestSermonHeading: "Latest Sermon",
+        sermonVideoWrap: "Loading latest sermon…",
+        shareSermonBtn: "Share",
+        copySermonLinkBtn: "Copy link",
+        openSermonOnYT: "Open on YouTube",
+        biblePlanHeading: "365 Bible",
+        bible_text: "Follow a one‑year chronological reading plan. Open today’s reading with one tap.",
+        shareTodayBtn: "Share";,
+        readTodayBtn: "Read",
+        serviceTimesHeading: "Service Times",
+        serviceHD1: "Friday • 7:00 PM", 
+        serviceHD2: "Sunday• 10:00 AM",
+        serviceHD3: "childcare available at both services.",
+        
       },
       fr: {
         hubTitle: "Centre Missionnaire La Restauration",
@@ -528,15 +542,27 @@
         no_announcements: "Aucune annonce en cours",
         contactHeading: "Contact",
         contactGetInTouch: "Entrer en contact",
-        contactMap: "Carte",
+        contactMap: "Direction",
         contactCall: "Appeler",
         contactEmail: "Courriel",
-        visitUsName: "Christ Missionary Revival Church",
+        visitUsName: "Centre Missionnaire La Restauration",
         visitUsAddress: "123 Church St, Fort Worth, TX",
         directionsBtn: "Itinéraire",
         prayerHeading: "Demande de prière",
         prayerSub: "Partagez une demande et nous prierons pour vous",
-        prayerBtn: "Demander la prière"
+        prayerBtn: "Demander la prière",
+        latestSermonHeading: "Dernier Sermon",
+        sermonVideoWrap: "Chargement du dernier sermon...",
+        shareSermonBtn: "Partager",
+        copySermonLinkBtn: "Copier le lien",
+        openSermonOnYT: "Ouvrir sur Youtube",
+        biblePlanHeading: "365 Bible",
+        bible_text: "Un plan de lecture biblique sur un an. Ouvrez la lecture du jour en un geste.",
+        shareTodayBtn: "Partager";,
+        readTodayBtn: "Lire",
+        serviceHD1: "Vendredi • 19:00", 
+        serviceHD2: "Dimanche • 10:00",
+        serviceHD3: "Service de garde d'enfants offert lors de deux services.",
       }
     };
 
