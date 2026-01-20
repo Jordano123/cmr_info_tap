@@ -84,15 +84,25 @@
 }
 
 /* Ensure logo scales from the 512px source and stays centered */
+/* Header spacing & logo sizing tweaks */
+.hub-header--stacked {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;               /* smaller gap between logo and title/subtitle */
+  text-align:center;
+}
+
+/* Larger logo but still responsive and centered */
 .hub-logo {
-  width:128px;            /* default displayed size */
-  height:128px;
+  width:180px;           /* increased default display size */
+  height:180px;
   flex:0 0 auto;
   display:flex;
   align-items:center;
   justify-content:center;
   overflow:hidden;
-  border-radius:12px;     /* optional, keeps rounded if desired */
+  border-radius:12px;
   background:transparent;
 }
 .hub-logo img {
@@ -104,26 +114,31 @@
   display:block;
 }
 
-/* Keep original typography sizes but center them */
+/* Keep title visible and centered; remove any old "CMR Hub" text via JS instead of deleting markup */
 .hub-title {
   font-size:20px;
   font-weight:700;
   margin:0;
   line-height:1.1;
 }
+
+/* Subtitle slightly closer to logo, but add a bit more space before the hub buttons */
 .hub-subtitle {
   font-size:13px;
   color:var(--muted);
   margin:0;
+  margin-bottom:12px;    /* increases spacing between subtitle and the buttons below */
 }
 
-/* Slightly larger logo on wider screens */
+/* Responsive adjustments */
 @media (min-width:981px) {
-  .hub-logo { width:160px; height:160px; }
+  .hub-logo { width:220px; height:220px; } /* larger on desktop */
 }
 @media (max-width:420px) {
-  .hub-logo { width:112px; height:112px; }
+  .hub-logo { width:140px; height:140px; } /* slightly smaller on very small screens */
+  .hub-subtitle { margin-bottom:10px; }
 }
+
 
     /* .hub-header{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
     .hub-logo{ width:88px; height:88px; border-radius:10px; background:transparent; display:flex; align-items:center; justify-content:center; overflow:hidden; flex:0 0 88px; }
