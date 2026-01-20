@@ -430,7 +430,7 @@
         </section> -->
 
      <!-- Minimal Service Times content to use inside your existing #serviceTimes card -->
-<section id="serviceTimes" class="card" aria-labelledby="serviceTimesHeading" style="margin-top:12px;">
+<!-- <section id="serviceTimes" class="card" aria-labelledby="serviceTimesHeading" style="margin-top:12px;">
   <h3 id="serviceTimesHeading">
     <span class="svc-icon" aria-hidden="true">⏰</span>
     Service Times
@@ -441,6 +441,23 @@
     <div style="font-weight:700; margin-top:6px;">Sunday • 10:00 AM</div>
     <div class="small-muted" style="margin-top:8px;">Childcare available at both services</div>
   </div>
+</section> -->
+
+
+        <section id="serviceTimes" class="card" aria-labelledby="serviceTimesHeading" style="margin-top:12px;">
+  <h3 id="serviceTimesHeading" data-i18n="serviceTimesHeading"><span class="svc-icon" aria-hidden="true">⏰</span>Service Times</h3>
+
+  <div id="serviceTimesList">
+    <div id="serviceTime1" data-i18n="serviceTime1" style="font-weight:700;">Friday • 7:00 PM</div>
+    <div id="serviceTime2" data-i18n="serviceTime2" style="font-weight:700; margin-top:6px;">Sunday • 10:00 AM</div>
+    <div id="serviceTimesNote" class="small-muted" data-i18n="serviceTimesNote" style="margin-top:8px;">Childcare available at both services</div>
+  </div>
+
+  <!-- optional actions (kept hidden if you don't want buttons) -->
+  <!-- <div id="serviceTimesActions" class="cta-row" style="margin-top:12px;">
+    <a id="serviceTimesPrimaryBtn" class="svc-cta" href="#" data-i18n="serviceTimesPrimaryBtn" style="display:none;">Get Directions</a>
+    <a id="serviceTimesSecondaryBtn" class="svc-ghost" href="#" data-i18n="serviceTimesSecondaryBtn" style="display:none;">Service details</a>
+  </div> -->
 </section>
 
 
@@ -514,10 +531,10 @@
         bible_text: "Follow a one‑year chronological reading plan. Open today’s reading with one tap.",
         // shareTodayBtn: "Share";,
         // readTodayBtn: "Read",
-        // serviceTimesHeading: "Service Times",
-        // serviceHD1: "Friday • 7:00 PM", 
-        // serviceHD2: "Sunday• 10:00 AM",
-        // serviceHD3: "childcare available at both services.",
+      serviceTimesHeading: "Service Times", 
+      serviceTime1: "Friday • 7:00 PM", 
+      serviceTime2: "Sunday • 10:00 AM", 
+      serviceTimesNote: "Childcare available at both services",
         
       },
       fr: {
@@ -560,9 +577,10 @@
         bible_text: "Un plan de lecture biblique sur un an. Ouvrez la lecture du jour en un geste.",
         // shareTodayBtn: "Partager";,
         // readTodayBtn: "Lire",
-        // serviceHD1: "Vendredi • 19:00", 
-        // serviceHD2: "Dimanche • 10:00",
-        // serviceHD3: "Service de garde d'enfants offert lors de deux services.",
+          serviceTimesHeading: "Heure de Services", 
+       serviceTime1: "Vendredi • 19:00", 
+         serviceTime2: "Dimanche • 10:00",
+        serviceTimesNote: "Service de garde d'enfants offert lors de deux services.",
       }
     };
 
