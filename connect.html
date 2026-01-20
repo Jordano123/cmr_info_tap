@@ -426,7 +426,9 @@
     let addressTimer = null;
     async function fetchAddressSuggestions(q){
       if(!q) return [];
-      const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(q)}&addressdetails=1&limit=6`;
+  const viewbox = '-124.848974,49.384358,-66.885444,24.396308'; // left, top, right, bottom (use appropriate order for your endpoint)
+const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(q)}&addressdetails=1&limit=6&viewbox=${viewbox}&bounded=1`;
+
       try {
         const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
         if(!res.ok) return [];
