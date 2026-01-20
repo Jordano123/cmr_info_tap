@@ -92,18 +92,26 @@
   <div class="wrap">
     <div class="card" role="main" aria-labelledby="connectHeading">
       <div class="header">
-        <div class="logo-stack" aria-hidden="false">
-          <div class="logo">
-            <img src="/cmr180.png" alt="CMR logo" id="connectLogo">
-          </div>
+        <div class="logo-stack" aria-hidden="false" style="align-items:center; gap:6px;">
+  
+  <!-- NEW CODE-BASED LOGO -->
+  <div class="code-logo-box">
+    <span class="code-logo-cmr">CMR</span>
+    <span class="code-logo-hub">hub</span>
+  </div>
 
-          <!-- Intro text below logo -->
-          <div class="title-block" style="align-items:center;">
-            <div class="intro-text" id="connectIntro">Tell us about yourself and how you'd like to get involved.</div>
-            <!-- Title below intro -->
-            <h1 id="connectHeading">Connect</h1>
-          </div>
-        </div>
+  <!-- Intro text below logo -->
+  <div class="title-block" style="align-items:center; margin-top:2px;">
+    <div class="intro-text" id="connectIntro">
+      Tell us about yourself and how you'd like to get involved.
+    </div>
+
+    <!-- Title below intro -->
+    <h1 id="connectHeading">Connect</h1>
+  </div>
+
+</div>
+
 
         <div style="flex:1;">
           <!-- optional right-side content left empty to keep layout balanced -->
@@ -149,8 +157,17 @@
               <input id="apt" name="apt" type="text" placeholder="Apt / Bldg" style="width:140px;" />
               <div class="suggestions" id="addressSuggestions" style="display:none;"></div>
             </div>
+            
             <div id="addressHelp" class="small-muted">Select an address to auto-fill city, state and ZIP.</div>
           </div>
+
+          <!-- Add after <input id="apt"...> -->
+<div id="addressExtras" style="display:none; width:100%; margin-top:8px; gap:8px; display:flex;">
+  <input id="city" name="city" type="text" placeholder="" style="flex:1;" />
+  <input id="state" name="state" type="text" placeholder="" style="width:140px;" />
+  <input id="zip" name="zip" type="text" placeholder="" style="width:120px;" />
+</div>
+
 
           <div class="col">
             <label for="status" id="labelStatus">Status</label>
@@ -250,7 +267,8 @@
         validation: {
           required: "This field is required.",
           phoneInvalid: "Enter a valid phone number.",
-          emailInvalid: "Enter a valid email address."
+          emailInvalid: "Enter a valid email address.",
+          addressCityLabel: "City", addressStateLabel: "State", addressZipLabel: "ZIP", addressCityPlaceholder: "City", addressStatePlaceholder: "State", addressZipPlaceholder: "ZIP",
         }
       },
       fr: {
@@ -288,7 +306,8 @@
         validation: {
           required: "Ce champ est requis.",
           phoneInvalid: "Entrez un numéro de téléphone valide.",
-          emailInvalid: "Entrez une adresse e-mail valide."
+          emailInvalid: "Entrez une adresse e-mail valide.",
+          addressCityLabel: "Ville", addressStateLabel: "État", addressZipLabel: "Code postal", addressCityPlaceholder: "Ville", addressStatePlaceholder: "État", addressZipPlaceholder: "Code postal",
         }
       }
     };
@@ -427,7 +446,7 @@
     async function fetchAddressSuggestions(q){
       if(!q) return [];
   const viewbox = '-124.848974,49.384358,-66.885444,24.396308'; // left, top, right, bottom (use appropriate order for your endpoint)
-const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(q)}&addressdetails=1&limit=6&viewbox=${viewbox}&bounded=1`;
+const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(q)}&addressdetails=1&limit=6&countrycodes=us`;
 
       try {
         const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
@@ -457,20 +476,49 @@ const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encode
       box.style.display = 'block';
     }
 
+    // function selectAddressItem(item){
+    //   const addrInput = document.getElementById('address');
+    //   const aptInput = document.getElementById('apt');
+    //   addrInput.value = item.display_name;
+    //   // parse address details for city/state/postcode
+    //   const ad = item.address || {};
+    //   // create hidden fields or visible fields for city/state/postcode
+    //   // We'll append or set values to inputs with ids city, state, zip if present, otherwise create them
+    //   setOrCreateField('city', ad.city || ad.town || ad.village || ad.county || '');
+    //   setOrCreateField('state', ad.state || ad.region || '');
+    //   setOrCreateField('zip', ad.postcode || '');
+    //   // keep apt input for user to fill
+    //   document.getElementById('addressSuggestions').style.display = 'none';
+    // }
+
     function selectAddressItem(item){
-      const addrInput = document.getElementById('address');
-      const aptInput = document.getElementById('apt');
-      addrInput.value = item.display_name;
-      // parse address details for city/state/postcode
-      const ad = item.address || {};
-      // create hidden fields or visible fields for city/state/postcode
-      // We'll append or set values to inputs with ids city, state, zip if present, otherwise create them
-      setOrCreateField('city', ad.city || ad.town || ad.village || ad.county || '');
-      setOrCreateField('state', ad.state || ad.region || '');
-      setOrCreateField('zip', ad.postcode || '');
-      // keep apt input for user to fill
-      document.getElementById('addressSuggestions').style.display = 'none';
-    }
+  const addrInput = document.getElementById('address');
+  addrInput.value = item.display_name || '';
+
+  const ad = item.address || {};
+
+  // Map common address fields to our inputs
+  const city = ad.city || ad.town || ad.village || ad.hamlet || ad.county || '';
+  const state = ad.state || ad.region || ad.state_district || '';
+  const postcode = ad.postcode || '';
+
+  // Ensure visible inputs exist and set values
+  const extras = document.getElementById('addressExtras');
+  if(extras) extras.style.display = 'flex';
+
+  const cityEl = document.getElementById('city');
+  const stateEl = document.getElementById('state');
+  const zipEl = document.getElementById('zip');
+
+  if(cityEl) cityEl.value = city;
+  if(stateEl) stateEl.value = state;
+  if(zipEl) zipEl.value = postcode;
+
+  // hide suggestions
+  const box = document.getElementById('addressSuggestions');
+  if(box) box.style.display = 'none';
+}
+
 
     function setOrCreateField(id, value){
       let el = document.getElementById(id);
@@ -668,6 +716,16 @@ const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encode
         document.querySelectorAll('#city,#state,#zip').forEach(el => { if(el) el.value = ''; });
         [first,last,phone,email].forEach(f => { if(f) clearError(f); });
         setTimeout(() => applyTranslations(), 40);
+
+
+        // inside reset handler
+const extras = document.getElementById('addressExtras');
+if(extras) extras.style.display = 'none';
+['city','state','zip'].forEach(id => {
+  const el = document.getElementById(id);
+  if(el) el.value = '';
+});
+
       });
 
       // Reapply translations on storage change
