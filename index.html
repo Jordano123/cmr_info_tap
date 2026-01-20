@@ -21,73 +21,62 @@
       font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
 
-    /* Make Service Times stand out */
+/* Service Times glass look with #800000 tint and white text */
 #serviceTimes {
-  background: linear-gradient(180deg, #fffefc 0%, #f7fbff 100%);
-  border: 2px solid rgba(59,130,246,0.12);
-  box-shadow: 0 10px 30px rgba(59,130,246,0.06);
-  padding:18px;
-  border-radius:12px;
-  transition:transform .12s ease, box-shadow .12s ease;
+  background: rgba(128, 0, 0, 0.12);        /* low-opacity maroon tint */
+  color: #ffffff;                           /* white text for contrast */
+  border: 1px solid rgba(128, 0, 0, 0.22);  /* slightly stronger maroon edge */
+  backdrop-filter: blur(6px) saturate(120%);/* glassy blur */
+  -webkit-backdrop-filter: blur(6px) saturate(120%);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  padding: 16px;
+  border-radius: 12px;
 }
 
-/* Slight lift on hover/tap */
-#serviceTimes:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(59,130,246,0.10); }
-
-/* Bigger title + icon */
+/* Heading with icon and white text */
 #serviceTimesHeading {
   display:flex;
   align-items:center;
   gap:10px;
   font-size:16px;
   font-weight:800;
+  color: #ffffff;
+  margin: 0 0 10px 0;
 }
+
+/* small icon block that matches glass theme */
 #serviceTimesHeading .svc-icon {
   width:36px;
   height:36px;
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  background:linear-gradient(135deg,#2563eb,#60a5fa);
+  background: rgba(255,255,255,0.08);
   color:#fff;
   border-radius:8px;
   font-weight:700;
   font-size:16px;
 }
 
-/* CTA button styling */
-#serviceTimes .svc-cta {
-  margin-top:12px;
-  display:inline-flex;
-  gap:8px;
-  align-items:center;
-  text-decoration:none;
-  padding:10px 14px;
-  border-radius:10px;
-  background:#2563eb;
-  color:#fff;
-  font-weight:700;
-  border:1px solid rgba(0,0,0,0.04);
-}
+/* Body text stays white but slightly muted for hierarchy */
+#serviceTimes .small-muted { color: rgba(255,255,255,0.85); }
 
-/* Secondary small action */
-#serviceTimes .svc-ghost {
-  margin-left:8px;
-  padding:8px 12px;
-  border-radius:10px;
-  background:#fff;
-  border:1px solid rgba(15,23,42,0.06);
-  color:#111827;
-  text-decoration:none;
-  font-weight:700;
-}
+/* Keep bold times very visible */
+#serviceTimes div[style*="font-weight:700"] { color: #ffffff; }
 
-/* Ensure good spacing on small screens */
+/* Remove any previously added CTA styles if present */
+#serviceTimes .svc-cta,
+#serviceTimes .svc-ghost,
+#serviceTimes .cta-row .svc-cta,
+#serviceTimes .cta-row .svc-ghost { display:none !important; }
+
+/* Responsive tweaks */
 @media (max-width:640px){
   #serviceTimes { padding:14px; }
   #serviceTimesHeading { font-size:15px; }
   #serviceTimesHeading .svc-icon { width:32px; height:32px; font-size:14px; }
 }
+
 
 
     html, body {
@@ -440,8 +429,9 @@
           </div>
         </section> -->
 
-        <section id="serviceTimes" class="card" aria-labelledby="serviceTimesHeading" style="margin-top:12px;">
-  <h3 id="serviceTimesHeading" style="margin:0 0 12px 0;">
+     <!-- Minimal Service Times content to use inside your existing #serviceTimes card -->
+<section id="serviceTimes" class="card" aria-labelledby="serviceTimesHeading" style="margin-top:12px;">
+  <h3 id="serviceTimesHeading">
     <span class="svc-icon" aria-hidden="true">⏰</span>
     Service Times
   </h3>
@@ -451,12 +441,8 @@
     <div style="font-weight:700; margin-top:6px;">Sunday • 11:00 AM</div>
     <div class="small-muted" style="margin-top:8px;">Childcare available at both services</div>
   </div>
-
-  <div class="cta-row" style="margin-top:12px;">
-    <a class="svc-cta" href="https://www.google.com/maps/search/?api=1&query=Christ+Missionary+Revival+Church" target="_blank" rel="noopener" aria-label="Get directions to church">Plan Your Visit</a>
-    <a class="svc-ghost" href="/service-details.html" aria-label="Service details">Service details</a>
-  </div>
 </section>
+
 
 
         <!-- placeholder for contact on mobile (JS will move the contact card here on mobile so it becomes last) -->
