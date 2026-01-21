@@ -103,6 +103,11 @@
       text-align:left;
     }
 
+    /* Language switcher (top-right floating inside page) */
+    .lang-switcher { position:fixed; top:12px; right:12px; display:flex; gap:8px; z-index:9999; }
+    .lang-btn { padding:8px 10px; border-radius:8px; border:1px solid rgba(15,23,42,0.06); background:#fff; cursor:pointer; font-weight:700; }
+    .lang-btn[aria-pressed="true"] { outline:2px solid rgba(43,108,176,0.18); box-shadow:0 4px 12px rgba(43,108,176,0.06); }
+
     /* Form layout */
     form { margin-top:6px; display:grid; gap:14px; }
     .row { display:flex; gap:12px; }
@@ -175,6 +180,7 @@
   </style>
 </head>
 <body>
+  <!-- Language switcher (persistent, forces translation) -->
   <div class="lang-switcher" id="langSwitcherConnect" aria-hidden="false"></div>
 
   <div class="wrap">
@@ -203,7 +209,7 @@
         <input type="hidden" name="form-name" value="connect" />
 
         <!-- Personal info -->
-        <div style="font-weight:700; margin-top:6px;">Tell us a little about you</div>
+        <div style="font-weight:700; margin-top:6px;" id="sectionPersonalTitle">Tell us a little about you</div>
 
         <div class="row">
           <div class="col">
@@ -251,7 +257,7 @@
         </div>
 
         <!-- Where do you live -->
-        <div style="font-weight:700; margin-top:6px;">Where do you live? (optional)</div>
+        <div style="font-weight:700; margin-top:6px;" id="sectionAddressTitle">Where do you live? (optional)</div>
 
         <div class="row">
           <div class="col">
@@ -283,7 +289,7 @@
         </div>
 
         <!-- Interests -->
-        <div style="font-weight:700; margin-top:6px;">I’m interested in… (optional)</div>
+        <div style="font-weight:700; margin-top:6px;" id="sectionInterestTitle">I’m interested in… (optional)</div>
         <div class="group" role="group" aria-labelledby="labelInterest">
           <label class="checkbox"><input type="checkbox" name="interest" value="becoming_member"> Becoming a member</label>
           <label class="checkbox"><input type="checkbox" name="interest" value="baptism"> Baptism</label>
@@ -366,29 +372,36 @@
   </div>
 
   <script>
-    // Set current year
-    document.getElementById('currentYear').textContent = new Date().getFullYear();
+    // Persisted language key
+    const LANG_KEY = 'cmr_lang';
 
-    // Translations (kept minimal for this page)
+    // Translations (English + French)
     const T = {
       en: {
         connectIntro: "Tell us a little about you",
         connectHeading: "CONNECT",
+        sectionPersonalTitle: "Tell us a little about you",
         labelFirst: "First Name",
         labelLast: "Last Name",
         labelPhone: "Phone Number",
         labelEmail: "Email (optional)",
-        labelAddress: "Address (optional)",
+        labelAddress: "Address",
         addressPlaceholder: "Start typing address...",
         addressHelp: "Select an address to auto-fill city, state and ZIP.",
+        sectionAddressTitle: "Where do you live? (optional)",
         labelStatus: "Where are you at with CMR?",
         statusHelp: "Choose the option that best describes you.",
-        labelGender: "Gender",
-        genderF: "F",
-        genderM: "M",
-        labelInterest: "I'm interested in",
-        addKidBtn: "Add child",
-        removeKidBtn: "Remove child",
+        sectionInterestTitle: "I’m interested in… (optional)",
+        interest: {
+          becoming_member: "Becoming a member",
+          baptism: "Baptism",
+          serving: "Serving",
+          small_group: "Joining a small group / crew",
+          prayer: "Prayer",
+          learning: "Learning more about Jesus",
+          volunteering: "Volunteering"
+        },
+        teamsTitle: "Which team interests you?",
         kidsHint: "You can add up to 5 children.",
         kidNamePlaceholder: "Child's full name",
         kidAgePlaceholder: "Date of birth",
@@ -403,20 +416,113 @@
           emailInvalid: "Enter a valid email address.",
           addressCityLabel: "City", addressStateLabel: "State", addressZipLabel: "ZIP",
         }
+      },
+      fr: {
+        connectIntro: "Parlez-nous un peu de vous",
+        connectHeading: "CONNECT",
+        sectionPersonalTitle: "Parlez-nous un peu de vous",
+        labelFirst: "Prénom",
+        labelLast: "Nom",
+        labelPhone: "Téléphone",
+        labelEmail: "E-mail (optionnel)",
+        labelAddress: "Adresse",
+        addressPlaceholder: "Commencez à taper l'adresse...",
+        addressHelp: "Sélectionnez une adresse pour remplir automatiquement la ville, l'état et le code postal.",
+        sectionAddressTitle: "Où habitez-vous ? (optionnel)",
+        labelStatus: "Où en êtes-vous avec CMR ?",
+        statusHelp: "Choisissez l'option qui vous décrit le mieux.",
+        sectionInterestTitle: "Je suis intéressé par… (optionnel)",
+        interest: {
+          becoming_member: "Devenir membre",
+          baptism: "Baptême",
+          serving: "Servir",
+          small_group: "Rejoindre un petit groupe / équipe",
+          prayer: "Prière",
+          learning: "En savoir plus sur Jésus",
+          volunteering: "Bénévolat"
+        },
+        teamsTitle: "Quelle équipe vous intéresse ?",
+        kidsHint: "Vous pouvez ajouter jusqu'à 5 enfants.",
+        kidNamePlaceholder: "Nom complet de l'enfant",
+        kidAgePlaceholder: "Date de naissance",
+        prayerSubtle: "Demande de prière",
+        prayerPlaceholder: "Partagez votre demande ici",
+        submitBtn: "Se connecter avec CMR",
+        resetBtn: "Effacer",
+        thankYou: "Merci — nous avons bien reçu votre message et nous vous contacterons bientôt.",
+        validation: {
+          required: "Ce champ est requis.",
+          phoneInvalid: "Entrez un numéro de téléphone valide.",
+          emailInvalid: "Entrez une adresse e-mail valide.",
+          addressCityLabel: "Ville", addressStateLabel: "État", addressZipLabel: "Code postal",
+        }
       }
     };
 
-    function getSavedLang(){ return localStorage.getItem('cmr_lang') || 'en'; }
+    // Language helpers
+    function getSavedLang(){ return localStorage.getItem(LANG_KEY) || 'en'; }
+    function setSavedLang(lang){
+      localStorage.setItem(LANG_KEY, lang);
+      applyTranslations();
+      updateLangButtons();
+    }
+
+    // Build language switcher UI
+    function buildLangSwitcher(){
+      const container = document.getElementById('langSwitcherConnect');
+      if(!container) return;
+      container.innerHTML = '';
+
+      const enBtn = document.createElement('button');
+      enBtn.className = 'lang-btn';
+      enBtn.id = 'lang-en';
+      enBtn.type = 'button';
+      enBtn.textContent = 'EN';
+      enBtn.setAttribute('aria-pressed', 'false');
+      enBtn.addEventListener('click', () => setSavedLang('en'));
+
+      const frBtn = document.createElement('button');
+      frBtn.className = 'lang-btn';
+      frBtn.id = 'lang-fr';
+      frBtn.type = 'button';
+      frBtn.textContent = 'FR';
+      frBtn.setAttribute('aria-pressed', 'false');
+      frBtn.addEventListener('click', () => setSavedLang('fr'));
+
+      container.appendChild(enBtn);
+      container.appendChild(frBtn);
+
+      updateLangButtons();
+    }
+
+    function updateLangButtons(){
+      const lang = getSavedLang();
+      const enBtn = document.getElementById('lang-en');
+      const frBtn = document.getElementById('lang-fr');
+      if(enBtn) enBtn.setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
+      if(frBtn) frBtn.setAttribute('aria-pressed', lang === 'fr' ? 'true' : 'false');
+    }
+
+    // Apply translations to all elements (force translate everything)
     function applyTranslations(){
       const lang = getSavedLang();
       const t = T[lang] || T.en;
+
       // header
       const intro = document.getElementById('connectIntro');
       if(intro) intro.textContent = t.connectIntro;
       const heading = document.getElementById('connectHeading');
       if(heading) heading.textContent = t.connectHeading;
 
-      // labels
+      // section titles
+      const secPersonal = document.getElementById('sectionPersonalTitle');
+      if(secPersonal) secPersonal.textContent = t.sectionPersonalTitle;
+      const secAddress = document.getElementById('sectionAddressTitle');
+      if(secAddress) secAddress.textContent = t.sectionAddressTitle;
+      const secInterest = document.getElementById('sectionInterestTitle');
+      if(secInterest) secInterest.textContent = t.sectionInterestTitle;
+
+      // labels and placeholders
       const setText = (id, text) => { const el = document.getElementById(id); if(el) el.textContent = text; };
       setText('labelFirst', t.labelFirst);
       setText('labelLast', t.labelLast);
@@ -434,25 +540,51 @@
       if(reset) reset.textContent = t.resetBtn;
       const kidsHint = document.getElementById('kidsHint');
       if(kidsHint) kidsHint.textContent = t.kidsHint;
+
+      // Interests: update visible labels (simple approach: replace text nodes)
+      const interestMap = t.interest || {};
+      document.querySelectorAll('input[name="interest"]').forEach((el) => {
+        const parent = el.parentElement;
+        if(!parent) return;
+        const val = el.value;
+        if(interestMap[val]) parent.childNodes.forEach(n => { if(n.nodeType === Node.TEXT_NODE) n.textContent = ' ' + interestMap[val]; });
+      });
+
+      // Teams title
+      const teamsTitle = document.querySelector('#teamsBlock > div');
+      if(teamsTitle) teamsTitle.textContent = t.teamsTitle || teamsTitle.textContent;
+
+      // Kids placeholders
+      document.querySelectorAll('#kidsList .kid-row').forEach((r, idx) => {
+        const name = r.querySelector('input[type="text"]');
+        const dob = r.querySelector('input[type="date"]');
+        if(name) name.placeholder = t.kidNamePlaceholder || name.placeholder;
+        if(dob) dob.placeholder = t.kidAgePlaceholder || dob.placeholder;
+      });
+
+      // Validation messages will use T[...] when needed
     }
 
-    applyTranslations();
+    // Set current year
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
 
     // Validation helpers
     function showError(el, message){
-      const err = document.getElementById((el && el.id ? el.id : el) + '-error');
+      const id = (typeof el === 'string') ? el : (el && el.id ? el.id : '');
+      const err = document.getElementById(id + '-error');
       if(err){ err.textContent = message; err.style.display = 'block'; err.setAttribute('aria-hidden','false'); }
-      if(el && el.classList) el.classList.add('input-invalid');
+      if(typeof el !== 'string' && el && el.classList) el.classList.add('input-invalid');
     }
     function clearError(el){
-      const err = document.getElementById((el && el.id ? el.id : el) + '-error');
+      const id = (typeof el === 'string') ? el : (el && el.id ? el.id : '');
+      const err = document.getElementById(id + '-error');
       if(err){ err.textContent = ''; err.style.display = 'none'; err.setAttribute('aria-hidden','true'); }
-      if(el && el.classList) el.classList.remove('input-invalid');
+      if(typeof el !== 'string' && el && el.classList) el.classList.remove('input-invalid');
     }
 
     function validateField(input){
       const lang = getSavedLang();
-      const v = T[lang].validation;
+      const v = (T[lang] && T[lang].validation) ? T[lang].validation : T.en.validation;
       if(!input) return true;
       const val = (input.value || '').trim();
       if(input.required && val === ''){
@@ -576,6 +708,10 @@
 
     // DOM wiring
     document.addEventListener('DOMContentLoaded', function(){
+      // Build language switcher and force translation
+      buildLangSwitcher();
+      applyTranslations();
+
       // basic elements
       const form = document.getElementById('connectForm');
       const first = document.getElementById('first');
@@ -608,7 +744,6 @@
       });
 
       // Teams conditional (when Serving selected)
-      const interestServing = document.getElementById('interestServing');
       const teamsBlock = document.getElementById('teamsBlock');
       function updateTeamsVisibility(){
         const servingChecked = document.querySelector('input[name="interest"][value="serving"]')?.checked;
@@ -661,12 +796,12 @@
 
         // status required (radio)
         const status = form.querySelector('input[name="status"]:checked');
-        if(!status){ showError('status', T.en.validation.required); ok = false; } else { clearError('status'); }
+        if(!status){ showError('status', T[getSavedLang()].validation.required); ok = false; } else { clearError('status'); }
 
         // consent required
         const consent = document.getElementById('consentContact');
         if(!consent || !consent.checked){
-          showError('consentContact', T.en.validation.required);
+          showError('consentContact', T[getSavedLang()].validation.required);
           ok = false;
         } else {
           clearError('consentContact');
@@ -678,8 +813,8 @@
           for(const r of rows){
             const name = r.querySelector('input[type="text"]');
             const dob = r.querySelector('input[type="date"]');
-            if(name && (!name.value || name.value.trim() === '')){ showError(name, T.en.validation.required); ok = false; }
-            if(dob && (!dob.value || dob.value.trim() === '')){ showError(dob, T.en.validation.required); ok = false; }
+            if(name && (!name.value || name.value.trim() === '')){ showError(name, T[getSavedLang()].validation.required); ok = false; }
+            if(dob && (!dob.value || dob.value.trim() === '')){ showError(dob, T[getSavedLang()].validation.required); ok = false; }
           }
         }
 
@@ -757,6 +892,15 @@
 
       // Ensure placeholders and dynamic labels reflect language
       updateKidsPlaceholders();
+      updateLangButtons();
+    });
+
+    // Listen for storage changes (sync across tabs)
+    window.addEventListener('storage', (e) => {
+      if(e.key === LANG_KEY) {
+        applyTranslations();
+        updateLangButtons();
+      }
     });
   </script>
 </body>
