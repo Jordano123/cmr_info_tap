@@ -15,33 +15,105 @@
       --card-bg:#ffffff;
       --page-bg:#f3f4f6;
       --radius:12px;
-      --max-width:900px;
+      --max-width:980px;
       --pad:20px;
       font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     }
 
     html,body{ margin:0; padding:0; background:var(--page-bg); color:#0f172a; -webkit-font-smoothing:antialiased; }
     .wrap{ width:100%; max-width:var(--max-width); margin:28px auto; padding:var(--pad); box-sizing:border-box; }
-    .card{ background:linear-gradient(180deg,#fff,#fbfbfb); border-radius:var(--radius); padding:22px; box-shadow:0 8px 30px rgba(15,23,42,0.06); border:1px solid rgba(15,23,42,0.04); }
-    .header{ display:flex; gap:14px; align-items:flex-start; margin-bottom:12px; }
-    .logo-stack { display:flex; flex-direction:column; align-items:center; gap:8px; flex:0 0 120px; }
-    .logo{ width:120px; height:120px; border-radius:12px; background:#ffffff; display:flex; align-items:center; justify-content:center; overflow:hidden; }
-    .logo img{ width:100%; height:100%; object-fit:contain; display:block; }
-    .title-block{ display:flex; flex-direction:column; gap:6px; align-items:flex-start; }
-    .intro-text { font-size:14px; color:var(--muted); text-align:center; max-width:220px; }
-    h1{ margin:0; font-size:20px; font-weight:800; color:#0f172a; text-transform:none; text-align:center; }
-    .subtitle{ margin:0; color:var(--muted); font-size:14px; }
+    .card{ background:linear-gradient(180deg,#fff,#fbfbfb); border-radius:var(--radius); padding:22px; box-shadow:0 8px 30px rgba(15,23,42,0.06); border:1px solid rgba(15,23,42,0.04); box-sizing:border-box; overflow:hidden; }
 
-    form { margin-top:14px; display:grid; gap:12px; }
+    /* Header layout: left stacked logo + title, right empty for balance on wide screens */
+    .header {
+      display:flex;
+      gap:18px;
+      align-items:flex-start;
+      margin-bottom:16px;
+      flex-wrap:wrap;
+    }
+
+    .header-left {
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      align-items:flex-start;
+      min-width:220px;
+      box-sizing:border-box;
+    }
+
+    /* Code-based logo (top-left) */
+    .code-logo-wrapper {
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      width:100%;
+    }
+
+    .code-logo-box {
+      width:110px;
+      height:52px;
+      background:#071022;
+      border-radius:12px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:2px 8px;
+      box-sizing:border-box;
+      box-shadow:0 6px 18px rgba(0,0,0,0.12);
+    }
+
+    .code-logo-cmr {
+      font-family: "Montserrat", sans-serif;
+      font-weight:900;
+      font-size:20px;
+      color:#ffffff;
+      line-height:1;
+      display:inline-block;
+    }
+
+    .code-logo-hub {
+      font-family: "Montserrat", sans-serif;
+      font-weight:300;
+      font-size:20px;
+      margin-left:6px;
+      background:linear-gradient(90deg, #73b3cf 0%, #800000 60%, #ffffff 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      -webkit-text-fill-color:transparent;
+      display:inline-block;
+    }
+
+    /* Title below logo (left aligned on wide screens, centered on small screens) */
+    .connect-title {
+      margin:0;
+      font-family: "Montserrat", sans-serif;
+      font-weight:700;
+      font-size:20px;
+      line-height:1.15;
+      color:#0f172a;
+      text-align:left;
+    }
+
+    .connect-sub {
+      margin:0;
+      font-size:13px;
+      color:var(--muted);
+      text-align:left;
+    }
+
+    /* Form layout */
+    form { margin-top:6px; display:grid; gap:14px; }
     .row { display:flex; gap:12px; }
-    .col { flex:1; display:flex; flex-direction:column; gap:6px; }
+    .col { flex:1; display:flex; flex-direction:column; gap:8px; }
     label { font-weight:700; font-size:13px; color:#0f172a; }
-    input[type="text"], input[type="tel"], input[type="email"], textarea, select, input[type="number"] {
+    input[type="text"], input[type="tel"], input[type="email"], textarea, select, input[type="number"], input[type="date"] {
       padding:10px 12px; border-radius:10px; border:1px solid rgba(15,23,42,0.06); background:#fff; font-size:14px; color:#0f172a;
       box-sizing:border-box;
     }
-    textarea { min-height:220px; resize:vertical; width:100%; }
-    .large-textarea { min-height:260px; font-size:15px; padding:14px; }
+    textarea { min-height:160px; resize:vertical; width:100%; }
+    .large-textarea { min-height:200px; font-size:15px; padding:14px; }
 
     .small-muted{ font-size:13px; color:var(--muted); }
 
@@ -66,9 +138,6 @@
       font-weight:700;
     }
 
-    .lang-switcher { position:fixed; top:12px; right:12px; display:flex; gap:8px; z-index:9999; }
-    .lang-btn { padding:8px 10px; border-radius:8px; border:1px solid rgba(15,23,42,0.06); background:#fff; cursor:pointer; font-weight:700; }
-
     .address-row { display:flex; gap:8px; align-items:center; position:relative; }
     .suggestions { position:absolute; top:44px; left:0; right:0; background:#fff; border:1px solid rgba(15,23,42,0.08); border-radius:8px; max-height:220px; overflow:auto; z-index:40; box-shadow:0 8px 20px rgba(15,23,42,0.06); }
     .suggestion-item { padding:8px 10px; cursor:pointer; border-bottom:1px solid rgba(15,23,42,0.03); }
@@ -76,14 +145,33 @@
     .suggestion-item:hover { background:rgba(43,108,176,0.04); }
 
     .kids-block { margin-top:8px; padding:10px; border-radius:10px; background:linear-gradient(180deg,#fff,#fbfbfb); border:1px solid rgba(15,23,42,0.04); }
-    .kid-row { display:flex; gap:8px; align-items:center; margin-top:8px; }
+    .kid-row { display:flex; gap:8px; align-items:center; margin-top:8px; flex-wrap:wrap; }
     .kid-row input[type="text"], .kid-row input[type="number"], .kid-row select { padding:8px 10px; }
 
-    @media (max-width:640px){
+    .teams-block { margin-top:8px; padding:10px; border-radius:10px; background:linear-gradient(180deg,#fff,#fbfbfb); border:1px solid rgba(15,23,42,0.04); display:none; }
+
+    /* Footer placement handled outside .card in markup */
+
+    /* Responsive adjustments */
+    @media (max-width:720px){
+      .header { gap:12px; }
+      .header-left { min-width:0; width:100%; align-items:center; }
+      .code-logo-wrapper { justify-content:center; }
+      .connect-title, .connect-sub { text-align:center; }
       .row { flex-direction:column; }
-      .logo{ width:96px; height:96px; }
-      .logo-stack { flex:0 0 auto; }
+      .code-logo-box { width:96px; height:46px; padding:2px 6px; }
+      .code-logo-cmr, .code-logo-hub { font-size:18px; }
     }
+
+    @media (min-width:900px){
+      .header { align-items:flex-start; }
+      .header-left { align-items:flex-start; }
+      .connect-title { text-align:left; }
+      .connect-sub { text-align:left; }
+    }
+
+    /* small visual helpers */
+    .visually-hidden { position:absolute !important; height:1px; width:1px; overflow:hidden; clip:rect(1px,1px,1px,1px); white-space:nowrap; }
   </style>
 </head>
 <body>
@@ -91,45 +179,41 @@
 
   <div class="wrap">
     <div class="card" role="main" aria-labelledby="connectHeading">
+
       <div class="header">
-        <div class="logo-stack" aria-hidden="false" style="align-items:center; gap:6px;">
-  
-  <!-- NEW CODE-BASED LOGO -->
-  <div class="code-logo-box">
-    <span class="code-logo-cmr">CMR</span>
-    <span class="code-logo-hub">hub</span>
-  </div>
+        <div class="header-left">
+          <!-- Logo (top-left) -->
+          <div class="code-logo-wrapper" aria-hidden="false">
+            <div class="code-logo-box" role="img" aria-label="CMR hub logo">
+              <span class="code-logo-cmr">CMR</span>
+              <span class="code-logo-hub">hub</span>
+            </div>
+          </div>
 
-  <!-- Intro text below logo -->
-  <div class="title-block" style="align-items:center; margin-top:2px;">
-    <div class="intro-text" id="connectIntro">
-      Tell us about yourself and how you'd like to get involved.
-    </div>
-
-    <!-- Title below intro -->
-    <h1 id="connectHeading">Connect</h1>
-  </div>
-
-</div>
-
-
-        <div style="flex:1;">
-          <!-- optional right-side content left empty to keep layout balanced -->
+          <!-- Title below logo -->
+          <h1 id="connectHeading" class="connect-title">CONNECT</h1>
+          <div class="connect-sub" id="connectIntro">Tell us a little about you</div>
         </div>
+
+        <!-- right side left intentionally empty for balance on wide screens -->
+        <div style="flex:1;"></div>
       </div>
 
       <form id="connectForm" name="connect" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
         <input type="hidden" name="form-name" value="connect" />
 
+        <!-- Personal info -->
+        <div style="font-weight:700; margin-top:6px;">Tell us a little about you</div>
+
         <div class="row">
           <div class="col">
-            <label for="first" id="labelFirst">First name</label>
+            <label for="first" id="labelFirst">First Name</label>
             <input id="first" name="first" type="text" required aria-required="true" />
             <div class="field-error" id="first-error" aria-hidden="true"></div>
           </div>
 
           <div class="col">
-            <label for="last" id="labelLast">Last name</label>
+            <label for="last" id="labelLast">Last Name</label>
             <input id="last" name="last" type="text" required aria-required="true" />
             <div class="field-error" id="last-error" aria-hidden="true"></div>
           </div>
@@ -137,7 +221,7 @@
 
         <div class="row">
           <div class="col">
-            <label for="phone" id="labelPhone">Phone</label>
+            <label for="phone" id="labelPhone">Phone Number</label>
             <input id="phone" name="phone" type="tel" required aria-required="true" />
             <div class="field-error" id="phone-error" aria-hidden="true"></div>
           </div>
@@ -151,75 +235,121 @@
 
         <div class="row">
           <div class="col">
-            <label for="address" id="labelAddress">Address (optional)</label>
+            <label for="gender" id="labelGender">Gender (optional)</label>
+            <select id="gender" name="gender" aria-describedby="genderHelp">
+              <option value="">Prefer not to say</option>
+              <option value="F">F</option>
+              <option value="M">M</option>
+            </select>
+            <div id="genderHelp" class="small-muted">Optional</div>
+          </div>
+
+          <div class="col">
+            <label for="dob" id="labelDob">Date of Birth (optional)</label>
+            <input id="dob" name="dob" type="date" />
+          </div>
+        </div>
+
+        <!-- Where do you live -->
+        <div style="font-weight:700; margin-top:6px;">Where do you live? (optional)</div>
+
+        <div class="row">
+          <div class="col">
+            <label for="address" id="labelAddress">Address</label>
             <div class="address-row">
               <input id="address" name="address" type="text" placeholder="Start typing address..." aria-describedby="addressHelp" autocomplete="off" />
               <input id="apt" name="apt" type="text" placeholder="Apt / Bldg" style="width:140px;" />
               <div class="suggestions" id="addressSuggestions" style="display:none;"></div>
             </div>
-            
             <div id="addressHelp" class="small-muted">Select an address to auto-fill city, state and ZIP.</div>
+
+            <div id="addressExtras" style="display:none; width:100%; margin-top:8px; gap:8px; display:flex;">
+              <input id="city" name="city" type="text" placeholder="City" style="flex:1;" />
+              <input id="state" name="state" type="text" placeholder="State" style="width:140px;" />
+              <input id="zip" name="zip" type="text" placeholder="ZIP" style="width:120px;" />
+            </div>
           </div>
-
-          <!-- Add after <input id="apt"...> -->
-<div id="addressExtras" style="display:none; width:100%; margin-top:8px; gap:8px; display:flex;">
-  <input id="city" name="city" type="text" placeholder="" style="flex:1;" />
-  <input id="state" name="state" type="text" placeholder="" style="width:140px;" />
-  <input id="zip" name="zip" type="text" placeholder="" style="width:120px;" />
-</div>
-
 
           <div class="col">
-            <label for="status" id="labelStatus">Status</label>
-            <select id="status" name="status" aria-describedby="statusHelp"></select>
-            <div id="statusHelp" class="small-muted">Choose the option that best describes you.</div>
-
-            <div style="margin-top:10px;">
-              <label id="labelGender">Gender</label>
-              <div class="group" role="radiogroup" aria-labelledby="labelGender" style="margin-top:8px;">
-                <label class="radio"><input type="radio" name="gender" value="F" checked> <span id="genderF">F</span></label>
-                <label class="radio"><input type="radio" name="gender" value="M"> <span id="genderM">M</span></label>
-              </div>
+            <label id="labelStatus">Where are you at with CMR? (required)</label>
+            <div class="group" role="radiogroup" aria-labelledby="labelStatus" style="margin-top:8px;">
+              <label class="radio"><input type="radio" name="status" value="first_visit" required checked> First-time guest</label>
+              <label class="radio"><input type="radio" name="status" value="second_visit"> Second-time guest</label>
+              <label class="radio"><input type="radio" name="status" value="regular"> Regular attendee</label>
+              <label class="radio"><input type="radio" name="status" value="member"> Member</label>
             </div>
+            <div class="field-error" id="status-error" aria-hidden="true"></div>
           </div>
         </div>
 
+        <!-- Interests -->
+        <div style="font-weight:700; margin-top:6px;">I’m interested in… (optional)</div>
+        <div class="group" role="group" aria-labelledby="labelInterest">
+          <label class="checkbox"><input type="checkbox" name="interest" value="becoming_member"> Becoming a member</label>
+          <label class="checkbox"><input type="checkbox" name="interest" value="baptism"> Baptism</label>
+          <label class="checkbox"><input type="checkbox" name="interest" value="serving" id="interestServing"> Serving</label>
+          <label class="checkbox"><input type="checkbox" name="interest" value="small_group"> Joining a small group / crew</label>
+          <label class="checkbox"><input type="checkbox" name="interest" value="prayer"> Prayer</label>
+          <label class="checkbox"><input type="checkbox" name="interest" value="learning"> Learning more about Jesus</label>
+          <label class="checkbox"><input type="checkbox" name="interest" value="volunteering"> Volunteering</label>
+        </div>
+
+        <!-- Conditional: Which team interests you? (shows when Serving selected) -->
+        <div id="teamsBlock" class="teams-block" aria-hidden="true">
+          <div style="font-weight:700;">Which team interests you?</div>
+          <div class="group" style="margin-top:8px;">
+            <label class="checkbox"><input type="checkbox" name="team" value="production"> Production / Media</label>
+            <label class="checkbox"><input type="checkbox" name="team" value="worship"> Worship / Band</label>
+            <label class="checkbox"><input type="checkbox" name="team" value="choir"> Choir</label>
+            <label class="checkbox"><input type="checkbox" name="team" value="kids"> Kids Ministry</label>
+            <label class="checkbox"><input type="checkbox" name="team" value="hospitality"> Hospitality / Welcome</label>
+            <label class="checkbox"><input type="checkbox" name="team" value="outreach"> Outreach</label>
+            <label class="checkbox"><input type="checkbox" name="team" value="admin"> Administration</label>
+          </div>
+        </div>
+
+        <!-- Children -->
+        <div style="font-weight:700; margin-top:6px;">Do you have children? (optional)</div>
+        <div class="group" role="radiogroup" aria-labelledby="labelKids" style="margin-top:8px;">
+          <label class="radio"><input type="radio" name="hasKids" value="no" checked> No</label>
+          <label class="radio"><input type="radio" name="hasKids" value="yes"> Yes</label>
+        </div>
+
+        <div id="kidsContainer" class="kids-block" style="display:none;">
+          <div style="font-weight:700;">How many children</div>
+          <div id="kidsList" aria-live="polite"></div>
+
+          <div style="margin-top:8px;">
+            <button type="button" class="btn-ghost" id="addKidBtn">Add child</button>
+            <button type="button" class="btn-ghost" id="removeKidBtn" style="display:none;">Remove child</button>
+          </div>
+          <div class="small-muted" style="margin-top:8px;" id="kidsHint">You can add up to 5 children.</div>
+        </div>
+
+        <!-- Prayer -->
+        <div style="font-weight:700; margin-top:6px;">How can we pray for you? (optional)</div>
         <div>
-          <label id="labelInterest">I'd like to learn</label>
-          <div class="group" role="group" aria-labelledby="labelInterest">
-            <label class="checkbox"><input type="checkbox" name="interest" value="baptism"> <span class="interestText" data-key="baptism">Baptism</span></label>
-            <label class="checkbox"><input type="checkbox" name="interest" value="serve"> <span class="interestText" data-key="serve">Serving</span></label>
-            <label class="checkbox"><input type="checkbox" name="interest" value="learn"> <span class="interestText" data-key="learn">Learn about CMR</span></label>
-            <label class="checkbox"><input type="checkbox" name="interest" value="follow"> <span class="interestText" data-key="follow">Talk about following Jesus</span></label>
-            <label class="checkbox"><input type="checkbox" name="interest" value="other"> <span class="interestText" data-key="other">Giving</span></label>
-          </div>
-        </div>
-
-        <div style="margin-top:12px;">
-          <label id="labelKids">Do you have kids?</label>
-          <div class="group" role="radiogroup" aria-labelledby="labelKids" style="margin-top:8px;">
-            <label class="radio"><input type="radio" name="hasKids" value="no" checked> <span id="kidsNoLabel">No</span></label>
-            <label class="radio"><input type="radio" name="hasKids" value="yes"> <span id="kidsYesLabel">Yes</span></label>
-          </div>
-
-          <div id="kidsContainer" class="kids-block" style="display:none;">
-            <div id="kidsList"></div>
-            <div style="margin-top:8px;">
-              <button type="button" class="btn-ghost" id="addKidBtn">Add child</button>
-              <button type="button" class="btn-ghost" id="removeKidBtn" style="display:none;">Remove child</button>
-            </div>
-            <div class="small-muted" style="margin-top:8px;" id="kidsHint">You can add up to 2 children.</div>
-          </div>
-        </div>
-
-        <div style="margin-top:12px;">
           <label id="labelPrayerSubtle" style="font-weight:600; color:var(--muted);">Prayer Request</label>
           <textarea id="prayer" name="prayer" class="large-textarea" placeholder="Share your request here"></textarea>
+          <div class="small-muted" style="margin-top:6px;">This will only be shared with our pastoral team.</div>
         </div>
 
+        <!-- Consent / Communication -->
+        <div style="margin-top:10px;">
+          <label style="font-weight:700;">Consent / Communication</label>
+          <div style="margin-top:8px;" class="group">
+            <label class="checkbox" style="width:100%;"><input type="checkbox" id="consentContact" name="consentContact" required> I agree to be contacted by CMR</label>
+          </div>
+          <div style="margin-top:8px;" class="group">
+            <label class="checkbox" style="width:100%;"><input type="checkbox" id="consentUpdates" name="consentUpdates"> I’d like to receive church updates</label>
+          </div>
+          <div class="field-error" id="consentContact-error" aria-hidden="true"></div>
+        </div>
+
+        <!-- Actions -->
         <div class="actions">
-          <button type="submit" class="btn" id="submitBtn">Submit</button>
-          <button type="reset" class="btn-ghost" id="resetBtn">Reset</button>
+          <button type="submit" class="btn" id="submitBtn">Connect with CMR</button>
+          <button type="reset" class="btn-ghost" id="resetBtn">Clear</button>
         </div>
 
         <div class="thankyou" id="thankyou" role="status" aria-live="polite">
@@ -227,197 +357,97 @@
         </div>
       </form>
     </div>
+
+    <!-- Footer must be outside .card and inside .wrap -->
+    <footer class="site-footer" role="contentinfo" style="margin-top:18px;">
+      <div>© <span id="currentYear"></span> Centre Missionnaire La Restauration. All rights reserved.</div>
+      <div style="margin-top:6px; color:var(--muted); font-size:12px;">Designed for the CMR community.</div>
+    </footer>
   </div>
 
   <script>
-    // Translations (English + French) - every visible string included
+    // Set current year
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    // Translations (kept minimal for this page)
     const T = {
       en: {
-        connectIntro: "Tell us about yourself and how you'd like to get involved.",
-        connectHeading: "Connect",
-        labelFirst: "First name",
-        labelLast: "Last name",
-        labelPhone: "Phone",
+        connectIntro: "Tell us a little about you",
+        connectHeading: "CONNECT",
+        labelFirst: "First Name",
+        labelLast: "Last Name",
+        labelPhone: "Phone Number",
         labelEmail: "Email (optional)",
         labelAddress: "Address (optional)",
         addressPlaceholder: "Start typing address...",
         addressHelp: "Select an address to auto-fill city, state and ZIP.",
-        labelStatus: "Status",
+        labelStatus: "Where are you at with CMR?",
         statusHelp: "Choose the option that best describes you.",
-        statusOptions: { first_visit: "First visit", second_visit: "Second visit", regular: "Regular attendee", member: "Member" },
         labelGender: "Gender",
         genderF: "F",
         genderM: "M",
-        labelInterest: "I'd like to learn",
-        interestOptions: { baptism: "Baptism", serve: "Serving", learn: "Learn about CMR", follow: "Talk about following Jesus", other: "Giving" },
-        labelKids: "Do you have kids?",
-        kidsYesLabel: "Yes",
-        kidsNoLabel: "No",
+        labelInterest: "I'm interested in",
         addKidBtn: "Add child",
         removeKidBtn: "Remove child",
-        kidsHint: "You can add up to 2 children.",
-        kidNamePlaceholder: "Name",
-        kidAgePlaceholder: "Age",
-        kidSexLabel: "Sex",
+        kidsHint: "You can add up to 5 children.",
+        kidNamePlaceholder: "Child's full name",
+        kidAgePlaceholder: "Date of birth",
         prayerSubtle: "Prayer Request",
         prayerPlaceholder: "Share your request here",
-        submitBtn: "Submit",
-        resetBtn: "Reset",
+        submitBtn: "Connect with CMR",
+        resetBtn: "Clear",
         thankYou: "Thank you — we received your submission and will get back to you soon.",
         validation: {
           required: "This field is required.",
           phoneInvalid: "Enter a valid phone number.",
           emailInvalid: "Enter a valid email address.",
-          addressCityLabel: "City", addressStateLabel: "State", addressZipLabel: "ZIP", addressCityPlaceholder: "City", addressStatePlaceholder: "State", addressZipPlaceholder: "ZIP",
-        }
-      },
-      fr: {
-        connectIntro: "Parlez-nous de vous et comment vous souhaitez vous impliquer.",
-        connectHeading: "Connect",
-        labelFirst: "Prénom",
-        labelLast: "Nom",
-        labelPhone: "Téléphone",
-        labelEmail: "E-mail (optionnel)",
-        labelAddress: "Adresse (optionnel)",
-        addressPlaceholder: "Commencez à taper l'adresse...",
-        addressHelp: "Sélectionnez une adresse pour remplir automatiquement la ville, l'état et le code postal.",
-        labelStatus: "Statut",
-        statusHelp: "Choisissez l'option qui vous décrit le mieux.",
-        statusOptions: { first_visit: "Première visite", second_visit: "Deuxième visite", regular: "Participant régulier", member: "Membre" },
-        labelGender: "Genre",
-        genderF: "F",
-        genderM: "M",
-        labelInterest: "Je suis intéressé par",
-        interestOptions: { baptism: "Baptême", serve: "Servir", learn: "En savoir plus sur CMR", follow: "Parler de suivre Jésus", other: "Donner" },
-        labelKids: "Avez-vous des enfants ?",
-        kidsYesLabel: "Oui",
-        kidsNoLabel: "Non",
-        addKidBtn: "Ajouter un enfant",
-        removeKidBtn: "Supprimer l'enfant",
-        kidsHint: "Vous pouvez ajouter jusqu'à 2 enfants.",
-        kidNamePlaceholder: "Nom",
-        kidAgePlaceholder: "Âge",
-        kidSexLabel: "Sexe",
-        prayerSubtle: "Demande de prière",
-        prayerPlaceholder: "Partagez votre demande ici",
-        submitBtn: "Soumettre",
-        resetBtn: "Réinitialiser",
-        thankYou: "Merci — nous avons reçu votre message et nous vous contacterons bientôt.",
-        validation: {
-          required: "Ce champ est requis.",
-          phoneInvalid: "Entrez un numéro de téléphone valide.",
-          emailInvalid: "Entrez une adresse e-mail valide.",
-          addressCityLabel: "Ville", addressStateLabel: "État", addressZipLabel: "Code postal", addressCityPlaceholder: "Ville", addressStatePlaceholder: "État", addressZipPlaceholder: "Code postal",
+          addressCityLabel: "City", addressStateLabel: "State", addressZipLabel: "ZIP",
         }
       }
     };
 
     function getSavedLang(){ return localStorage.getItem('cmr_lang') || 'en'; }
-    function setSavedLang(lang){ localStorage.setItem('cmr_lang', lang); applyTranslations(); }
-
-    // Build language switcher
-    function buildLangSwitcher(){
-      const container = document.getElementById('langSwitcherConnect');
-      if(!container) return;
-      container.innerHTML = '';
-      const enBtn = document.createElement('button'); enBtn.className='lang-btn'; enBtn.textContent='EN'; enBtn.onclick = ()=> setSavedLang('en');
-      const frBtn = document.createElement('button'); frBtn.className='lang-btn'; frBtn.textContent='FR'; frBtn.onclick = ()=> setSavedLang('fr');
-      container.appendChild(enBtn); container.appendChild(frBtn);
-    }
-
-    // Apply translations to all elements (force translate everything)
     function applyTranslations(){
       const lang = getSavedLang();
       const t = T[lang] || T.en;
-
-      const setText = (id, value) => {
-        const el = document.getElementById(id);
-        if(!el || typeof value !== 'string') return;
-        el.textContent = value;
-      };
-
       // header
-      setText('connectIntro', t.connectIntro);
-      setText('connectHeading', t.connectHeading);
+      const intro = document.getElementById('connectIntro');
+      if(intro) intro.textContent = t.connectIntro;
+      const heading = document.getElementById('connectHeading');
+      if(heading) heading.textContent = t.connectHeading;
 
-      // basic labels
+      // labels
+      const setText = (id, text) => { const el = document.getElementById(id); if(el) el.textContent = text; };
       setText('labelFirst', t.labelFirst);
       setText('labelLast', t.labelLast);
       setText('labelPhone', t.labelPhone);
       setText('labelEmail', t.labelEmail);
       setText('labelAddress', t.labelAddress);
       const addr = document.getElementById('address');
-      if(addr) addr.placeholder = t.addressPlaceholder || '';
-      setText('addressHelp', t.addressHelp);
-
-      // status
-      setText('labelStatus', t.labelStatus);
-      setText('statusHelp', t.statusHelp);
-      const sel = document.getElementById('status');
-      if(sel){
-        sel.innerHTML = '';
-        for(const key of ['first_visit','second_visit','regular','member']){
-          const o = document.createElement('option');
-          o.value = key;
-          o.textContent = (t.statusOptions && t.statusOptions[key]) || key;
-          sel.appendChild(o);
-        }
-      }
-
-      // gender
-      setText('labelGender', t.labelGender);
-      setText('genderF', t.genderF);
-      setText('genderM', t.genderM);
-
-      // interest checkboxes
-      setText('labelInterest', t.labelInterest);
-      document.querySelectorAll('.interestText').forEach(el => {
-        const key = el.getAttribute('data-key');
-        el.textContent = (t.interestOptions && t.interestOptions[key]) || key;
-      });
-
-      // kids
-      setText('labelKids', t.labelKids);
-      setText('kidsYesLabel', t.kidsYesLabel);
-      setText('kidsNoLabel', t.kidsNoLabel);
-      setText('addKidBtn', t.addKidBtn);
-      setText('removeKidBtn', t.removeKidBtn);
-      setText('kidsHint', t.kidsHint);
-
-      // prayer
+      if(addr) addr.placeholder = t.addressPlaceholder;
       setText('labelPrayerSubtle', t.prayerSubtle);
       const prayer = document.getElementById('prayer');
-      if(prayer) prayer.placeholder = t.prayerPlaceholder || '';
-
-      // buttons and thank you
-      setText('submitBtn', t.submitBtn);
-      setText('resetBtn', t.resetBtn);
-      setText('thankyou', t.thankYou);
-
-      // kids placeholders if any exist
-      document.querySelectorAll('#kidsList .kid-row').forEach((r) => {
-        const name = r.querySelector('input[type="text"]');
-        const age = r.querySelector('input[type="number"]');
-        const sex = r.querySelector('select');
-        if(name) name.placeholder = t.kidNamePlaceholder || '';
-        if(age) age.placeholder = t.kidAgePlaceholder || '';
-        if(sex){
-          sex.innerHTML = '';
-          const optM = document.createElement('option'); optM.value='M'; optM.textContent = t.genderM || 'M';
-          const optF = document.createElement('option'); optF.value='F'; optF.textContent = t.genderF || 'F';
-          sex.appendChild(optM); sex.appendChild(optF);
-        }
-      });
+      if(prayer) prayer.placeholder = t.prayerPlaceholder;
+      const submit = document.getElementById('submitBtn');
+      if(submit) submit.textContent = t.submitBtn;
+      const reset = document.getElementById('resetBtn');
+      if(reset) reset.textContent = t.resetBtn;
+      const kidsHint = document.getElementById('kidsHint');
+      if(kidsHint) kidsHint.textContent = t.kidsHint;
     }
+
+    applyTranslations();
 
     // Validation helpers
     function showError(el, message){
-      const err = document.getElementById(el.id + '-error');
-      if(err){ err.textContent = message; err.style.display = 'block'; err.setAttribute('aria-hidden','false'); el.classList.add('input-invalid'); }
+      const err = document.getElementById((el && el.id ? el.id : el) + '-error');
+      if(err){ err.textContent = message; err.style.display = 'block'; err.setAttribute('aria-hidden','false'); }
+      if(el && el.classList) el.classList.add('input-invalid');
     }
     function clearError(el){
-      const err = document.getElementById(el.id + '-error');
-      if(err){ err.textContent = ''; err.style.display = 'none'; err.setAttribute('aria-hidden','true'); el.classList.remove('input-invalid'); }
+      const err = document.getElementById((el && el.id ? el.id : el) + '-error');
+      if(err){ err.textContent = ''; err.style.display = 'none'; err.setAttribute('aria-hidden','true'); }
+      if(el && el.classList) el.classList.remove('input-invalid');
     }
 
     function validateField(input){
@@ -441,13 +471,11 @@
       return true;
     }
 
-    // Address autocomplete using Nominatim with suggestion dropdown
+    // Address autocomplete using Nominatim (restricted to US)
     let addressTimer = null;
     async function fetchAddressSuggestions(q){
       if(!q) return [];
-  const viewbox = '-124.848974,49.384358,-66.885444,24.396308'; // left, top, right, bottom (use appropriate order for your endpoint)
-const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(q)}&addressdetails=1&limit=6&countrycodes=us`;
-
+      const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(q)}&addressdetails=1&limit=6&countrycodes=us`;
       try {
         const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
         if(!res.ok) return [];
@@ -468,62 +496,34 @@ const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encode
         div.className = 'suggestion-item';
         div.textContent = it.display_name;
         div.dataset.raw = JSON.stringify(it);
-        div.addEventListener('click', () => {
-          selectAddressItem(it);
-        });
+        div.addEventListener('click', () => selectAddressItem(it));
         box.appendChild(div);
       });
       box.style.display = 'block';
     }
 
-    // function selectAddressItem(item){
-    //   const addrInput = document.getElementById('address');
-    //   const aptInput = document.getElementById('apt');
-    //   addrInput.value = item.display_name;
-    //   // parse address details for city/state/postcode
-    //   const ad = item.address || {};
-    //   // create hidden fields or visible fields for city/state/postcode
-    //   // We'll append or set values to inputs with ids city, state, zip if present, otherwise create them
-    //   setOrCreateField('city', ad.city || ad.town || ad.village || ad.county || '');
-    //   setOrCreateField('state', ad.state || ad.region || '');
-    //   setOrCreateField('zip', ad.postcode || '');
-    //   // keep apt input for user to fill
-    //   document.getElementById('addressSuggestions').style.display = 'none';
-    // }
-
     function selectAddressItem(item){
-  const addrInput = document.getElementById('address');
-  addrInput.value = item.display_name || '';
-
-  const ad = item.address || {};
-
-  // Map common address fields to our inputs
-  const city = ad.city || ad.town || ad.village || ad.hamlet || ad.county || '';
-  const state = ad.state || ad.region || ad.state_district || '';
-  const postcode = ad.postcode || '';
-
-  // Ensure visible inputs exist and set values
-  const extras = document.getElementById('addressExtras');
-  if(extras) extras.style.display = 'flex';
-
-  const cityEl = document.getElementById('city');
-  const stateEl = document.getElementById('state');
-  const zipEl = document.getElementById('zip');
-
-  if(cityEl) cityEl.value = city;
-  if(stateEl) stateEl.value = state;
-  if(zipEl) zipEl.value = postcode;
-
-  // hide suggestions
-  const box = document.getElementById('addressSuggestions');
-  if(box) box.style.display = 'none';
-}
-
+      const addrInput = document.getElementById('address');
+      addrInput.value = item.display_name || '';
+      const ad = item.address || {};
+      const city = ad.city || ad.town || ad.village || ad.hamlet || ad.county || '';
+      const state = ad.state || ad.region || ad.state_district || '';
+      const postcode = ad.postcode || '';
+      const extras = document.getElementById('addressExtras');
+      if(extras) extras.style.display = 'flex';
+      const cityEl = document.getElementById('city');
+      const stateEl = document.getElementById('state');
+      const zipEl = document.getElementById('zip');
+      if(cityEl) cityEl.value = city;
+      if(stateEl) stateEl.value = state;
+      if(zipEl) zipEl.value = postcode;
+      const box = document.getElementById('addressSuggestions');
+      if(box) box.style.display = 'none';
+    }
 
     function setOrCreateField(id, value){
       let el = document.getElementById(id);
       if(!el){
-        // create a hidden input appended to the form
         el = document.createElement('input');
         el.type = 'hidden';
         el.id = id;
@@ -533,7 +533,7 @@ const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encode
       el.value = value || '';
     }
 
-    // Kids UI helpers (max 2)
+    // Kids UI helpers (max 5)
     function createKidRow(index){
       const row = document.createElement('div');
       row.className = 'kid-row';
@@ -542,84 +542,83 @@ const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encode
       const nameInput = document.createElement('input');
       nameInput.type = 'text';
       nameInput.name = `kid_name_${index}`;
-      nameInput.placeholder = T[getSavedLang()].kidNamePlaceholder || 'Name';
+      nameInput.placeholder = T[getSavedLang()].kidNamePlaceholder || "Child's full name";
+      nameInput.required = true;
       nameInput.style.flex = '1';
 
-      const ageInput = document.createElement('input');
-      ageInput.type = 'number';
-      ageInput.name = `kid_age_${index}`;
-      ageInput.placeholder = T[getSavedLang()].kidAgePlaceholder || 'Age';
-      ageInput.min = 0;
-      ageInput.max = 25;
-      ageInput.style.width = '90px';
+      const dobInput = document.createElement('input');
+      dobInput.type = 'date';
+      dobInput.name = `kid_dob_${index}`;
+      dobInput.required = true;
+      dobInput.style.width = '160px';
 
-      const sexSelect = document.createElement('select');
-      sexSelect.name = `kid_sex_${index}`;
-      sexSelect.style.width = '90px';
-      const optM = document.createElement('option'); optM.value='M'; optM.textContent = T[getSavedLang()].genderM || 'M';
-      const optF = document.createElement('option'); optF.value='F'; optF.textContent = T[getSavedLang()].genderF || 'F';
-      sexSelect.appendChild(optM); sexSelect.appendChild(optF);
+      const allergyInput = document.createElement('input');
+      allergyInput.type = 'text';
+      allergyInput.name = `kid_allergies_${index}`;
+      allergyInput.placeholder = 'Allergies / special needs (optional)';
+      allergyInput.style.flex = '1';
 
       row.appendChild(nameInput);
-      row.appendChild(ageInput);
-      row.appendChild(sexSelect);
+      row.appendChild(dobInput);
+      row.appendChild(allergyInput);
       return row;
     }
 
     function updateKidsPlaceholders(){
       const lang = getSavedLang();
-      document.querySelectorAll('#kidsList .kid-row').forEach(r => {
+      document.querySelectorAll('#kidsList .kid-row').forEach((r, idx) => {
         const name = r.querySelector('input[type="text"]');
-        const age = r.querySelector('input[type="number"]');
-        const sex = r.querySelector('select');
-        if(name) name.placeholder = T[lang].kidNamePlaceholder || '';
-        if(age) age.placeholder = T[lang].kidAgePlaceholder || '';
-        if(sex){
-          sex.innerHTML = '';
-          const optM = document.createElement('option'); optM.value='M'; optM.textContent = T[lang].genderM || 'M';
-          const optF = document.createElement('option'); optF.value='F'; optF.textContent = T[lang].genderF || 'F';
-          sex.appendChild(optM); sex.appendChild(optF);
-        }
+        const dob = r.querySelector('input[type="date"]');
+        if(name) name.placeholder = T[lang].kidNamePlaceholder || "Child's full name";
+        if(dob) dob.placeholder = T[lang].kidAgePlaceholder || 'Date of birth';
       });
     }
 
-    // Wire up DOM and events
+    // DOM wiring
     document.addEventListener('DOMContentLoaded', function(){
-      buildLangSwitcher();
-      applyTranslations();
-
+      // basic elements
       const form = document.getElementById('connectForm');
-      if(!form) return;
-
       const first = document.getElementById('first');
       const last = document.getElementById('last');
       const phone = document.getElementById('phone');
       const email = document.getElementById('email');
+      const addressInput = document.getElementById('address');
+      const suggestionsBox = document.getElementById('addressSuggestions');
 
       [first,last,phone,email].forEach(f => { if(!f) return; f.addEventListener('input', ()=> validateField(f)); f.addEventListener('blur', ()=> validateField(f)); });
 
       // Address autocomplete wiring
-      const addressInput = document.getElementById('address');
-      const suggestionsBox = document.getElementById('addressSuggestions');
-
-      addressInput.addEventListener('input', () => {
-        const q = addressInput.value.trim();
-        if(addressTimer) clearTimeout(addressTimer);
-        if(!q){ suggestionsBox.style.display = 'none'; return; }
-        addressTimer = setTimeout(async () => {
-          const items = await fetchAddressSuggestions(q);
-          renderSuggestions(items);
-        }, 300);
-      });
+      if(addressInput){
+        addressInput.addEventListener('input', () => {
+          const q = addressInput.value.trim();
+          if(addressTimer) clearTimeout(addressTimer);
+          if(!q){ suggestionsBox.style.display = 'none'; return; }
+          addressTimer = setTimeout(async () => {
+            const items = await fetchAddressSuggestions(q);
+            renderSuggestions(items);
+          }, 300);
+        });
+      }
 
       // close suggestions when clicking outside
       document.addEventListener('click', (e) => {
         if(!document.querySelector('.address-row')?.contains(e.target)) {
-          suggestionsBox.style.display = 'none';
+          if(suggestionsBox) suggestionsBox.style.display = 'none';
         }
       });
 
-      // Kids handling
+      // Teams conditional (when Serving selected)
+      const interestServing = document.getElementById('interestServing');
+      const teamsBlock = document.getElementById('teamsBlock');
+      function updateTeamsVisibility(){
+        const servingChecked = document.querySelector('input[name="interest"][value="serving"]')?.checked;
+        if(servingChecked){ teamsBlock.style.display = 'block'; teamsBlock.setAttribute('aria-hidden','false'); }
+        else { teamsBlock.style.display = 'none'; teamsBlock.setAttribute('aria-hidden','true'); }
+      }
+      document.querySelectorAll('input[name="interest"]').forEach(i => i.addEventListener('change', updateTeamsVisibility));
+      updateTeamsVisibility();
+
+      // Kids handling (max 5)
       const kidsRadios = Array.from(document.querySelectorAll('input[name="hasKids"]'));
       const kidsContainer = document.getElementById('kidsContainer');
       const kidsList = document.getElementById('kidsList');
@@ -627,7 +626,7 @@ const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encode
       const removeKidBtn = document.getElementById('removeKidBtn');
 
       function setKidsVisibility(){
-        const val = document.querySelector('input[name="hasKids"]:checked').value;
+        const val = document.querySelector('input[name="hasKids"]:checked')?.value;
         if(val === 'yes'){ kidsContainer.style.display = 'block'; } else { kidsContainer.style.display = 'none'; }
       }
       kidsRadios.forEach(r => r.addEventListener('change', setKidsVisibility));
@@ -636,11 +635,11 @@ const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encode
       function kidCount(){ return kidsList.querySelectorAll('.kid-row').length; }
 
       addKidBtn.addEventListener('click', () => {
-        if(kidCount() >= 2) return;
+        if(kidCount() >= 5) return;
         const idx = kidCount() + 1;
         kidsList.appendChild(createKidRow(idx));
         if(kidCount() >= 1) removeKidBtn.style.display = 'inline-flex';
-        if(kidCount() >= 2) addKidBtn.style.display = 'none';
+        if(kidCount() >= 5) addKidBtn.style.display = 'none';
         updateKidsPlaceholders();
       });
 
@@ -648,16 +647,42 @@ const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encode
         const rows = kidsList.querySelectorAll('.kid-row');
         if(rows.length === 0) return;
         rows[rows.length - 1].remove();
-        if(kidCount() < 2) addKidBtn.style.display = 'inline-flex';
+        if(kidCount() < 5) addKidBtn.style.display = 'inline-flex';
         if(kidCount() === 0) removeKidBtn.style.display = 'none';
       });
 
       // Submit handler
       form.addEventListener('submit', async function(e){
         e.preventDefault();
+
         // validate required fields
         let ok = true;
         [first,last,phone].forEach(f => { if(f) ok = validateField(f) && ok; });
+
+        // status required (radio)
+        const status = form.querySelector('input[name="status"]:checked');
+        if(!status){ showError('status', T.en.validation.required); ok = false; } else { clearError('status'); }
+
+        // consent required
+        const consent = document.getElementById('consentContact');
+        if(!consent || !consent.checked){
+          showError('consentContact', T.en.validation.required);
+          ok = false;
+        } else {
+          clearError('consentContact');
+        }
+
+        // kids required fields if present
+        if(document.querySelector('input[name="hasKids"]:checked')?.value === 'yes'){
+          const rows = kidsList.querySelectorAll('.kid-row');
+          for(const r of rows){
+            const name = r.querySelector('input[type="text"]');
+            const dob = r.querySelector('input[type="date"]');
+            if(name && (!name.value || name.value.trim() === '')){ showError(name, T.en.validation.required); ok = false; }
+            if(dob && (!dob.value || dob.value.trim() === '')){ showError(dob, T.en.validation.required); ok = false; }
+          }
+        }
+
         if(!ok){
           const firstInvalid = form.querySelector('.input-invalid');
           if(firstInvalid) firstInvalid.focus();
@@ -666,23 +691,28 @@ const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encode
 
         // collect form data
         const fd = new FormData(form);
-        // interests
+
+        // interests (multiple)
         const interests = Array.from(form.querySelectorAll('input[name="interest"]:checked')).map(i => i.value);
         fd.delete('interest');
         interests.forEach(i => fd.append('interest', i));
+
+        // teams (if any)
+        const teams = Array.from(form.querySelectorAll('input[name="team"]:checked')).map(i => i.value);
+        teams.forEach(t => fd.append('team', t));
 
         // kids
         if(document.querySelector('input[name="hasKids"]:checked')?.value === 'yes'){
           const kids = Array.from(kidsList.querySelectorAll('.kid-row')).map((r, idx) => {
             const name = r.querySelector('input[type="text"]')?.value || '';
-            const age = r.querySelector('input[type="number"]')?.value || '';
-            const sex = r.querySelector('select')?.value || '';
-            return { name, age, sex };
+            const dob = r.querySelector('input[type="date"]')?.value || '';
+            const allergies = r.querySelector('input[type="text"]')?.value || '';
+            return { name, dob, allergies };
           });
           kids.forEach((k, i) => {
             fd.append(`kid_name_${i+1}`, k.name);
-            fd.append(`kid_age_${i+1}`, k.age);
-            fd.append(`kid_sex_${i+1}`, k.sex);
+            fd.append(`kid_dob_${i+1}`, k.dob);
+            fd.append(`kid_allergies_${i+1}`, k.allergies);
           });
         }
 
@@ -704,7 +734,11 @@ const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encode
         removeKidBtn.style.display = 'none';
         addKidBtn.style.display = 'inline-flex';
         setKidsVisibility();
+        updateTeamsVisibility();
         [first,last,phone,email].forEach(f => { if(f) clearError(f); });
+        document.querySelectorAll('#city,#state,#zip').forEach(el => { if(el) el.value = ''; });
+        const extras = document.getElementById('addressExtras');
+        if(extras) extras.style.display = 'none';
 
         setTimeout(()=>{ thank.style.display = 'none'; thank.setAttribute('aria-hidden','true'); }, 8000);
       });
@@ -716,21 +750,9 @@ const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encode
         document.querySelectorAll('#city,#state,#zip').forEach(el => { if(el) el.value = ''; });
         [first,last,phone,email].forEach(f => { if(f) clearError(f); });
         setTimeout(() => applyTranslations(), 40);
-
-
-        // inside reset handler
-const extras = document.getElementById('addressExtras');
-if(extras) extras.style.display = 'none';
-['city','state','zip'].forEach(id => {
-  const el = document.getElementById(id);
-  if(el) el.value = '';
-});
-
-      });
-
-      // Reapply translations on storage change
-      window.addEventListener('storage', (e) => {
-        if(e.key === 'cmr_lang') applyTranslations();
+        const extras = document.getElementById('addressExtras');
+        if(extras) extras.style.display = 'none';
+        updateTeamsVisibility();
       });
 
       // Ensure placeholders and dynamic labels reflect language
