@@ -21,64 +21,7 @@
       font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
 
-/* Service Times glass look with #800000 tint and white text */
-#serviceTimes {
-  background: rgba(128, 0, 0, 0.40);        /* low-opacity maroon tint */
-  color: #ffffff;                           /* white text for contrast */
-  border: 1px solid rgba(128, 0, 0, 0.15);  /* slightly stronger maroon edge */
-  backdrop-filter: blur(6px) saturate(120%);/* glassy blur */
-  -webkit-backdrop-filter: blur(6px) saturate(120%);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-  padding: 16px;
-  border-radius: 12px;
-}
-
-/* Heading with icon and white text */
-#serviceTimesHeading {
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-size:16px;
-  font-weight:800;
-  color: #ffffff;
-  margin: 0 0 10px 0;
-}
-
-/* small icon block that matches glass theme */
-#serviceTimesHeading .svc-icon {
-  width:36px;
-  height:36px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  background: rgba(255,255,255,0.08);
-  color:#fff;
-  border-radius:8px;
-  font-weight:700;
-  font-size:16px;
-}
-
-/* Body text stays white but slightly muted for hierarchy */
-#serviceTimes .small-muted { color: rgba(255,255,255,0.85); }
-
-/* Keep bold times very visible */
-#serviceTimes div[style*="font-weight:700"] { color: #ffffff; }
-
-/* Remove any previously added CTA styles if present */
-#serviceTimes .svc-cta,
-#serviceTimes .svc-ghost,
-#serviceTimes .cta-row .svc-cta,
-#serviceTimes .cta-row .svc-ghost { display:none !important; }
-
-/* Responsive tweaks */
-@media (max-width:640px){
-  #serviceTimes { padding:14px; }
-  #serviceTimesHeading { font-size:15px; }
-  #serviceTimesHeading .svc-icon { width:32px; height:32px; font-size:14px; }
-}
-
-
-
+    /* Ensure page-root fills viewport and footer stays at bottom */
     html, body {
       margin: 0;
       padding: 0;
@@ -93,7 +36,16 @@
     }
     *, *::before, *::after { box-sizing: inherit; }
 
+    .page-root {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Make the main content grow so footer is pushed down */
     .wrap {
+      flex: 1 1 auto;
+      display: block;
       width: 100%;
       max-width: var(--max-width);
       margin-left: auto;
@@ -113,6 +65,13 @@
       }
     }
 
+    /* Keep desktop centering behavior but apply to page-root */
+    @media (min-width:981px) {
+      .page-root { display:flex; justify-content:center; }
+      .wrap { box-shadow: 0 8px 30px rgba(2,6,23,0.04); border-radius:12px; background:transparent; }
+    }
+
+    /* Layout grid */
     .layout-fixed{
       display:grid;
       grid-template-columns: 1fr 360px;
@@ -132,163 +91,138 @@
     }
 
     .card{ background:var(--card-bg); border-radius:var(--radius); padding:20px; box-shadow:0 6px 18px rgba(15,23,42,0.06); border:1px solid rgba(15,23,42,0.04); }
-    /* Stacked header: logo on top, centered text below */
-/* .hub-header--stacked {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:10px;
-  text-align:center;
-} */
 
-/* Ensure logo scales from the 512px source and stays centered */
-/* Header spacing & logo sizing tweaks */
-/* .hub-header--stacked {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:6px;               /* smaller gap between logo and title/subtitle */
-  /* text-align:center;
-} */ 
+    /* Service Times glass look with #800000 tint and white text */
+    #serviceTimes {
+      background: rgba(128, 0, 0, 0.40);
+      color: #ffffff;
+      border: 1px solid rgba(128, 0, 0, 0.15);
+      backdrop-filter: blur(6px) saturate(120%);
+      -webkit-backdrop-filter: blur(6px) saturate(120%);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      padding: 16px;
+      border-radius: 12px;
+    }
 
-/* Larger logo but still responsive and centered */
-/* Mobile: pull header to top and tighten spacing */
-/* Header spacing & logo sizing tweaks */
-/* HEADER WRAPPER — ensures centering on ALL devices */
+    /* Heading with icon and white text */
+    #serviceTimesHeading {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:16px;
+      font-weight:800;
+      color: #ffffff;
+      margin: 0 0 10px 0;
+    }
 
+    #serviceTimesHeading .svc-icon {
+      width:36px;
+      height:36px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(255,255,255,0.08);
+      color:#fff;
+      border-radius:8px;
+      font-weight:700;
+      font-size:16px;
+    }
 
+    #serviceTimes .small-muted { color: rgba(255,255,255,0.85); }
+    #serviceTimes div[style*="font-weight:700"] { color: #ffffff; }
+    #serviceTimes .svc-cta,
+    #serviceTimes .svc-ghost,
+    #serviceTimes .cta-row .svc-cta,
+    #serviceTimes .cta-row .svc-ghost { display:none !important; }
 
+    @media (max-width:640px){
+      #serviceTimes { padding:14px; }
+      #serviceTimesHeading { font-size:15px; }
+      #serviceTimesHeading .svc-icon { width:32px; height:32px; font-size:14px; }
+    }
 
-/* Font import (add once in head or main stylesheet) */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700;900&display=swap');
+    /* Header / logo */
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700;900&display=swap');
 
-/* Header wrapper: center everything and give a little top breathing room */
-.logo-stack {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 10px;            /* gap between logo and title block */
-  padding-top: 18px;    /* breathing room from top */
-  width: 100%;
-  box-sizing: border-box;
-  text-align: center;
-}
+    .logo-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
+      padding-top: 18px;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+    }
 
-/* wrapper to ensure perfect horizontal centering */
-.code-logo-wrapper {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
+    .code-logo-wrapper { width: 100%; display: flex; justify-content: center; }
+    .code-logo-box {
+      width: 110px;
+      height: 52px;
+      background: #071022;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px 8px;
+      box-sizing: border-box;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+      margin: 0 auto;
+    }
+    .code-logo-cmr {
+      font-family: "Montserrat", sans-serif;
+      font-weight: 900;
+      font-size: 20px;
+      line-height: 1;
+      color: #ffffff;
+      letter-spacing: 0.02em;
+      display: inline-block;
+    }
+    .code-logo-hub {
+      font-family: "Montserrat", sans-serif;
+      font-weight: 300;
+      font-size: 20px;
+      line-height: 1;
+      margin-left: 6px;
+      background: linear-gradient(90deg, #73b3cf 0%, #800000 60%, #ffffff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
 
-/* Compact logo box with reduced padding */
-.code-logo-box {
-  width: 110px;
-  height: 52px;
-  background: #071022;      /* deep navy/black */
-  border-radius: 12px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2px 8px;         /* reduced top/bottom and left/right padding */
-  box-sizing: border-box;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-  margin: 0 auto;
-}
+    .title-block h1#connectHeading {
+      margin: 0;
+      font-family: "Montserrat", sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 1.15;
+      color: #0f172a;
+    }
+    .title-block .intro-text {
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--muted, #6b7280);
+      line-height: 1.2;
+    }
 
-/* CMR text (bold) */
-.code-logo-cmr {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 900;
-  font-size: 20px;
-  line-height: 1;
-  color: #ffffff;
-  letter-spacing: 0.02em;
-  display: inline-block;
-}
+    @media (max-width: 420px) {
+      .code-logo-box { width: 92px; height: 44px; padding: 2px 6px; }
+      .code-logo-cmr, .code-logo-hub { font-size: 16px; }
+      .title-block h1#connectHeading { font-size: 16px; }
+      .title-block .intro-text { font-size: 12px; margin-top: 5px; }
+      .logo-stack { padding-top: 12px; gap: 8px; }
+    }
 
-/* hub text: same font-size as CMR, visible gradient */
-.code-logo-hub {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 300;
-  font-size: 20px;   /* same size as CMR */
-  line-height: 1;
-  margin-left: 6px;
-  background: linear-gradient(90deg, #73b3cf 0%, #800000 60%, #ffffff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
-}
-
-/* Title (church name) — bold but not too large */
-.title-block h1#connectHeading {
-  margin: 0;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 700;
-  font-size: 18px;      /* bold but not too big */
-  line-height: 1.15;
-  color: #0f172a;
-}
-
-/* Subtext — small gap from title */
-.title-block .intro-text {
-  margin-top: 6px;      /* mini gap between title and subtext */
-  font-size: 13px;
-  color: var(--muted, #6b7280);
-  line-height: 1.2;
-}
-
-/* Slightly larger gap between logo and title-block than title/subtext gap */
-.logo-stack { gap: 12px; }
-
-/* Responsive: small phones and closed foldables */
-@media (max-width: 420px) {
-  .code-logo-box { width: 92px; height: 44px; padding: 2px 6px; }
-  .code-logo-cmr, .code-logo-hub { font-size: 16px; }
-  .title-block h1#connectHeading { font-size: 16px; }
-  .title-block .intro-text { font-size: 12px; margin-top: 5px; }
-  .logo-stack { padding-top: 12px; gap: 8px; }
-}
-
-/* Larger screens and opened foldables */
-@media (min-width: 900px) {
-  .code-logo-box { width: 140px; height: 64px; padding: 4px 12px; }
-  .code-logo-cmr, .code-logo-hub { font-size: 26px; }
-  .title-block h1#connectHeading { font-size: 20px; }
-  .title-block .intro-text { font-size: 14px; }
-  .logo-stack { padding-top: 22px; gap: 14px; }
-}
-
-
-/* Reduce gap between logo and title */
-.hub-header--stacked {
-  gap: 4px !important;
-  display:flex; 
-  flex-direction:column; 
-  align-items:center; 
-  text-align:center;
-}
-
-
-/* Keep title visible and centered; remove any old "CMR Hub" text via JS instead of deleting markup */
-.hub-title {
-  font-size:12px;
-  font-weight:700;
-  margin:0;
-  line-height:1.1;
-}
-
-/* Subtitle slightly closer to logo, but add a bit more space before the hub buttons */
-.hub-subtitle {
-  font-size:13px;
-  color:var(--muted);
-  margin:0;
-  margin-bottom:12px;    /* increases spacing between subtitle and the buttons below */
-}
-
+    @media (min-width: 900px) {
+      .code-logo-box { width: 140px; height: 64px; padding: 4px 12px; }
+      .code-logo-cmr, .code-logo-hub { font-size: 26px; }
+      .title-block h1#connectHeading { font-size: 20px; }
+      .title-block .intro-text { font-size: 14px; }
+      .logo-stack { padding-top: 22px; gap: 14px; }
+    }
 
     .hub-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
     @media(max-width:640px){ .hub-grid{ grid-template-columns:repeat(2,1fr); } }
@@ -322,7 +256,6 @@
 
     .address-row { display:flex; justify-content:space-between; align-items:center; gap:12px; }
 
-    /* Contact card styles */
     .contact-card { display:flex; flex-direction:column; gap:10px; border-radius:10px; padding:14px; background:#fff; border:1px solid rgba(15,23,42,0.04); box-shadow:0 6px 18px rgba(15,23,42,0.03); }
     .contact-card .contact-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
     .contact-card .contact-btn {
@@ -334,20 +267,13 @@
     .contact-card .contact-btn.map { background:linear-gradient(90deg,#b4822b,#b4822b); color:#fff; border:1px solid rgba(0,0,0,0.04); }
     .contact-card .contact-meta { color:var(--muted); font-size:13px; }
 
-    /* Sermon thumbnail */
     .video-thumb{position:relative;cursor:pointer;border-radius:10px;overflow:hidden;background:#000;}
     .video-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
     .play-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
     .play-button{width:72px;height:72px;border-radius:50%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;border:3px solid rgba(255,255,255,0.12);}
 
-    /* Prayer card */
     .prayer-card{display:flex;flex-direction:column;gap:10px;border-radius:10px;padding:14px;background:#fff;border:1px solid rgba(15,23,42,0.04);}
     .prayer-meta{color:var(--muted);font-size:13px;}
-
-    @media (min-width:981px) {
-      body { display:flex; justify-content:center; }
-      .wrap { box-shadow: 0 8px 30px rgba(2,6,23,0.04); border-radius:12px; background:transparent; }
-    }
 
     @media (max-width:420px){
       .wrap{ padding-left: calc(12px + env(safe-area-inset-left)); padding-right: calc(12px + env(safe-area-inset-right)); }
@@ -357,205 +283,157 @@
   </style>
 </head>
 <body>
-  <div class="lang-switcher" id="globalLangSwitcher" aria-hidden="false"></div>
+  <div class="page-root">
+    <div class="lang-switcher" id="globalLangSwitcher" aria-hidden="false"></div>
 
-  <div class="wrap" id="pageWrap">
-    <div class="layout-fixed" id="mainLayout">
+    <div class="wrap" id="pageWrap">
+      <div class="layout-fixed" id="mainLayout">
 
-      <!-- LEFT COLUMN: CMR Hub, Latest Sermon, Bible in a Year, Leaders, Contact (desktop placement) -->
-      <div class="left-col" id="leftColumn">
-        <!-- CMR HUB CARD -->
-        <div class="card" id="hubCard" aria-label="CMR Hub">
-          
-          <!-- <div class="hub-header">
-            <div class="hub-logo">
-              <img src="logo.png" alt="CMR logo" id="connectLogo">
+        <!-- LEFT COLUMN -->
+        <div class="left-col" id="leftColumn">
+          <!-- CMR HUB CARD -->
+          <div class="card" id="hubCard" aria-label="CMR Hub">
+            <div class="logo-stack" aria-hidden="false">
+              <div class="code-logo-wrapper">
+                <div class="code-logo-box" role="img" aria-label="CMR hub logo">
+                  <span class="code-logo-cmr">CMR</span>
+                  <span class="code-logo-hub">hub</span>
+                </div>
+              </div>
+
+              <div class="title-block">
+                <h1 id="connectHeading" data-i18n="hubTitle">Centre Missionnaire La Restauration</h1>
+                <div class="intro-text" id="connectIntro" data-i18n="hubSubtitle">One place for everything happening at CMR</div>
+              </div>
             </div>
-            <div style="flex:1;">
-              <h1 class="hub-title" id="hubTitle">CMR Hub</h1>
-              <p class="hub-subtitle" id="hubSubtitle">One place for everything happening at CMR.</p>
+
+            <div class="hub-grid" role="navigation" aria-label="Main actions">
+              <a class="hub-button" href="give.html" id="giveBtn" title="Give">
+                <div class="hub-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.8 4.6c-1.6-1.6-4.2-1.6-5.8 0L12 7.6 9 4.6C7.4 3 4.8 3 3.2 4.6 1.6 6.2 1.6 8.8 3.2 10.4L12 19.2l8.8-8.8c1.6-1.6 1.6-4.2 0-5.8z"/></svg></div>
+                <div><div class="hub-label" id="giveLabel" data-i18n="giveLabel">Give</div><div class="hub-sub" id="giveSub" data-i18n="giveSub">Support online</div></div>
+              </a>
+
+              <a class="hub-button" href="https://www.youtube.com/@CentreMissionnaireRestauration" id="sermonsBtn" title="Sermons" data-app-href="https://www.youtube.com/@CentreMissionnaireRestauration" data-android-intent="intent://www.youtube.com/@CentreMissionnaireRestauration#Intent;package=com.google.android.youtube;scheme=https;end">
+                <div class="hub-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M23 7L16 12 23 17 23 7zM1 5h14v14H1z"/></svg></div>
+                <div><div class="hub-label" id="sermonsLabel" data-i18n="sermonsLabel">Sermons</div><div class="hub-sub" id="sermonsSub" data-i18n="sermonsSub">Watch on YouTube</div></div>
+              </a>
+
+              <a class="hub-button" href="listen.html" id="listenBtn" title="Listen">
+                <div class="hub-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 1v22M4 7v10M20 7v10"/></svg></div>
+                <div><div class="hub-label" id="listenLabel" data-i18n="listenLabel">Listen</div><div class="hub-sub" id="listenSub" data-i18n="listenSub">Audio highlights</div></div>
+              </a>
+
+              <a class="hub-button" href="connect.html" id="connectBtn" title="Connect">
+                <div class="hub-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM8 11c1.657 0 3-1.343 3-3S9.657 5 8 5 5 6.343 5 8s1.343 3 3 3zM8 13c-2.667 0-8 1.333-8 4v2h16v-2c0-2.667-5.333-4-8-4zM16 13c-.667 0-2 0-2 1v3h6v-3c0-1-1.333-1-2-1z"/></svg></div>
+                <div><div class="hub-label" id="connectLabel" data-i18n="connectLabel">Connect</div><div class="hub-sub" id="connectSub" data-i18n="connectSub">Fill out the form</div></div>
+              </a>
+
+              <a class="hub-button" href="https://cmrestauration.org" id="visitBtn" title="Visit Website">
+                <div class="hub-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/></svg></div>
+                <div><div class="hub-label" id="visitLabel" data-i18n="visitLabel">Visit Website</div><div class="hub-sub" id="visitSub" data-i18n="visitSub">More info online</div></div>
+              </a>
+
+              <a class="hub-button" href="https://linktr.ee/cmrmediaconnect" id="followBtn" title="Follow Us">
+                <div class="hub-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 12h16M4 6h16M4 18h16"/></svg></div>
+                <div><div class="hub-label" id="followLabel" data-i18n="followLabel">Follow Us</div><div class="hub-sub" id="followSub" data-i18n="followSub">Social links</div></div>
+              </a>
             </div>
-          </div> -->
-         <div class="logo-stack" aria-hidden="false">
-  <div class="code-logo-wrapper">
-    <div class="code-logo-box" role="img" aria-label="CMR hub logo">
-      <span class="code-logo-cmr">CMR</span>
-      <span class="code-logo-hub">hub</span>
-    </div>
-  </div>
-
-  <div class="title-block">
-  <h1 id="connectHeading">Centre Missionnaire La Restauration</h1>
-  <div class="intro-text" id="connectIntro">One place for everything happening at CMR</div>
-</div>
-
-
-
-
-          <div class="hub-grid" role="navigation" aria-label="Main actions">
-            <a class="hub-button" href="give.html" id="giveBtn" title="Give">
-              <div class="hub-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.8 4.6c-1.6-1.6-4.2-1.6-5.8 0L12 7.6 9 4.6C7.4 3 4.8 3 3.2 4.6 1.6 6.2 1.6 8.8 3.2 10.4L12 19.2l8.8-8.8c1.6-1.6 1.6-4.2 0-5.8z"/></svg></div>
-              <div><div class="hub-label" id="giveLabel">Give</div><div class="hub-sub" id="giveSub">Support online</div></div>
-            </a>
-
-            <a class="hub-button" href="https://www.youtube.com/@CentreMissionnaireRestauration" id="sermonsBtn" title="Sermons" data-app-href="https://www.youtube.com/@CentreMissionnaireRestauration" data-android-intent="intent://www.youtube.com/@CentreMissionnaireRestauration#Intent;package=com.google.android.youtube;scheme=https;end">
-              <div class="hub-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M23 7L16 12 23 17 23 7zM1 5h14v14H1z"/></svg></div>
-              <div><div class="hub-label" id="sermonsLabel">Sermons</div><div class="hub-sub" id="sermonsSub">Watch on YouTube</div></div>
-            </a>
-
-            <a class="hub-button" href="listen.html" id="listenBtn" title="Listen">
-              <div class="hub-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 1v22M4 7v10M20 7v10"/></svg></div>
-              <div><div class="hub-label" id="listenLabel">Listen</div><div class="hub-sub" id="listenSub">Audio highlights</div></div>
-            </a>
-
-            <a class="hub-button" href="connect.html" id="connectBtn" title="Connect">
-              <div class="hub-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM8 11c1.657 0 3-1.343 3-3S9.657 5 8 5 5 6.343 5 8s1.343 3 3 3zM8 13c-2.667 0-8 1.333-8 4v2h16v-2c0-2.667-5.333-4-8-4zM16 13c-.667 0-2 0-2 1v3h6v-3c0-1-1.333-1-2-1z"/></svg></div>
-              <div><div class="hub-label" id="connectLabel">Connect</div><div class="hub-sub" id="connectSub">Fill out the form</div></div>
-            </a>
-
-            <a class="hub-button" href="https://cmrestauration.org" id="visitBtn" title="Visit Website">
-              <div class="hub-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/></svg></div>
-              <div><div class="hub-label" id="visitLabel">Visit Website</div><div class="hub-sub" id="visitSub">More info online</div></div>
-            </a>
-
-            <a class="hub-button" href="https://linktr.ee/cmrmediaconnect" id="followBtn" title="Follow Us">
-              <div class="hub-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 12h16M4 6h16M4 18h16"/></svg></div>
-              <div><div class="hub-label" id="followLabel">Follow Us</div><div class="hub-sub" id="followSub">Social links</div></div>
-            </a>
           </div>
+
+          <!-- LATEST SERMON -->
+          <section id="latestSermonCard" class="card" aria-labelledby="latestSermonHeading">
+            <h3 id="latestSermonHeading" style="margin:0 0 12px 0;" data-i18n="latestSermonHeading">Latest Sermon</h3>
+
+            <div id="sermonVideoWrap" style="width:100%; aspect-ratio:16/9; background:#000; border-radius:10px; overflow:hidden;">
+              <div style="display:flex;align-items:center;justify-content:center;color:#fff;">Loading latest sermon…</div>
+            </div>
+
+            <div id="sermonMeta" style="margin-top:10px;">
+              <div id="sermonTitle" style="font-weight:700; font-size:16px;"></div>
+              <div id="sermonDetails" style="color:#6b7280; font-size:13px; margin-top:4px;"></div>
+            </div>
+
+            <div id="sermonActions" style="margin-top:10px; display:flex; gap:8px; align-items:center;">
+              <button id="shareSermonBtn" class="btn btn-primary" aria-label="Share sermon">Share</button>
+              <button id="copySermonLinkBtn" class="btn btn-primary" aria-label="Copy link">Copy link</button>
+              <a id="openSermonOnYT" class="btn btn-youtube" target="_blank" rel="noopener" aria-label="Open on YouTube">Open on YouTube</a>
+            </div>
+          </section>
+
+          <!-- BIBLE IN A YEAR -->
+          <div class="card" id="biblePlanCard" aria-labelledby="biblePlanHeading" style="margin-top:12px;">
+            <h3 id="biblePlanHeading" style="margin:0 0 12px 0;" data-i18n="biblePlanHeading">365 Bible</h3>
+
+            <div style="font-size:14px; color:#374151; margin-bottom:10px;">
+              <span id="bible_text" data-i18n="bible_text">Follow a one‑year chronological reading plan. Open today’s reading with one tap.</span>
+            </div>
+
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+              <a id="readTodayBtn" class="btn btn-primary"
+                 href="https://bibleinayearonline.com/chronological-bible-custom-reading-plan/"
+                 target="_blank" rel="noopener" aria-label="Open Bible in a Year reading plan">
+                Read Today
+              </a>
+
+              <button id="shareTodayBtn" class="btn btn-ghost" aria-label="Share today's reading">
+                Share Today
+              </button>
+
+              <div id="biblePlanStatus" class="small-muted" style="margin-left:6px;"></div>
+            </div>
+          </div>
+
+          <!-- LEADERS -->
+          <section id="leadersSection" class="card" aria-labelledby="leadersHeading" style="margin-top:12px;">
+            <h3 id="leadersHeading" style="margin:0 0 12px 0;">Leaders</h3>
+            <div id="leadersGrid" class="leaders-grid" aria-live="polite">
+              <div class="small-muted">Loading leaders…</div>
+            </div>
+          </section>
         </div>
 
-        <!-- LATEST SERMON -->
-        <section id="latestSermonCard" class="card" aria-labelledby="latestSermonHeading">
-          <h3 id="latestSermonHeading" style="margin:0 0 12px 0;">Latest Sermon</h3>
-
-          <div id="sermonVideoWrap" style="width:100%; aspect-ratio:16/9; background:#000; border-radius:10px; overflow:hidden;">
-            <div style="display:flex;align-items:center;justify-content:center;color:#fff;">Loading latest sermon…</div>
+        <!-- RIGHT COLUMN -->
+        <aside class="right-col" id="rightColumn" aria-label="Right column">
+          <div class="card" id="announcementsCardPrimary" aria-live="polite" data-accent="true">
+            <h3 id="announcementsTitle" style="margin:0 0 12px 0;" data-i18n="announcements">Announcements</h3>
+            <div id="announcementContainer"></div>
           </div>
 
-          <div id="sermonMeta" style="margin-top:10px;">
-            <div id="sermonTitle" style="font-weight:700; font-size:16px;"></div>
-            <div id="sermonDetails" style="color:#6b7280; font-size:13px; margin-top:4px;"></div>
+          <div class="card" id="announcementsCard2" aria-live="polite">
+            <h3 style="margin:0 0 12px 0;" data-i18n="more_announcements">More Announcements</h3>
+            <div id="announcementContainer2"></div>
           </div>
 
-          <div id="sermonActions" style="margin-top:10px; display:flex; gap:8px; align-items:center;">
-            <button id="shareSermonBtn" class="btn btn-primary" aria-label="Share sermon">Share</button>
-            <button id="copySermonLinkBtn" class="btn btn-primary" aria-label="Copy link">Copy link</button>
-            <a id="openSermonOnYT" class="btn btn-youtube" target="_blank" rel="noopener" aria-label="Open on YouTube">Open on YouTube</a>
+          <div id="upcomingEventCard" style="margin-top:0;"></div>
+
+          <section id="serviceTimes" class="card" aria-labelledby="serviceTimesHeading" style="margin-top:12px;">
+            <h3 id="serviceTimesHeading" data-i18n="serviceTimesHeading"><span class="svc-icon" aria-hidden="true">⏰</span>Service Times</h3>
+
+            <div id="serviceTimesList">
+              <div id="serviceTime1" data-i18n="serviceTime1" style="font-weight:700;">Friday • 7:00 PM</div>
+              <div id="serviceTime2" data-i18n="serviceTime2" style="font-weight:700; margin-top:6px;">Sunday • 10:00 AM</div>
+              <div id="serviceTimesNote" class="small-muted" data-i18n="serviceTimesNote" style="margin-top:8px;">Childcare available at both services</div>
+            </div>
+          </section>
+
+          <div id="contactPlaceholder"></div>
+
+          <div class="card" id="announcementsCard3" aria-live="polite" style="display:none; margin-top:12px;">
+            <h3 style="margin:0 0 12px 0;" data-i18n="more">More</h3>
+            <div id="announcementContainer3"></div>
           </div>
-        </section>
-
-        <!-- BIBLE IN A YEAR (left column) -->
-        <div class="card" id="biblePlanCard" aria-labelledby="biblePlanHeading" style="margin-top:12px;">
-          <h3 id="biblePlanHeading" style="margin:0 0 12px 0;">365 Bible</h3>
-
-          <div style="font-size:14px; color:#374151; margin-bottom:10px;">
-            <span id="bible_text">Follow a one‑year chronological reading plan. Open today’s reading with one tap.</span>
-          </div>
-
-          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-            <a id="readTodayBtn" class="btn btn-primary"
-               href="https://bibleinayearonline.com/chronological-bible-custom-reading-plan/"
-               target="_blank" rel="noopener" aria-label="Open Bible in a Year reading plan">
-              Read Today
-            </a>
-
-            <button id="shareTodayBtn" class="btn btn-ghost" aria-label="Share today's reading">
-              Share Today
-            </button>
-
-            <div id="biblePlanStatus" class="small-muted" style="margin-left:6px;"></div>
-          </div>
-        </div>
-
-        <!-- LEADERS -->
-        <section id="leadersSection" class="card" aria-labelledby="leadersHeading" style="margin-top:12px;">
-          <h3 id="leadersHeading" style="margin:0 0 12px 0;">Leaders</h3>
-          <div id="leadersGrid" class="leaders-grid" aria-live="polite">
-            <div class="small-muted">Loading leaders…</div>
-          </div>
-        </section>
+        </aside>
       </div>
-
-      <!-- RIGHT COLUMN: Announcements, Upcoming Event, Service Times -->
-      <aside class="right-col" id="rightColumn" aria-label="Right column">
-        <!-- ANNOUNCEMENTS (primary) -->
-        <div class="card" id="announcementsCardPrimary" aria-live="polite" data-accent="true">
-          <h3 id="announcementsTitle" style="margin:0 0 12px 0;">Announcements</h3>
-          <div id="announcementContainer"></div>
-        </div>
-
-        <!-- MORE ANNOUNCEMENTS (secondary) -->
-        <div class="card" id="announcementsCard2" aria-live="polite">
-          <h3 style="margin:0 0 12px 0;">More Announcements</h3>
-          <div id="announcementContainer2"></div>
-        </div>
-
-        <!-- UPCOMING EVENT -->
-        <div id="upcomingEventCard" style="margin-top:0;"></div>
-
-        <!-- SERVICE TIMES -->
-        <!-- <section id="serviceTimes" class="card" aria-labelledby="serviceTimesHeading" style="margin-top:12px;">
-          <h3 id="serviceTimesHeading" style="margin:0 0 12px 0;">Service Times</h3>
-          <div>
-            <div style="font-weight:700;">Sunday • 9:00 AM</div>
-            <div style="font-weight:700; margin-top:6px;">Sunday • 11:00 AM</div>
-            <div class="small-muted" style="margin-top:8px;">Childcare available at both services</div>
-          </div>
-        </section> -->
-
-     <!-- Minimal Service Times content to use inside your existing #serviceTimes card -->
-<!-- <section id="serviceTimes" class="card" aria-labelledby="serviceTimesHeading" style="margin-top:12px;">
-  <h3 id="serviceTimesHeading">
-    <span class="svc-icon" aria-hidden="true">⏰</span>
-    Service Times
-  </h3>
-
-  <div>
-    <div style="font-weight:700;">Friday • 7:00 PM</div>
-    <div style="font-weight:700; margin-top:6px;">Sunday • 10:00 AM</div>
-    <div class="small-muted" style="margin-top:8px;">Childcare available at both services</div>
-  </div>
-</section> -->
-
-
-        <section id="serviceTimes" class="card" aria-labelledby="serviceTimesHeading" style="margin-top:12px;">
-  <h3 id="serviceTimesHeading" data-i18n="serviceTimesHeading"><span class="svc-icon" aria-hidden="true">⏰</span>Service Times</h3>
-
-  <div id="serviceTimesList">
-    <div id="serviceTime1" data-i18n="serviceTime1" style="font-weight:700;">Friday • 7:00 PM</div>
-    <div id="serviceTime2" data-i18n="serviceTime2" style="font-weight:700; margin-top:6px;">Sunday • 10:00 AM</div>
-    <div id="serviceTimesNote" class="small-muted" data-i18n="serviceTimesNote" style="margin-top:8px;">Childcare available at both services</div>
-  </div>
-
-  <!-- optional actions (kept hidden if you don't want buttons) -->
-  <!-- <div id="serviceTimesActions" class="cta-row" style="margin-top:12px;">
-    <a id="serviceTimesPrimaryBtn" class="svc-cta" href="#" data-i18n="serviceTimesPrimaryBtn" style="display:none;">Get Directions</a>
-    <a id="serviceTimesSecondaryBtn" class="svc-ghost" href="#" data-i18n="serviceTimesSecondaryBtn" style="display:none;">Service details</a>
-  </div> -->
-</section>
-
-
-
-        <!-- placeholder for contact on mobile (JS will move the contact card here on mobile so it becomes last) -->
-        <div id="contactPlaceholder"></div>
-
-        <!-- tertiary slot (hidden by default) -->
-        <div class="card" id="announcementsCard3" aria-live="polite" style="display:none; margin-top:12px;">
-          <h3 style="margin:0 0 12px 0;">More</h3>
-          <div id="announcementContainer3"></div>
-        </div>
-      </aside>
     </div>
-     <!-- </div> -->
-    
+
     <!-- Footer / Copyright -->
     <footer class="site-footer" role="contentinfo">
       <div>© <span id="currentYear"></span> Centre Missionnaire La Restauration. All rights reserved.</div>
       <div style="margin-top:6px; color:var(--muted); font-size:12px;">Designed for the CMR community.</div>
     </footer>
+  </div> <!-- /.page-root -->
 
-
+  <!-- SCRIPTS -->
   <script>
     // set copyright year
     document.getElementById('currentYear').textContent = new Date().getFullYear();
@@ -599,19 +477,11 @@
         prayerSub: "Share a request and we will pray for you",
         prayerBtn: "Request Prayer",
         latestSermonHeading: "Latest Sermon",
-        // sermonVideoWrap: "Loading latest sermon…",
-        // shareSermonBtn: "Share",
-        // copySermonLinkBtn: "Copy link",
-        // openSermonOnYT: "Open on YouTube",
-        // biblePlanHeading: "365 Bible",
         bible_text: "Follow a one‑year chronological reading plan. Open today’s reading with one tap.",
-        // shareTodayBtn: "Share";,
-        // readTodayBtn: "Read",
-      serviceTimesHeading: "Service Times", 
-      serviceTime1: "Friday • 7:00 PM", 
-      serviceTime2: "Sunday • 10:00 AM", 
-      serviceTimesNote: "Childcare available at both services",
-        
+        serviceTimesHeading: "Service Times",
+        serviceTime1: "Friday • 7:00 PM",
+        serviceTime2: "Sunday • 10:00 AM",
+        serviceTimesNote: "Childcare available at both services",
       },
       fr: {
         hubTitle: "Centre Missionnaire La Restauration",
@@ -645,17 +515,10 @@
         prayerSub: "Partagez une demande et nous prierons pour vous",
         prayerBtn: "Demander la prière",
         latestSermonHeading: "Dernier Sermon",
-        // sermonVideoWrap: "Chargement du dernier sermon...",
-        // shareSermonBtn: "Partager",
-        // copySermonLinkBtn: "Copier le lien",
-        // openSermonOnYT: "Ouvrir sur Youtube",
-        // biblePlanHeading: "365 Bible",
         bible_text: "Un plan de lecture biblique sur un an. Ouvrez la lecture du jour en un geste.",
-        // shareTodayBtn: "Partager";,
-        // readTodayBtn: "Lire",
-          serviceTimesHeading: "Heure de Services", 
-       serviceTime1: "Vendredi • 19:00", 
-         serviceTime2: "Dimanche • 10:00",
+        serviceTimesHeading: "Heure de Services",
+        serviceTime1: "Vendredi • 19:00",
+        serviceTime2: "Dimanche • 10:00",
         serviceTimesNote: "Service de garde d'enfants offert lors de deux services.",
       }
     };
@@ -672,11 +535,14 @@
       container.appendChild(enBtn); container.appendChild(frBtn);
     }
 
+    // applyTranslations updates known IDs and also any element with data-i18n
     function applyTranslations(){
       const lang = getSavedLang();
       try { document.documentElement.lang = lang; } catch(e){}
       const t = translations[lang] || translations.en;
       const safeSet = (id, text) => { const el = document.getElementById(id); if(el) el.textContent = text; };
+
+      // IDs you already use
       safeSet('hubTitle', t.hubTitle);
       safeSet('hubSubtitle', t.hubSubtitle);
       safeSet('giveLabel', t.giveLabel);
@@ -699,7 +565,6 @@
       const terH = document.querySelector('#announcementsCard3 h3');
       if(terH) terH.textContent = t.more;
 
-      // Contact translations (if contact card exists)
       const contactHeading = document.getElementById('contactHeading');
       if(contactHeading) contactHeading.textContent = t.contactHeading;
       const contactBtns = document.querySelectorAll('#contactCard .contact-btn');
@@ -711,19 +576,23 @@
       const contactMetaTitle = document.querySelector('#contactCard .contact-meta .meta-title');
       if(contactMetaTitle) contactMetaTitle.textContent = t.contactGetInTouch || 'Get in touch';
 
-      // Visit/address text inside contact (if present)
       const visitName = document.querySelector('#contactCard .visit-name');
       const visitAddr = document.querySelector('#contactCard .visit-addr');
       if(visitName) visitName.textContent = t.visitUsName || 'Christ Missionary Revival Church';
       if(visitAddr) visitAddr.textContent = t.visitUsAddress || '123 Church St, Fort Worth, TX';
 
-      // Prayer translations
       const prayerHeading = document.querySelector('#prayerCard #prayerHeading');
       if(prayerHeading) prayerHeading.textContent = t.prayerHeading;
       const prayerMeta = document.querySelector('#prayerCard .prayer-meta');
       if(prayerMeta) prayerMeta.textContent = t.prayerSub;
       const prayerBtn = document.querySelector('#prayerCard .prayer-btn');
       if(prayerBtn) prayerBtn.textContent = t.prayerBtn;
+
+      // Translate any element that uses data-i18n attribute
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if(key && t[key]) el.textContent = t[key];
+      });
     }
 
     // ---------- ANNOUNCEMENTS RENDERER ----------
@@ -762,7 +631,7 @@
 
       const ctaRow = document.createElement('div'); ctaRow.className = 'cta-row';
       const learn = document.createElement('a'); learn.className = 'btn btn-primary'; learn.href = data.learnMoreUrl || '#'; learn.target = '_blank'; learn.rel = 'noopener';
-      learn.textContent = translations[getSavedLang()].learn_more || 'Learn more';
+      learn.textContent = translations[getSavedLang()]?.learn_more || 'Learn more';
       ctaRow.appendChild(learn); wrapper.appendChild(ctaRow);
 
       containerEl.appendChild(wrapper);
@@ -999,13 +868,11 @@ END:VCALENDAR`;
 
     // ---------- CONTACT CARD + responsive placement (phone, address, email) ----------
     (function(){
-      // Config: update these values to your real contact info
       const CONTACT_PHONE = '+1-817-555-0123';
       const CONTACT_EMAIL = 'info@cmrestauration.org';
       const CONTACT_ADDRESS = '123 Church St, Fort Worth, TX';
       const MAP_QUERY = encodeURIComponent(CONTACT_ADDRESS);
 
-      // Create contact card element (id used for safe re-use)
       function createContactCard() {
         if (document.getElementById('contactCard')) return document.getElementById('contactCard');
 
@@ -1030,18 +897,14 @@ END:VCALENDAR`;
         return card;
       }
 
-      // Place contact below Leaders on desktop; on mobile place it after Service Times (so it's last)
       function repositionContact() {
         const desktop = window.innerWidth >= 981;
         const leadersSection = document.getElementById('leadersSection');
         const serviceTimes = document.getElementById('serviceTimes');
-        const rightColumn = document.getElementById('rightColumn');
-        const leftColumn = document.getElementById('leftColumn');
         const placeholder = document.getElementById('contactPlaceholder');
         const contactCard = createContactCard();
 
         if (desktop) {
-          // Insert contact after leadersSection in left column
           if (leadersSection && leadersSection.parentElement) {
             if (leadersSection.nextSibling !== contactCard) {
               if (contactCard.parentElement) contactCard.parentElement.removeChild(contactCard);
@@ -1049,14 +912,12 @@ END:VCALENDAR`;
             }
           }
         } else {
-          // Mobile: ensure contact is after serviceTimes (in right column) so it becomes last
           if (serviceTimes && serviceTimes.parentElement) {
             if (serviceTimes.nextSibling !== contactCard) {
               if (contactCard.parentElement) contactCard.parentElement.removeChild(contactCard);
               serviceTimes.parentElement.insertBefore(contactCard, serviceTimes.nextSibling);
             }
           } else if (placeholder && placeholder.parentElement) {
-            // fallback: append to placeholder
             if (placeholder.firstChild !== contactCard) {
               if (contactCard.parentElement) contactCard.parentElement.removeChild(contactCard);
               placeholder.appendChild(contactCard);
@@ -1067,7 +928,6 @@ END:VCALENDAR`;
         applyTranslations();
       }
 
-      // Debounced resize
       let _resizeTimer = null;
       function onResize() {
         clearTimeout(_resizeTimer);
@@ -1075,8 +935,7 @@ END:VCALENDAR`;
       }
 
       function initContactPlacement() {
-        createContactCard(); // ensure element exists
-        // If there's a placeholder in the right column, replace it with the contact card by default
+        createContactCard();
         const placeholder = document.getElementById('contactPlaceholder');
         if (placeholder && !placeholder.firstChild) {
           const card = createContactCard();
@@ -1091,6 +950,9 @@ END:VCALENDAR`;
       } else {
         initContactPlacement();
       }
+
+      // expose createContactCard for global use
+      window.createContactCard = createContactCard;
     })();
 
     // ---------- PRAYER CARD (creation + placement) ----------
@@ -1122,7 +984,6 @@ END:VCALENDAR`;
         const prayerCard = createPrayerCard();
 
         if (desktop) {
-          // place under Service Times (right column)
           if (serviceTimes && serviceTimes.parentElement) {
             if (serviceTimes.nextSibling !== prayerCard) {
               if (prayerCard.parentElement) prayerCard.parentElement.removeChild(prayerCard);
@@ -1130,7 +991,6 @@ END:VCALENDAR`;
             }
           }
         } else {
-          // mobile: place after Leaders (left column)
           if (leadersSection && leadersSection.parentElement) {
             if (leadersSection.nextSibling !== prayerCard) {
               if (prayerCard.parentElement) prayerCard.parentElement.removeChild(prayerCard);
@@ -1142,22 +1002,9 @@ END:VCALENDAR`;
         applyTranslations();
       }
 
-      // expose to global for init usage
       window.createPrayerCard = createPrayerCard;
       window.repositionPrayer = repositionPrayer;
     })();
-
-    // ---------- DIRECTIONS (legacy click handler removed; map handled by contact map button) ----------
-    // kept for compatibility if you still use a directions button elsewhere
-    const CHURCH_LAT = 32.7555;
-    const CHURCH_LNG = -97.3308;
-    const CHURCH_LABEL = 'Christ Missionary Revival Church';
-    function openDirections(lat, lng, label) {
-      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-      const apple = `maps://?q=${encodeURIComponent(label)}&ll=${lat},${lng}`;
-      const google = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-      window.location.href = isIOS ? apple : google;
-    }
 
     // ---------- INIT ----------
     document.addEventListener('DOMContentLoaded', async () => {
@@ -1173,18 +1020,15 @@ END:VCALENDAR`;
       loadSingleLatestSermon();
       loadNextEvent();
 
-      // create and position contact + prayer
       if (window.createPrayerCard) window.createPrayerCard();
       if (window.repositionPrayer) window.repositionPrayer();
-      // reposition contact (initContactPlacement already runs, but ensure both are correct)
-      if (typeof window !== 'undefined') {
-        // small delay to ensure contact/prayer exist
-        setTimeout(() => {
-          try { const ev = new Event('resize'); window.dispatchEvent(ev); } catch(e){}
-        }, 120);
-      }
 
-      // Bible plan card wiring (Read Today already has href set in markup)
+      // ensure contact/prayer placement after small delay
+      setTimeout(() => {
+        try { window.dispatchEvent(new Event('resize')); } catch(e){}
+      }, 120);
+
+      // Bible plan share wiring
       const planUrl = 'https://bibleinayearonline.com/chronological-bible-custom-reading-plan/';
       const shareBtn = document.getElementById('shareTodayBtn');
       const status = document.getElementById('biblePlanStatus');
@@ -1260,7 +1104,7 @@ END:VCALENDAR`;
           }
         };
 
-        // If thumbnail exists, show thumbnail with play overlay and only load iframe on click
+        // Keep your thumbnail-first behavior exactly as you wrote it
         if (latest.thumbnail) {
           wrap.innerHTML = '';
           const thumbWrap = document.createElement('div');
@@ -1281,7 +1125,6 @@ END:VCALENDAR`;
           overlay.appendChild(play);
           thumbWrap.appendChild(overlay);
 
-          // click handler: replace with iframe (no autoplay)
           thumbWrap.addEventListener('click', () => {
             const iframe = document.createElement('iframe');
             iframe.src = `https://www.youtube.com/embed/${latest.videoId}?rel=0&modestbranding=1`;
@@ -1297,7 +1140,6 @@ END:VCALENDAR`;
 
           wrap.appendChild(thumbWrap);
         } else {
-          // fallback: embed iframe immediately
           wrap.innerHTML = '';
           const iframe = document.createElement('iframe');
           iframe.src = `https://www.youtube.com/embed/${latest.videoId}?rel=0&modestbranding=1`;
@@ -1321,107 +1163,92 @@ END:VCALENDAR`;
       }
     }
 
-    // ---------- Resize handling for prayer + contact placement ----------
+    // Resize handling for prayer + contact placement
     let _placementTimer = null;
     window.addEventListener('resize', () => {
       clearTimeout(_placementTimer);
       _placementTimer = setTimeout(() => {
         try {
           if (window.repositionPrayer) window.repositionPrayer();
-          // repositionContact is defined inside its IIFE; trigger a resize event to let it run if it listens
-          const ev = new Event('resize');
-          window.dispatchEvent(ev);
+          window.dispatchEvent(new Event('resize'));
         } catch (e) {}
       }, 120);
     });
 
-    // ---------- ENFORCE MOBILE LAYOUT & FORCE TRANSLATIONS ----------
-   // ---------- USER MOBILE ORDER PATCH ----------
-(function enforceUserMobileOrder() {
-  const BREAK = 981;
+    // USER MOBILE ORDER PATCH (keeps your mobile/desktop order logic)
+    (function enforceUserMobileOrder() {
+      const BREAK = 981;
 
-  function applyOrder() {
-    const isDesktop = window.innerWidth >= BREAK;
-    const left = document.getElementById('leftColumn');
-    const right = document.getElementById('rightColumn');
-    if (!left || !right) return;
+      function applyOrder() {
+        const isDesktop = window.innerWidth >= BREAK;
+        const left = document.getElementById('leftColumn');
+        const right = document.getElementById('rightColumn');
+        if (!left || !right) return;
 
-    // Ensure prayer/contact exist (use your creators if available)
-    const prayer = (window.createPrayerCard && window.createPrayerCard()) || document.getElementById('prayerCard');
-    const contact = (window.createContactCard && window.createContactCard()) || document.getElementById('contactCard');
+        const prayer = (window.createPrayerCard && window.createPrayerCard()) || document.getElementById('prayerCard');
+        const contact = (window.createContactCard && window.createContactCard()) || document.getElementById('contactCard');
 
-    // Elements by id (as in your markup)
-    const hub = document.getElementById('hubCard');
-    const latest = document.getElementById('latestSermonCard');
-    const annPrimary = document.getElementById('announcementsCardPrimary');
-    const annMore = document.getElementById('announcementsCard2');
-    const upcoming = document.getElementById('upcomingEventCard');
-    const leaders = document.getElementById('leadersSection');
-    const bible = document.getElementById('biblePlanCard');
-    const serviceTimes = document.getElementById('serviceTimes');
+        const hub = document.getElementById('hubCard');
+        const latest = document.getElementById('latestSermonCard');
+        const annPrimary = document.getElementById('announcementsCardPrimary');
+        const annMore = document.getElementById('announcementsCard2');
+        const upcoming = document.getElementById('upcomingEventCard');
+        const leaders = document.getElementById('leadersSection');
+        const bible = document.getElementById('biblePlanCard');
+        const serviceTimes = document.getElementById('serviceTimes');
 
-    if (!isDesktop) {
-      // Mobile exact order requested by you:
-      // CMR Hub, Latest Sermon, Announcement, More Announcement, Upcoming event,
-      // Leaders, Bible in a year, Prayer request, Service times, Contact
-      const order = [hub, latest, annPrimary, annMore, upcoming, leaders, bible, prayer, serviceTimes, contact];
-      order.forEach(el => { if (el) left.appendChild(el); });
-    } else {
-      // Desktop: restore sensible desktop placements without altering markup
-      // Left: hub, latest, bible, leaders, contact (contact after leaders)
-      if (hub) left.appendChild(hub);
-      if (latest) left.appendChild(latest);
-      if (bible) left.appendChild(bible);
-      if (leaders) left.appendChild(leaders);
-      if (contact) {
-        if (leaders && leaders.parentElement) leaders.parentElement.insertBefore(contact, leaders.nextSibling);
-        else left.appendChild(contact);
+        if (!isDesktop) {
+          const order = [hub, latest, annPrimary, annMore, upcoming, leaders, bible, prayer, serviceTimes, contact];
+          order.forEach(el => { if (el) left.appendChild(el); });
+        } else {
+          if (hub) left.appendChild(hub);
+          if (latest) left.appendChild(latest);
+          if (bible) left.appendChild(bible);
+          if (leaders) left.appendChild(leaders);
+          if (contact) {
+            if (leaders && leaders.parentElement) leaders.parentElement.insertBefore(contact, leaders.nextSibling);
+            else left.appendChild(contact);
+          }
+
+          if (annPrimary) right.appendChild(annPrimary);
+          if (annMore) right.appendChild(annMore);
+          if (upcoming) right.appendChild(upcoming);
+          if (serviceTimes) right.appendChild(serviceTimes);
+          if (prayer) {
+            if (serviceTimes && serviceTimes.parentElement) serviceTimes.parentElement.insertBefore(prayer, serviceTimes.nextSibling);
+            else right.appendChild(prayer);
+          }
+        }
+
+        try { applyTranslations(); } catch (e) { /* no-op */ }
       }
 
-      // Right: announcements, announcementsCard2, upcoming, serviceTimes, prayer (after serviceTimes)
-      if (annPrimary) right.appendChild(annPrimary);
-      if (annMore) right.appendChild(annMore);
-      if (upcoming) right.appendChild(upcoming);
-      if (serviceTimes) right.appendChild(serviceTimes);
-      if (prayer) {
-        if (serviceTimes && serviceTimes.parentElement) serviceTimes.parentElement.insertBefore(prayer, serviceTimes.nextSibling);
-        else right.appendChild(prayer);
+      let _t = null;
+      function onResize() { clearTimeout(_t); _t = setTimeout(applyOrder, 120); }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => { applyOrder(); window.addEventListener('resize', onResize); });
+      } else {
+        applyOrder();
+        window.addEventListener('resize', onResize);
       }
-    }
 
-    // Force translations after moves
-    try { applyTranslations(); } catch (e) { /* no-op */ }
-  }
+      window.enforceUserMobileOrder = applyOrder;
+    })();
 
-  // Run now and on resize (debounced)
-  let _t = null;
-  function onResize() { clearTimeout(_t); _t = setTimeout(applyOrder, 120); }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => { applyOrder(); window.addEventListener('resize', onResize); });
-  } else {
-    applyOrder();
-    window.addEventListener('resize', onResize);
-  }
-
-  // Expose for manual invocation
-  window.enforceUserMobileOrder = applyOrder;
-})();
     (function adjustHeaderTop(){
-  const header = document.querySelector('.hub-header--stacked');
-  const wrap = document.querySelector('.wrap');
-  if(!header || !wrap) return;
-  const style = getComputedStyle(wrap);
-  const padTop = parseFloat(style.paddingTop) || 0;
-  // apply negative margin equal to wrap padding on small screens
-  function apply(){
-    if(window.innerWidth <= 980) header.style.marginTop = `-${padTop}px`;
-    else header.style.marginTop = '';
-  }
-  apply();
-  window.addEventListener('resize', () => { setTimeout(apply, 80); });
-})();
-
+      const header = document.querySelector('.hub-header--stacked');
+      const wrap = document.querySelector('.wrap');
+      if(!header || !wrap) return;
+      const style = getComputedStyle(wrap);
+      const padTop = parseFloat(style.paddingTop) || 0;
+      function apply(){
+        if(window.innerWidth <= 980) header.style.marginTop = `-${padTop}px`;
+        else header.style.marginTop = '';
+      }
+      apply();
+      window.addEventListener('resize', () => { setTimeout(apply, 80); });
+    })();
   </script>
 </body>
 </html>
