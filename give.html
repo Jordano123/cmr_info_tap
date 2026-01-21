@@ -38,19 +38,26 @@
       justify-content:center;
       margin-bottom:12px;
     }
+    /* .code-logo-wrapper {
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      width:100%;
+    } */
+
     .code-logo-box {
-      width:96px;
-      height:44px;
+      width:110px;
+      height:52px;
       background:#071022;
       border-radius:12px;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      padding:4px 10px;
+      padding:2px 8px;
       box-sizing:border-box;
       box-shadow:0 6px 18px rgba(0,0,0,0.12);
-      flex:0 0 auto;
     }
+
     .code-logo-cmr {
       font-family: "Montserrat", sans-serif;
       font-weight:900;
@@ -59,10 +66,11 @@
       line-height:1;
       display:inline-block;
     }
+
     .code-logo-hub {
       font-family: "Montserrat", sans-serif;
-      font-weight:300;
-      font-size:20px;
+      font-weight:320;
+      font-size:22px;
       margin-left:6px;
       background:linear-gradient(90deg, #73b3cf 0%, #800000 60%, #ffffff 100%);
       -webkit-background-clip:text;
@@ -71,7 +79,6 @@
       -webkit-text-fill-color:transparent;
       display:inline-block;
     }
-
     h1{ margin:6px 0 0 0; font-size:22px; font-weight:800; }
     p.lead{ margin:10px 0 18px 0; color:var(--muted); font-size:15px; }
 
@@ -154,11 +161,12 @@
     /* Bank info box */
     .bank-box{
       margin-top:18px;
-      background: linear-gradient(180deg, rgba(0,0,0,1), rgba(255,255,255,0.88));
+      /* background: linear-gradient(180deg, rgba(0,0,0,1), rgba(255,255,255,0.88)); */
+      background: #0b0b0b;
       border-radius:10px;
       padding:14px;
       border:1px solid rgba(15,23,42,0.04);
-      color:var(--text);
+      color:#ffffff;
       font-size:15px;
     }
 
@@ -189,32 +197,6 @@
 
       <!-- Centered buttons -->
       <div class="btn-wrap" aria-hidden="false">
-        <div class="btn-inner">
-          <a class="give-btn cashapp-btn" href="https://cash.app/$cmr8703" rel="noopener" target="_blank" aria-label="Give with Cash App">
-            <span class="icon-wrap" aria-hidden="true" title="Cash App">
-              <!-- Cash App SVG (green square with $) -->
-              <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                <rect x="2" y="2" width="20" height="20" rx="4" fill="#00C244"/>
-                <path d="M12 7c1.657 0 3 1.343 3 3 0 1.657-1.343 3-3 3s-3 1.343-3 3" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                <path d="M11.2 9.2h2.6" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-            <span style="flex:1;text-align:left;">Cash App</span>
-          </a>
-        </div>
-
-        <div class="btn-inner">
-          <a class="give-btn paypal-btn" href="https://paypal.me/YOURPAYPAL" rel="noopener" target="_blank" aria-label="Give with PayPal">
-            <span class="icon-wrap" aria-hidden="true" title="PayPal">
-              <!-- PayPal P logo simplified -->
-              <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                <path d="M7.5 7.5h4.8c1.9 0 3.4 1.5 3.1 3.4l-1.1 6.1c-.2 1.2-1.2 2.1-2.4 2.1H9.2c-1.1 0-2-.8-2.2-1.9L6 9.4c-.1-1.1.8-1.9 1.5-1.9z" fill="#003087"/>
-                <path d="M9.5 7.5h4.8c1.9 0 3.4 1.5 3.1 3.4l-1.1 6.1c-.2 1.2-1.2 2.1-2.4 2.1H11.2c-1.1 0-2-.8-2.2-1.9L9.5 7.5z" fill="#009cde" opacity="0.9"/>
-              </svg>
-            </span>
-            <span style="flex:1;text-align:left;">PayPal</span>
-          </a>
-        </div>
 
         <div class="btn-inner">
   <a class="give-btn cashapp-btn" href="https://cash.app/$cmr8703" rel="noopener" target="_blank" aria-label="Give with Cash App">
