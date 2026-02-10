@@ -1,0 +1,1255 @@
+// cmrhub.js (full file with Start reading / Share translations and wiring)
+
+// set copyright year
+document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+// ---------- CONFIG ----------
+let SHOW_SECOND_ANNOUNCEMENT = null;
+let SHOW_THIRD_ANNOUNCEMENT = null;
+const ANNOUNCEMENT_JSON_PATH = '/announcement.json';
+const SITE_CONFIG_PATH = '/site-config.json';
+
+// Translations used across the hub
+const translations = {
+  en: {
+    hubTitle: "Centre Missionnaire La Restauration",
+    hubSubtitle: "One place for everything happening at CMR.",
+    giveLabel: "Give",
+    giveSub: "Support online",
+    sermonsLabel: "Sermons",
+    sermonsSub: "Watch on YouTube",
+    listenLabel: "Listen",
+    listenSub: "Audio highlights",
+    connectLabel: "Connect",
+    connectSub: "Fill out the form",
+    visitLabel: "Visit Website",
+    visitSub: "More info online",
+    followLabel: "Follow Us",
+    followSub: "Social links",
+    announcements: "Announcements",
+    more_announcements: "More Announcements",
+    more: "More",
+    learn_more: "Learn more",
+    no_announcements: "No current announcements",
+    contactHeading: "Contact",
+    contactGetInTouch: "Get in touch",
+    contactMap: "Direction",
+    contactCall: "Call",
+    contactEmail: "Email",
+    open_on_youtube: "Open on YouTube", 
+    share: "Share", 
+    copy_link: "Copy Link",
+    visitUsName: "Centre Missionnaire La Restauration",
+    visitUsAddress: "123 Church St, Fort Worth, TX",
+    directionsBtn: "Directions",
+    prayerHeading: "Prayer Request",
+    prayerSub: "Share a request and we will pray for you",
+    prayerBtn: "Request Prayer",
+    latestSermonHeading: "Latest Sermon",
+    bible_text: "Spend time in God's Word with this daily bible reading plan.",
+    read_today: "Start Reading",
+    share: "Share",
+    leadersHeading: "Our Family",
+    get_involved: "Get Involved",
+    serviceTimesHeading: "Service Times",
+    serviceTime1: "Friday • 7:00 PM",
+    serviceTime2: "Sunday • 10:00 AM",
+    serviceTimesNote: "Childcare available at both services",
+    updates_opt_in_title: "Updates opt-in", updates_opt_in_text: "3 update types are perfect: New sermon added; New announcement; New event created. We are live.", opt_in_phone_label: "Phone number", opt_in_checkbox_sermons: "Sermons", opt_in_checkbox_events: "Events", opt_in_checkbox_live: "Live", opt_in_checkbox_announcements: "Announcements", opt_in_submit: "Subscribe via SMS", watch_live_text: "Watch Live", watch_live_banner_text: "We're live now", watch_live_close: "Close",
+  },
+  fr: {
+    hubTitle: "Centre Missionnaire La Restauration",
+    hubSubtitle: "Un endroit pour tout ce qui se passe à CMR.",
+    giveLabel: "Donner",
+    giveSub: "Soutenir en ligne",
+    sermonsLabel: "Sermons",
+    sermonsSub: "Regarder sur YouTube",
+    listenLabel: "Écouter",
+    listenSub: "Extraits audio",
+    connectLabel: "Se connecter",
+    connectSub: "Remplir le formulaire",
+    visitLabel: "Visiter le site",
+    visitSub: "Plus d'infos en ligne",
+    followLabel: "Suivez-nous",
+    followSub: "Liens sociaux",
+    announcements: "Annonces",
+    more_announcements: "Plus d'annonces",
+    more: "Plus",
+    learn_more: "En savoir plus",
+    no_announcements: "Aucune annonce en cours",
+    contactHeading: "Contact",
+    contactGetInTouch: "Entrer en contact",
+    contactMap: "Direction",
+    leadersHeading: "La Famille",
+    contactCall: "Appeler",
+    contactEmail: "Courriel",
+    open_on_youtube: "Ouvrir sur YouTube", 
+    share: "Partager", 
+    copy_link: "Copier le lien",
+    visitUsName: "Centre Missionnaire La Restauration",
+    visitUsAddress: "123 Church St, Fort Worth, TX",
+    directionsBtn: "Itinéraire",
+    get_involved: "S'impliquer",
+    prayerHeading: "Demande de prière",
+    prayerSub: "Partagez une demande et nous prierons pour vous",
+    prayerBtn: "Demander la prière",
+    latestSermonHeading: "Dernier Sermon",
+    bible_text: "Passe du temps dans la Parole de Dieu avec ce plan de lecture biblique quotidien.",
+    read_today: "Commencer la lecture",
+    share: "Partager",
+    serviceTimesHeading: "Heure de Services",
+    serviceTime1: "Vendredi • 19h00",
+    serviceTime2: "Dimanche • 10h00",
+    serviceTimesNote: "Service de garde d'enfants offert lors de deux services.",
+    updates_opt_in_title: "Inscription aux mises à jour", updates_opt_in_text: "3 types de mises à jour sont parfaits : Nouveau sermon ajouté ; Nouvelle annonce ; Nouvel événement créé. Nous sommes en direct.", opt_in_phone_label: "Numéro de téléphone", opt_in_checkbox_sermons: "Sermons", opt_in_checkbox_events: "Événements", opt_in_checkbox_live: "En direct", opt_in_checkbox_announcements: "Annonces", opt_in_submit: "S'abonner par SMS", watch_live_text: "Regarder en direct", watch_live_banner_text: "Nous sommes en direct", watch_live_close: "Fermer"
+  }
+};
+
+// ---------- Language helpers ----------
+function getSavedLang(){ return localStorage.getItem('cmr_lang') || 'en'; }
+function setSavedLang(lang){ localStorage.setItem('cmr_lang', lang); applyTranslations(); renderAnnouncementsFromData(lastAnnouncementData); }
+function buildLangSwitcher(){
+  const container = document.getElementById('globalLangSwitcher');
+  if(!container) return;
+  container.innerHTML = '';
+  const enBtn = document.createElement('button'); enBtn.className = 'lang-btn'; enBtn.textContent = 'EN'; enBtn.onclick = () => setSavedLang('en');
+  const frBtn = document.createElement('button'); frBtn.className = 'lang-btn'; frBtn.textContent = 'FR'; frBtn.onclick = () => setSavedLang('fr');
+  container.appendChild(enBtn); container.appendChild(frBtn);
+}
+
+// applyTranslations updates known IDs and also any element with data-i18n
+function applyTranslations(){
+  const lang = getSavedLang();
+  try { document.documentElement.lang = lang; } catch(e){}
+  const t = translations[lang] || translations.en;
+  const safeSet = (id, text) => { const el = document.getElementById(id); if(el) el.textContent = text; };
+
+  // IDs you already use
+  safeSet('hubTitle', t.hubTitle);
+  safeSet('hubSubtitle', t.hubSubtitle);
+  safeSet('giveLabel', t.giveLabel);
+  safeSet('giveSub', t.giveSub);
+  safeSet('sermonsLabel', t.sermonsLabel);
+  safeSet('sermonsSub', t.sermonsSub);
+  safeSet('listenLabel', t.listenLabel);
+  safeSet('listenSub', t.listenSub);
+  safeSet('connectLabel', t.connectLabel);
+  safeSet('connectSub', t.connectSub);
+  safeSet('visitLabel', t.visitLabel);
+  safeSet('visitSub', t.visitSub);
+  safeSet('followLabel', t.followLabel);
+  safeSet('followSub', t.followSub);
+
+  const annTitle = document.getElementById('announcementsTitle');
+  if(annTitle) annTitle.textContent = t.announcements;
+  const secH = document.querySelector('#announcementsCard2 h3');
+  if(secH) secH.textContent = t.more_announcements;
+  const terH = document.querySelector('#announcementsCard3 h3');
+  if(terH) terH.textContent = t.more;
+
+  const contactHeading = document.getElementById('contactHeading');
+  if(contactHeading) contactHeading.textContent = t.contactHeading;
+  const contactBtns = document.querySelectorAll('#contactCard .contact-btn');
+  contactBtns.forEach(btn => {
+    if(btn.classList.contains('phone')) btn.textContent = t.contactCall || 'Call';
+    if(btn.classList.contains('map')) btn.textContent = t.contactMap || 'Map';
+    if(btn.classList.contains('email')) btn.textContent = t.contactEmail || 'Email';
+  });
+  const contactMetaTitle = document.querySelector('#contactCard .contact-meta .meta-title');
+  if(contactMetaTitle) contactMetaTitle.textContent = t.contactGetInTouch || 'Get in touch';
+
+  const visitName = document.querySelector('#contactCard .visit-name');
+  const visitAddr = document.querySelector('#contactCard .visit-addr');
+  if(visitName) visitName.textContent = t.visitUsName || 'Christ Missionary Revival Church';
+  if(visitAddr) visitAddr.textContent = t.visitUsAddress || '123 Church St, Fort Worth, TX';
+
+  const prayerHeading = document.querySelector('#prayerCard #prayerHeading');
+  if(prayerHeading) prayerHeading.textContent = t.prayerHeading;
+  const prayerMeta = document.querySelector('#prayerCard .prayer-meta');
+  if(prayerMeta) prayerMeta.textContent = t.prayerSub;
+  const prayerBtn = document.querySelector('#prayerCard .prayer-btn');
+  if(prayerBtn) prayerBtn.textContent = t.prayerBtn;
+
+  // Bible buttons (Start reading + Share)
+  const readBtn = document.getElementById('readTodayBtn');
+  if (readBtn) {
+    readBtn.textContent = t.read_today || 'Start reading';
+    readBtn.setAttribute('aria-label', t.read_today || 'Start reading');
+  }
+  const shareBtn = document.getElementById('shareTodayBtn');
+  if (shareBtn) {
+    shareBtn.textContent = t.share || 'Share';
+    shareBtn.setAttribute('aria-label', t.share || 'Share');
+  }
+
+  // Leaders heading translation
+const leadersHeadingEl = document.getElementById('leadersHeading');
+if (leadersHeadingEl) leadersHeadingEl.textContent = t.leadersHeading || 'Our family';
+
+  // Leader global button (Get involved)
+const globalGetInvolved = document.getElementById('getInvolvedBtn');
+if (globalGetInvolved) {
+  globalGetInvolved.textContent = t.get_involved || 'Get involved';
+  globalGetInvolved.setAttribute('aria-label', t.get_involved || 'Get involved');
+}
+
+
+  // Latest sermon action buttons
+const openSermonBtn = document.getElementById('openSermonOnYT');
+if (openSermonBtn) {
+  openSermonBtn.textContent = t.open_on_youtube || 'Open on YouTube';
+  openSermonBtn.setAttribute('aria-label', t.open_on_youtube || 'Open on YouTube');
+}
+const shareSermonBtn = document.getElementById('shareSermonBtn');
+if (shareSermonBtn) {
+  shareSermonBtn.textContent = t.share || 'Share';
+  shareSermonBtn.setAttribute('aria-label', t.share || 'Share');
+}
+const copySermonBtn = document.getElementById('copySermonLinkBtn');
+if (copySermonBtn) {
+  copySermonBtn.textContent = t.copy_link || 'Copy link';
+  copySermonBtn.setAttribute('aria-label', t.copy_link || 'Copy link');
+}
+
+
+  // Translate any element that uses data-i18n attribute
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(key && t[key]) el.textContent = t[key];
+  });
+}
+
+// ---------- ANNOUNCEMENTS RENDERER ----------
+let lastAnnouncementData = null;
+function isExpired(expireDateStr){ if(!expireDateStr) return false; const now = new Date(); const expire = new Date(expireDateStr + 'T23:59:59'); return now > expire; }
+
+function renderSingleAnnouncement(containerEl, data, lang){
+  if(!containerEl) return;
+  containerEl.innerHTML = '';
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'announcement';
+
+  // meta row
+  const meta = document.createElement('div');
+  meta.className = 'meta-row';
+  const dateSpan = document.createElement('div');
+  dateSpan.className = 'small-muted';
+  dateSpan.textContent = data.date || new Date().toLocaleDateString();
+  const typeSpan = document.createElement('div');
+  typeSpan.className = 'small-muted';
+  // prefer translated type if available
+  typeSpan.textContent = (lang === 'fr' && data.type_fr) ? data.type_fr.toUpperCase() : (data.type || 'announcement').toUpperCase();
+  meta.appendChild(dateSpan);
+  meta.appendChild(typeSpan);
+  wrapper.appendChild(meta);
+
+  // thumbnail
+  if(data.thumbnail){
+    const img = document.createElement('img');
+    img.className = 'thumb';
+    img.src = data.thumbnail;
+    img.alt = data.title || 'Announcement image';
+    wrapper.appendChild(img);
+  }
+
+  // title (translated if available)
+  const title = document.createElement('h3');
+  title.className = 'announce-title';
+  const titleText = (lang === 'fr' && data.title_fr) ? data.title_fr : (data.title || '');
+  title.textContent = titleText;
+  wrapper.appendChild(title);
+
+  // description (allow a small set of tags via sanitizer)
+  const descText = (lang === 'fr' && data.description_fr) ? data.description_fr : (data.description || '');
+  if(descText){
+    const desc = document.createElement('div');
+    desc.className = 'announce-desc';
+    // sanitize and allow <strong>, <em>, <br>
+    desc.innerHTML = sanitizeAllowlist(descText.replace(/\n/g, '<br>'));
+    wrapper.appendChild(desc);
+  }
+
+  // extra info: support translated time and optional new-line display
+  if (data.extra && (data.extra.location || data.extra.time || data.extra.time_fr)) {
+    const info = document.createElement('div');
+    info.className = 'small-muted';
+
+    // choose translated time when available
+    const timeVal = (lang === 'fr' && data.extra.time_fr) ? data.extra.time_fr : (data.extra.time || '');
+
+    if (data.extra.timeOnNewLine) {
+      // location on first line, time on second (if present)
+      if (data.extra.location) {
+        const loc = document.createElement('div');
+        loc.textContent = data.extra.location;
+        info.appendChild(loc);
+      }
+      if (timeVal) {
+        const timeLine = document.createElement('div');
+        timeLine.textContent = timeVal;
+        info.appendChild(timeLine);
+      }
+    } else {
+      // single-line: "location • time"
+      const parts = [];
+      if (data.extra.location) parts.push(data.extra.location);
+      if (timeVal) parts.push(timeVal);
+      info.textContent = parts.join(' • ');
+    }
+
+    wrapper.appendChild(info);
+  }
+
+  // CTA row: prefer translated learnMore link if available
+  const ctaRow = document.createElement('div');
+  ctaRow.className = 'cta-row';
+  const learn = document.createElement('a');
+  learn.className = 'btn btn-primary';
+  learn.href = (lang === 'fr' && data.learnMore_fr) ? data.learnMore_fr : (data.learnMoreUrl || '#');
+  learn.target = '_blank';
+  learn.rel = 'noopener';
+  learn.textContent = translations[getSavedLang()]?.learn_more || 'Learn more';
+  ctaRow.appendChild(learn);
+  wrapper.appendChild(ctaRow);
+
+  containerEl.appendChild(wrapper);
+}
+
+// Allow Strong/Em/BR sanitizer
+function sanitizeAllowlist(html) {
+  // Allow only <strong>, <em>, <br>
+  const template = document.createElement('template');
+  template.innerHTML = html || '';
+  const allowed = ['STRONG','EM','BR'];
+  const walker = document.createTreeWalker(template.content, NodeFilter.SHOW_ELEMENT, null, false);
+  const toRemove = [];
+  while (walker.nextNode()) {
+    const node = walker.currentNode;
+    if (!allowed.includes(node.nodeName)) toRemove.push(node);
+    else {
+      // strip attributes from allowed tags
+      for (let i = node.attributes.length - 1; i >= 0; i--) node.removeAttribute(node.attributes[i].name);
+    }
+  }
+  toRemove.forEach(n => n.replaceWith(document.createTextNode(n.textContent || '')));
+  return template.innerHTML;
+}
+
+function renderAnnouncementsFromData(rawData){
+  lastAnnouncementData = rawData;
+  const lang = getSavedLang();
+  let items = [];
+  if(!rawData) items = [];
+  else if(Array.isArray(rawData)) items = rawData;
+  else if(typeof rawData === 'object'){
+    if(Array.isArray(rawData.items)) items = rawData.items;
+  }
+
+  const active = (items || []).filter(a => a.enabled !== false && !isExpired(a.expireDate));
+
+  const primaryCard = document.getElementById('announcementsCardPrimary');
+  const secondaryCard = document.getElementById('announcementsCard2');
+  const tertiaryCard = document.getElementById('announcementsCard3');
+
+  if(primaryCard) primaryCard.style.display = (active.length > 0) ? '' : '';
+
+  if (secondaryCard) {
+    if (SHOW_SECOND_ANNOUNCEMENT === true) secondaryCard.style.display = '';
+    else if (SHOW_SECOND_ANNOUNCEMENT === false) secondaryCard.style.display = 'none';
+    else secondaryCard.style.display = (active.length >= 2) ? '' : 'none';
+  }
+
+  if (tertiaryCard) {
+    if (SHOW_THIRD_ANNOUNCEMENT === true) tertiaryCard.style.display = '';
+    else if (SHOW_THIRD_ANNOUNCEMENT === false) tertiaryCard.style.display = 'none';
+    else tertiaryCard.style.display = (active.length >= 3) ? '' : 'none';
+  }
+
+  const primaryContainer = document.getElementById('announcementContainer');
+  const secondaryContainer = document.getElementById('announcementContainer2');
+  const tertiaryContainer = document.getElementById('announcementContainer3');
+  if(primaryContainer) primaryContainer.innerHTML = '';
+  if(secondaryContainer) secondaryContainer.innerHTML = '';
+  if(tertiaryContainer) tertiaryContainer.innerHTML = '';
+
+  if(active[0] && primaryContainer) renderSingleAnnouncement(primaryContainer, active[0], lang);
+  if(active[1] && secondaryContainer) renderSingleAnnouncement(secondaryContainer, active[1], lang);
+  if(active[2] && tertiaryContainer) renderSingleAnnouncement(tertiaryContainer, active[2], lang);
+
+  if(active.length === 0 && primaryContainer){
+    const placeholder = document.createElement('div'); placeholder.className = 'announcement-placeholder';
+    placeholder.textContent = translations[lang].no_announcements;
+    primaryContainer.appendChild(placeholder);
+  }
+
+  applyTranslations();
+  loadNextEvent();
+}
+
+
+// Localize opt-in CTA and Watch Live banner, validate phone, submit, and handle placement on mobile
+function localizeOptInAndBanner() {
+  const lang = (typeof getSavedLang === 'function') ? getSavedLang() : 'en';
+  const t = (window.translations && translations[lang]) ? translations[lang] : (translations && translations.en) || {};
+
+  // opt-in elements (minimal: title, phone, subscribe)
+  const heading = document.getElementById('updatesOptInHeading');
+  const submit = document.getElementById('smsOptInSubmit');
+
+  if (heading) heading.textContent = t.updates_opt_in_title || 'Stay up to date with the family';
+  if (submit) submit.textContent = t.opt_in_submit || 'Subscribe';
+
+  // watch live banner
+  const watchText = document.getElementById('watchLiveText');
+  const watchBtn = document.getElementById('watchLiveBtn');
+  const closeBtn = document.getElementById('watchLiveClose');
+  if (watchText) watchText.textContent = t.watch_live_banner_text || "We're live now";
+  if (watchBtn) watchBtn.textContent = t.watch_live_text || 'Watch Live';
+  if (closeBtn) closeBtn.textContent = t.watch_live_close || 'Close';
+}
+
+/* Phone helpers
+   - normalizePhone: keeps leading + if present, strips other non-digits
+   - isValidPhone: permissive: +country (8-15 digits) or local (10-15 digits)
+*/
+function normalizePhone(input) {
+  if (!input) return '';
+  let v = input.trim();
+  const leadingPlus = v.startsWith('+') ? '+' : '';
+  v = v.replace(/[^\d]/g, '');
+  return leadingPlus + v;
+}
+
+function isValidPhone(raw) {
+  const normalized = normalizePhone(raw);
+  if (!normalized) return false;
+  if (normalized.startsWith('+')) {
+    const digits = normalized.slice(1);
+    return digits.length >= 8 && digits.length <= 15;
+  }
+  return normalized.length >= 10 && normalized.length <= 15;
+}
+
+// Submit handler for the minimal single-CTA opt-in (title, phone, subscribe)
+async function handleSmsOptInSubmit(e) {
+  e.preventDefault();
+  const phoneInput = document.getElementById('smsPhone');
+  const submitBtn = document.getElementById('smsOptInSubmit');
+  const msg = document.getElementById('smsOptInMsg');
+
+  if (!phoneInput || !submitBtn || !msg) return;
+
+  msg.textContent = '';
+  const rawPhone = phoneInput.value || '';
+
+  if (!isValidPhone(rawPhone)) {
+    msg.textContent = 'Please enter a valid phone number (e.g. +1 983-748-9488 or 983-748-9488).';
+    phoneInput.focus();
+    return;
+  }
+
+  const payload = { phone: normalizePhone(rawPhone) };
+
+  // UI feedback
+  submitBtn.disabled = true;
+  const prevText = submitBtn.textContent;
+  submitBtn.textContent = 'Sending…';
+
+  try {
+    const res = await fetch('/api/subscribe-sms', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      // try to parse server error message
+      let errMsg = 'Subscription failed. Please try again later.';
+      try {
+        const errData = await res.json();
+        if (errData && errData.message) errMsg = errData.message;
+      } catch (err) { /* ignore parse error */ }
+      throw new Error(errMsg);
+    }
+
+    const data = await res.json();
+    msg.textContent = data.message || 'Thanks — check your phone for a confirmation.';
+    phoneInput.value = '';
+  } catch (err) {
+    console.error(err);
+    msg.textContent = err.message || 'Subscription failed. Please try again later.';
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = prevText || 'Subscribe';
+  }
+}
+
+// Place opt-in under #serviceTimes on small screens, otherwise keep in right column
+function placeOptInForViewport() {
+  const optinSection = document.getElementById('updatesOptIn');
+  const serviceTimes = document.getElementById('serviceTimes');
+  const rightColumn = document.getElementById('rightColumn');
+  if (!optinSection) return;
+
+  if (window.innerWidth <= 640 && serviceTimes && serviceTimes.parentNode) {
+    // insert after serviceTimes if not already there
+    if (serviceTimes.nextSibling !== optinSection) {
+      serviceTimes.parentNode.insertBefore(optinSection, serviceTimes.nextSibling);
+    }
+  } else if (rightColumn) {
+    // ensure it lives in right column by default
+    if (!rightColumn.contains(optinSection)) rightColumn.appendChild(optinSection);
+  }
+}
+
+// DOM ready wiring
+document.addEventListener('DOMContentLoaded', () => {
+  // localize UI
+  localizeOptInAndBanner();
+
+  // wire form submit
+  const form = document.getElementById('smsOptInForm');
+  if (form) {
+    form.addEventListener('submit', handleSmsOptInSubmit);
+  }
+
+  // initial placement and responsive wiring
+  placeOptInForViewport();
+  window.addEventListener('resize', placeOptInForViewport);
+
+  // initialize watch live logic (keeps your existing initWatchLive function)
+  if (typeof initWatchLive === 'function') initWatchLive();
+});
+
+/* ---------------- Watch Live logic (unchanged) ----------------
+   Keep the functions initWatchLive() and checkScheduleForLive() you already have.
+   If you don't, include the versions below (they match the previous behavior).
+*/
+
+async function initWatchLive() {
+  const banner = document.getElementById('watchLiveBanner');
+  const watchBtn = document.getElementById('watchLiveBtn');
+  const closeBtn = document.getElementById('watchLiveClose');
+
+  let cfg = { live: false, liveStreamUrl: '#', timezone: 'America/Chicago' };
+
+  try {
+    const res = await fetch('/site-config.json', { cache: 'no-store' });
+    if (res.ok) cfg = Object.assign(cfg, await res.json());
+  } catch (err) {
+    console.warn('Could not load site-config.json, using defaults.', err);
+  }
+
+  if (watchBtn) watchBtn.href = cfg.liveStreamUrl || '#';
+
+  const shouldShow = cfg.live === true || checkScheduleForLive(cfg.timezone);
+
+  if (shouldShow && banner) {
+    // respect session dismissal
+    if (sessionStorage.getItem('watchLiveDismissed') !== '1') banner.style.display = 'block';
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      if (banner) banner.style.display = 'none';
+      sessionStorage.setItem('watchLiveDismissed', '1');
+    });
+  }
+}
+
+function checkScheduleForLive(timezone = 'America/Chicago') {
+  try {
+    const now = new Date();
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: timezone,
+      weekday: 'short',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: false
+    }).formatToParts(now).reduce((acc, p) => { acc[p.type] = p.value; return acc; }, {});
+
+    const weekday = parts.weekday;
+    const hour = parseInt(parts.hour, 10);
+    const minute = parseInt(parts.minute, 10);
+
+    if (weekday === 'Sun' && hour === 10 && minute >= 0 && minute < 60) return true;
+    if (weekday === 'Fri' && hour === 19 && minute >= 0 && minute < 60) return true;
+    return false;
+  } catch (err) {
+    console.error('Schedule check failed', err);
+    return false;
+  }
+}
+
+
+
+
+
+
+async function loadAndRenderAnnouncements(){
+  const url = ANNOUNCEMENT_JSON_PATH + '?t=' + Date.now();
+  try {
+    const res = await fetch(url, { cache: 'no-store' });
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    console.info('Loaded announcement.json', data);
+    renderAnnouncementsFromData(data);
+  } catch (err) {
+    console.error('Failed to load announcement.json from', url, err);
+    if(lastAnnouncementData) {
+      console.info('Rendering last known announcement data');
+      renderAnnouncementsFromData(lastAnnouncementData);
+      return;
+    }
+    renderAnnouncementsFromData({ items: [
+      { title: "Announcements temporarily unavailable", description: "We are updating announcements. Check back soon.", enabled: true }
+    ]});
+  }
+}
+
+// ---------- SITE CONFIG LOADER (optional) ----------
+async function loadSiteConfig(){
+  try {
+    const res = await fetch(SITE_CONFIG_PATH, { cache: 'no-store' });
+    if(!res.ok) return;
+    const cfg = await res.json();
+    if('showSecondAnnouncement' in cfg) SHOW_SECOND_ANNOUNCEMENT = cfg.showSecondAnnouncement;
+    if('showThirdAnnouncement' in cfg) SHOW_THIRD_ANNOUNCEMENT = cfg.showThirdAnnouncement;
+    console.info('site-config.json loaded', cfg);
+  } catch (e) {
+    // ignore — use defaults
+  }
+}
+
+// ---------- APP LINK HELPER ----------
+function tryOpenAppThenFallback(anchor, event){
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.button === 1) return;
+  const appHref = anchor.getAttribute('data-app-href');
+  const androidIntent = anchor.getAttribute('data-android-intent');
+  const webHref = anchor.href;
+  const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if(!isMobile || !appHref) return;
+  event.preventDefault();
+  if (/Android/i.test(navigator.userAgent) && androidIntent) {
+    window.location = androidIntent;
+    return;
+  }
+  let didHide = false;
+  function onVisibilityChange() { didHide = document.hidden; }
+  document.addEventListener('visibilitychange', onVisibilityChange);
+  const timeout = setTimeout(() => {
+    document.removeEventListener('visibilitychange', onVisibilityChange);
+    if (!didHide) window.location = webHref;
+  }, 1200);
+  try { window.location = appHref; } catch (e) { clearTimeout(timeout); document.removeEventListener('visibilitychange', onVisibilityChange); window.location = webHref; }
+}
+
+function wireAppLinks(){
+  const anchors = document.querySelectorAll('.hub-button[data-app-href]');
+  anchors.forEach(a => { a.addEventListener('click', function(e){ tryOpenAppThenFallback(a, e); }); });
+}
+
+// ---------- LEADERS ----------
+async function loadLeaders() {
+  const grid = document.getElementById('leadersGrid');
+  try {
+    const res = await fetch('/leaders.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error('Failed to load leaders.json');
+    const data = await res.json();
+    const items = (data.items || []).filter(Boolean);
+
+    if (!grid) return;
+
+    if (!items.length) {
+      grid.innerHTML = '<div class="small-muted">No leaders listed.</div>';
+      applyTranslations();
+      ensureGlobalGetInvolvedButton();
+      return;
+    }
+
+    grid.innerHTML = '';
+    const lang = getSavedLang();
+
+    items.forEach(l => {
+      const card = document.createElement('div');
+      card.className = 'leader-card';
+
+      const img = document.createElement('img');
+      img.src = l.photo || '/step.png';
+      img.alt = l.name || (lang === 'fr' ? l.name_fr || 'Leader' : 'Leader');
+      img.width = 96;
+      img.height = 96;
+
+      const name = document.createElement('div');
+      name.className = 'leader-name';
+      // prefer translated name if available
+      name.textContent = (lang === 'fr' && l.name_fr) ? l.name_fr : (l.name || '');
+
+      const role = document.createElement('div');
+      role.className = 'leader-role small-muted';
+      // prefer translated role/description if available
+      role.textContent = (lang === 'fr' && l.role_fr) ? l.role_fr : (l.role || '');
+
+      card.appendChild(img);
+      card.appendChild(name);
+      card.appendChild(role);
+
+      grid.appendChild(card);
+    });
+
+    applyTranslations();
+    ensureGlobalGetInvolvedButton();
+  } catch (err) {
+    console.error(err);
+    if (grid) grid.innerHTML = '<div class="small-muted">Could not load leaders.</div>';
+    applyTranslations();
+    ensureGlobalGetInvolvedButton();
+  }
+}
+
+
+// helper: create or ensure the single Get Involved button under the leaders grid
+function ensureGlobalGetInvolvedButton(options = {}) {
+  // options.teamId (string) — id to pass to cmrfamily page, default 'leaders'
+  const teamId = options.teamId || 'leaders';
+  const container = document.getElementById('leadersSection'); // parent section for leaders
+  if (!container) return;
+
+  // If a dedicated wrapper exists, use it; otherwise create one
+  let wrapper = document.getElementById('leadersActionWrapper');
+  if (!wrapper) {
+    wrapper = document.createElement('div');
+    wrapper.id = 'leadersActionWrapper';
+    wrapper.style.marginTop = '12px';
+    container.appendChild(wrapper);
+  }
+
+  // If button already exists, update its attributes and return
+  let btn = document.getElementById('getInvolvedBtn');
+  if (btn) {
+    btn.dataset.team = teamId;
+    // update href in case teamId changed
+    btn.href = `/cmrfamily.html?team=${encodeURIComponent(teamId)}`;
+    return;
+  }
+
+  // Create anchor so it behaves like a link (good for SEO / Netlify)
+  btn = document.createElement('a');
+  btn.id = 'getInvolvedBtn';
+  btn.className = 'btn get-involved-global';
+  btn.dataset.team = teamId;
+  // navigate to cmrfamily and include team query param so that page can open modal & preselect
+  btn.href = `/cmrfamily.html?team=${encodeURIComponent(teamId)}`;
+  btn.setAttribute('role', 'button');
+
+  // If you want the link to open in a new tab, uncomment the next line:
+  // btn.target = '_blank';
+
+  // Click handler: follow the link (keeps normal link behavior for middle-click / open in new tab)
+  // but also prevent default if you want to do SPA navigation — here we let the browser navigate.
+  // Add a small analytics hook or console message if desired.
+  btn.addEventListener('click', (e) => {
+    // If you want to intercept and do JS navigation instead, uncomment the next lines:
+    // e.preventDefault();
+    // window.location.href = btn.href;
+    console.info('Get Involved clicked — navigating to', btn.href);
+    // allow default navigation
+  });
+
+  // Visible text will be set/updated by your translation routine (applyTranslations / data-i18n)
+  // Provide a default label for users without JS translations
+  btn.textContent = 'Get Involved';
+
+  wrapper.appendChild(btn);
+}
+
+
+// ---------- EVENTS (BILINGUAL) ----------
+async function loadNextEvent() {
+  const container = document.getElementById('upcomingEventCard');
+  if(!container) return;
+  try {
+    const res = await fetch('/events.json', { cache: 'no-store' });
+    if (!res.ok) { container.innerHTML = ''; applyTranslations(); return; }
+    const data = await res.json();
+    const items = (data.items || []).filter(e => e.public !== false);
+    const now = new Date();
+    const upcoming = items
+      .map(e => ({...e, start: new Date(`${e.date}T${e.startTime || '00:00'}`)}))
+      .filter(e => e.start >= now)
+      .sort((a,b) => a.start - b.start);
+    if (!upcoming.length) { container.innerHTML = ''; applyTranslations(); return; }
+    const next = upcoming[0];
+    const lang = getSavedLang();
+
+    // BILINGUAL FIELD SELECTION
+    const title = (lang === 'fr' && next.title_fr) ? next.title_fr : next.title;
+    const description = (lang === 'fr' && next.description_fr) ? next.description_fr : next.description;
+    const location = (lang === 'fr' && next.location_fr) ? next.location_fr : next.location;
+    const startTime = (lang === 'fr' && next.startTime_fr) ? next.startTime_fr : next.startTime;
+    const endTime = (lang === 'fr' && next.endTime_fr) ? next.endTime_fr : next.endTime;
+
+    // DATE (supports date_fr)
+    let dateDisplay = next.date;
+    if (lang === 'fr') {
+      if (next.date_fr) {
+        dateDisplay = next.date_fr;
+      } else {
+        try {
+          const d = new Date(next.date);
+          dateDisplay = d.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
+        } catch (e) {
+          dateDisplay = next.date;
+        }
+      }
+    } else {
+      try {
+        const d = new Date(next.date);
+        dateDisplay = d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      } catch (e) {
+        dateDisplay = next.date;
+      }
+    }
+
+container.innerHTML = `<div class="card" style="padding:12px;">
+  <div style="font-weight:700;">${lang === 'fr' ? 'Événement à venir' : 'Upcoming Event'}</div>
+  <div class="small-muted" style="margin-top:6px;">${dateDisplay} • ${startTime || ''}</div>
+  <div style="margin-top:6px; font-weight:700;">${title || ''}</div>
+  <div class="small-muted" style="margin-top:6px;">${location || ''}</div>
+  <div class="cta-row" style="margin-top:10px;">
+    <a class="btn btn-primary add-google" href="${toGoogleCalendarUrl(next)}" target="_blank" rel="noopener">${lang === 'fr' ? 'Ajouter à Google' : 'Add to Google'}</a>
+    <button class="btn btn-ghost" onclick='downloadICS(${JSON.stringify(next).replace(/'/g,"\\'")})'>${lang === 'fr' ? 'Ajouter à Apple/Outlook' : 'Add to Apple/Outlook'}</button>
+  </div>
+</div>`;
+
+    applyTranslations();
+  } catch (err) {
+    console.error('Failed to load events.json', err);
+    container.innerHTML = '';
+    applyTranslations();
+  }
+}
+
+function toGoogleCalendarUrl(event){
+  const start = `${event.date.replace(/-/g,'')}T${(event.startTime||'00:00').replace(':','')}00`;
+  const end = event.endTime ? `${event.date.replace(/-/g,'')}T${event.endTime.replace(':','')}00` : `${event.date.replace(/-/g,'')}T${String(Number((event.startTime||'00:00').split(':')[0]) + 1).padStart(2,'0')}${(event.startTime||'00:00').split(':')[1]}00`;
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: event.title || '',
+    dates: `${start}/${end}`,
+    details: event.description || '',
+    location: event.location || ''
+  });
+  return `https://www.google.com/calendar/render?${params.toString()}`;
+}
+
+function downloadICS(event){
+  const start = `${event.date.replace(/-/g,'')}T${(event.startTime||'00:00').replace(':','')}00`;
+  const end = event.endTime ? `${event.date.replace(/-/g,'')}T${event.endTime.replace(':','')}00` : `${event.date.replace(/-/g,'')}T${String(Number((event.startTime||'00:00').split(':')[0]) + 1).padStart(2,'0')}${(event.startTime||'00:00').split(':')[1]}00`;
+  const ics =
+`BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+UID:${event.id || 'event'}@cmrhub
+DTSTAMP:${new Date().toISOString().replace(/[-:]/g,'').split('.')[0]}Z
+DTSTART:${start}
+DTEND:${end}
+SUMMARY:${event.title || ''}
+DESCRIPTION:${(event.description||'').replace(/\n/g,' ')}
+LOCATION:${event.location || ''}
+END:VEVENT
+END:VCALENDAR`;
+  const blob = new Blob([ics], { type: 'text/calendar' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${event.id || 'event'}.ics`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+// ---------- CONTACT CARD + responsive placement (phone, address, email) ----------
+(function(){
+  const CONTACT_PHONE = '+1-817-555-0123';
+  const CONTACT_EMAIL = 'info@cmrestauration.org';
+  const CONTACT_ADDRESS = '123 Church St, Fort Worth, TX';
+  const MAP_QUERY = encodeURIComponent(CONTACT_ADDRESS);
+
+  function createContactCard() {
+    if (document.getElementById('contactCard')) return document.getElementById('contactCard');
+
+    const card = document.createElement('div');
+    card.id = 'contactCard';
+    card.className = 'card contact-card';
+    card.setAttribute('aria-labelledby','contactHeading');
+
+    card.innerHTML = `
+      <h3 id="contactHeading" style="margin:0 0 12px 0;">Contact</h3>
+      <div class="contact-meta" style="margin-bottom:6px;">
+        <div class="meta-title" style="font-weight:700;">Get in touch</div>
+        <div class="visit-name" style="margin-top:4px; font-weight:700;">Christ Missionary Revival Church</div>
+        <div class="visit-addr small-muted" style="margin-top:4px;">${CONTACT_ADDRESS}</div>
+      </div>
+      <div class="contact-row" role="group" aria-label="Contact actions">
+        <a class="contact-btn phone" href="tel:${CONTACT_PHONE.replace(/\s+/g,'')}" aria-label="Call ${CONTACT_PHONE}">Call</a>
+        <a class="contact-btn email" href="mailto:${CONTACT_EMAIL}" aria-label="Email ${CONTACT_EMAIL}">Email</a>
+        <a class="contact-btn map" href="https://www.google.com/maps/search/?api=1&query=${MAP_QUERY}" target="_blank" rel="noopener" aria-label="Open map">Map</a>
+      </div>
+    `;
+    return card;
+  }
+
+  function repositionContact() {
+    const desktop = window.innerWidth >= 981;
+    const leadersSection = document.getElementById('leadersSection');
+    const serviceTimes = document.getElementById('serviceTimes');
+    const placeholder = document.getElementById('contactPlaceholder');
+    const contactCard = createContactCard();
+
+    if (desktop) {
+      if (leadersSection && leadersSection.parentElement) {
+        if (leadersSection.nextSibling !== contactCard) {
+          if (contactCard.parentElement) contactCard.parentElement.removeChild(contactCard);
+          leadersSection.parentElement.insertBefore(contactCard, leadersSection.nextSibling);
+        }
+      }
+    } else {
+      if (serviceTimes && serviceTimes.parentElement) {
+        if (serviceTimes.nextSibling !== contactCard) {
+          if (contactCard.parentElement) contactCard.parentElement.removeChild(contactCard);
+          serviceTimes.parentElement.insertBefore(contactCard, serviceTimes.nextSibling);
+        }
+      } else if (placeholder && placeholder.parentElement) {
+        if (placeholder.firstChild !== contactCard) {
+          if (contactCard.parentElement) contactCard.parentElement.removeChild(contactCard);
+          placeholder.appendChild(contactCard);
+        }
+      }
+    }
+  }
+
+  // init contact placement helpers
+  let _resizeTimer = null;
+  function onResize() {
+    clearTimeout(_resizeTimer);
+    _resizeTimer = setTimeout(repositionContact, 120);
+  }
+
+  function initContactPlacement() {
+    createContactCard();
+    const placeholder = document.getElementById('contactPlaceholder');
+    if (placeholder && !placeholder.firstChild) {
+      const card = createContactCard();
+      placeholder.appendChild(card);
+    }
+    repositionContact();
+    window.addEventListener('resize', onResize);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initContactPlacement);
+  } else {
+    initContactPlacement();
+  }
+
+  // expose createContactCard for global use
+  window.createContactCard = createContactCard;
+})();
+
+// ---------- PRAYER CARD (creation + placement) ----------
+(function(){
+  const PRAYER_EMAIL = 'info@cmrestauration.org';
+  const PRAYER_SUBJECT = encodeURIComponent('Prayer Request');
+  const PRAYER_BODY = encodeURIComponent('Prayer Request');
+
+  function createPrayerCard() {
+    if (document.getElementById('prayerCard')) return document.getElementById('prayerCard');
+    const card = document.createElement('div');
+    card.id = 'prayerCard';
+    card.className = 'card prayer-card';
+    card.innerHTML = `
+      <h3 id="prayerHeading" style="margin:0 0 12px 0;">Prayer Request</h3>
+      <div class="prayer-meta" style="margin-bottom:6px;">Share a request and we will pray for you</div>
+      <div>
+        <a class="btn btn-primary prayer-btn" href="mailto:${PRAYER_EMAIL}?subject=${PRAYER_SUBJECT}&body=${PRAYER_BODY}" aria-label="Request Prayer">Request Prayer</a>
+      </div>
+    `;
+    document.body.appendChild(card);
+    return card;
+  }
+
+  function repositionPrayer() {
+    const desktop = window.innerWidth >= 981;
+    const leadersSection = document.getElementById('leadersSection');
+    const serviceTimes = document.getElementById('serviceTimes');
+    const prayerCard = createPrayerCard();
+
+    if (desktop) {
+      if (serviceTimes && serviceTimes.parentElement) {
+        if (serviceTimes.nextSibling !== prayerCard) {
+          if (prayerCard.parentElement) prayerCard.parentElement.removeChild(prayerCard);
+          serviceTimes.parentElement.insertBefore(prayerCard, serviceTimes.nextSibling);
+        }
+      }
+    } else {
+      if (leadersSection && leadersSection.parentElement) {
+        if (leadersSection.nextSibling !== prayerCard) {
+          if (prayerCard.parentElement) prayerCard.parentElement.removeChild(prayerCard);
+          leadersSection.parentElement.insertBefore(prayerCard, leadersSection.nextSibling);
+        }
+      }
+    }
+
+    applyTranslations();
+  }
+
+  window.createPrayerCard = createPrayerCard;
+  window.repositionPrayer = repositionPrayer;
+})();
+
+// ---------- INIT ----------
+document.addEventListener('DOMContentLoaded', async () => {
+  buildLangSwitcher();
+  applyTranslations();
+  wireAppLinks();
+
+  await loadSiteConfig();
+  loadAndRenderAnnouncements();
+  setInterval(loadAndRenderAnnouncements, 5 * 60 * 1000);
+
+  loadLeaders();
+  loadSingleLatestSermon();
+  loadNextEvent();
+
+  if (window.createPrayerCard) window.createPrayerCard();
+  if (window.repositionPrayer) window.repositionPrayer();
+
+  // ensure contact/prayer placement after small delay
+  setTimeout(() => {
+    try { window.dispatchEvent(new Event('resize')); } catch(e){}
+  }, 120);
+
+  // Bible plan share wiring
+  const planUrl = 'https://bibleinayearonline.com/chronological-bible-custom-reading-plan/';
+  const shareBtn = document.getElementById('shareTodayBtn');
+  const status = document.getElementById('biblePlanStatus');
+  if (shareBtn) {
+    shareBtn.addEventListener('click', async () => {
+      const shareTitle = 'CMR — Bible in a Year';
+      const shareText = 'Read today’s chronological Bible in a Year reading from CMR Hub';
+      try {
+        if (navigator.share) {
+          await navigator.share({ title: shareTitle, text: shareText, url: planUrl });
+          status.textContent = 'Shared';
+          setTimeout(() => status.textContent = '', 1600);
+          return;
+        }
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(planUrl);
+          status.textContent = 'Link copied';
+          setTimeout(() => status.textContent = '', 1600);
+          return;
+        }
+        window.prompt('Copy this link to share', planUrl);
+      } catch (err) {
+        try { await navigator.clipboard.writeText(planUrl); status.textContent = 'Link copied'; setTimeout(() => status.textContent = '', 1600); }
+        catch (e) { window.prompt('Copy this link to share', planUrl); }
+      }
+    });
+  }
+});
+
+// ---------- SERMONS JS (thumbnail-first behavior) ----------
+async function loadSingleLatestSermon() {
+  const wrap = document.getElementById('sermonVideoWrap');
+  const titleEl = document.getElementById('sermonTitle');
+  const detailsEl = document.getElementById('sermonDetails');
+  const openBtn = document.getElementById('openSermonOnYT');
+  const shareBtn = document.getElementById('shareSermonBtn');
+  const copyBtn = document.getElementById('copySermonLinkBtn');
+
+  try {
+    const res = await fetch('/sermons.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error('Failed to load sermons.json');
+    const data = await res.json();
+    const items = (data.items || []).filter(i => i.videoId && i.date);
+    if (!items.length) throw new Error('No sermons found');
+
+    items.sort((a,b) => new Date(b.date) - new Date(a.date));
+    const latest = items[0];
+
+    // set meta
+    titleEl.textContent = latest.title || 'Latest Sermon';
+    const dateStr = latest.date ? new Date(latest.date).toLocaleDateString() : '';
+    detailsEl.textContent = `${latest.preacher || ''}${latest.preacher ? ' • ' : ''}${dateStr}`;
+
+    const videoUrl = `https://www.youtube.com/watch?v=${latest.videoId}`;
+    openBtn.href = videoUrl;
+
+    shareBtn.onclick = async () => {
+      const shareData = { title: latest.title, text: latest.title, url: videoUrl };
+      if (navigator.share) {
+        try { await navigator.share(shareData); return; } catch (e) { /* fallback below */ }
+      }
+      const fb = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(videoUrl)}`;
+      window.open(fb, '_blank', 'noopener');
+    };
+
+    copyBtn.onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(videoUrl);
+        copyBtn.textContent = 'Copied';
+        setTimeout(() => copyBtn.textContent = 'Copy link', 1600);
+      } catch (e) {
+        prompt('Copy this link', videoUrl);
+      }
+    };
+
+    // Keep your thumbnail-first behavior exactly as you wrote it
+    if (latest.thumbnail) {
+      wrap.innerHTML = '';
+      const thumbWrap = document.createElement('div');
+      thumbWrap.className = 'video-thumb';
+      thumbWrap.style.width = '100%';
+      thumbWrap.style.height = '100%';
+
+      const img = document.createElement('img');
+      img.src = latest.thumbnail;
+      img.alt = latest.title || 'Sermon thumbnail';
+      thumbWrap.appendChild(img);
+
+      const overlay = document.createElement('div');
+      overlay.className = 'play-overlay';
+      const play = document.createElement('div');
+      play.className = 'play-button';
+      play.innerHTML = '&#9658;';
+      overlay.appendChild(play);
+      thumbWrap.appendChild(overlay);
+
+      thumbWrap.addEventListener('click', () => {
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube.com/embed/${latest.videoId}?rel=0&modestbranding=1`;
+        iframe.title = latest.title || 'Latest sermon';
+        iframe.loading = 'lazy';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = '0';
+        wrap.innerHTML = '';
+        wrap.appendChild(iframe);
+      }, { once: true });
+
+      wrap.appendChild(thumbWrap);
+    } else {
+      wrap.innerHTML = '';
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube.com/embed/${latest.videoId}?rel=0&modestbranding=1`;
+      iframe.title = latest.title || 'Latest sermon';
+      iframe.loading = 'lazy';
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      iframe.style.border = '0';
+      wrap.appendChild(iframe);
+    }
+
+    applyTranslations();
+  } catch (err) {
+    console.error(err);
+    wrap.innerHTML = '';
+    titleEl.textContent = 'Latest sermon unavailable';
+    detailsEl.textContent = 'Visit our YouTube channel for recent messages.';
+    openBtn.href = '/';
+    applyTranslations();
+  }
+}
+
+// Resize handling for prayer + contact placement
+let _placementTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(_placementTimer);
+  _placementTimer = setTimeout(() => {
+    try {
+      if (window.repositionPrayer) window.repositionPrayer();
+      window.dispatchEvent(new Event('resize'));
+    } catch (e) {}
+  }, 120);
+});
+
+// USER MOBILE ORDER PATCH (keeps your mobile/desktop order logic)
+(function enforceUserMobileOrder() {
+  const BREAK = 981;
+
+  function applyOrder() {
+    const isDesktop = window.innerWidth >= BREAK;
+    const left = document.getElementById('leftColumn');
+    const right = document.getElementById('rightColumn');
+    if (!left || !right) return;
+
+    const prayer = (window.createPrayerCard && window.createPrayerCard()) || document.getElementById('prayerCard');
+    const contact = (window.createContactCard && window.createContactCard()) || document.getElementById('contactCard');
+
+    const hub = document.getElementById('hubCard');
+    const latest = document.getElementById('latestSermonCard');
+    const annPrimary = document.getElementById('announcementsCardPrimary');
+    const annMore = document.getElementById('announcementsCard2');
+    const upcoming = document.getElementById('upcomingEventCard');
+    const leaders = document.getElementById('leadersSection');
+    const bible = document.getElementById('biblePlanCard');
+    const serviceTimes = document.getElementById('serviceTimes');
+
+    if (!isDesktop) {
+      const order = [hub, latest, annPrimary, annMore, upcoming, leaders, bible, prayer, serviceTimes, contact];
+      order.forEach(el => { if (el) left.appendChild(el); });
+    } else {
+      if (hub) left.appendChild(hub);
+      if (latest) left.appendChild(latest);
+      if (bible) left.appendChild(bible);
+      if (leaders) left.appendChild(leaders);
+      if (contact) {
+        if (leaders && leaders.parentElement) leaders.parentElement.insertBefore(contact, leaders.nextSibling);
+        else left.appendChild(contact);
+      }
+
+      if (annPrimary) right.appendChild(annPrimary);
+      if (annMore) right.appendChild(annMore);
+      if (upcoming) right.appendChild(upcoming);
+      if (serviceTimes) right.appendChild(serviceTimes);
+      if (prayer) {
+        if (serviceTimes && serviceTimes.parentElement) serviceTimes.parentElement.insertBefore(prayer, serviceTimes.nextSibling);
+        else right.appendChild(prayer);
+      }
+    }
+
+    try { applyTranslations(); } catch (e) { /* no-op */ }
+  }
+
+  let _t = null;
+  function onResize() { clearTimeout(_t); _t = setTimeout(applyOrder, 120); }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => { applyOrder(); window.addEventListener('resize', onResize); });
+  } else {
+    applyOrder();
+    window.addEventListener('resize', onResize);
+  }
+
+  window.enforceUserMobileOrder = applyOrder;
+})();
+
+(function adjustHeaderTop(){
+  const header = document.querySelector('.hub-header--stacked');
+  const wrap = document.querySelector('.wrap');
+  if(!header || !wrap) return;
+  const style = getComputedStyle(wrap);
+  const padTop = parseFloat(style.paddingTop) || 0;
+  function apply(){
+    if(window.innerWidth <= 980) header.style.marginTop = `-${padTop}px`;
+    else header.style.marginTop = '';
+  }
+  apply();
+  window.addEventListener('resize', () => { setTimeout(apply, 80); });
+})();

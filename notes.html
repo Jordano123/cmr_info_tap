@@ -1,366 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>CMR Notes</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <title>CMR HUB</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&family=Georgia:ital,wght@0,400;0,700;1,400&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+  <!-- PWA + ICONS -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" sizes="512x512" href="/cmr512.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/cmr192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cmr32.png">
+  <link rel="icon" type="image/svg+xml" href="/cmrsvg.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/cmr180.png">
+  <meta name="theme-color" content="#000000">
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
-    :root { --page-padding:24px; --bg:#f6f7f8; --card:#ffffff; --muted:#6b7280; --accent:#007aff; --radius:14px; --shadow:0 10px 30px rgba(16,24,40,0.08); --control-bg:#f3f4f6; }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      padding: calc(var(--page-padding) + env(safe-area-inset-top)) calc(var(--page-padding) + env(safe-area-inset-right)) calc(var(--page-padding) + env(safe-area-inset-bottom)) calc(var(--page-padding) + env(safe-area-inset-left));
-      background:var(--bg);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-family: Roboto, system-ui, -apple-system, "Segoe UI", Arial;
-      color:#111827;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
     }
 
-    h1, .church { font-size: clamp(1.05rem, 2.6vw, 1.6rem); }
-    p, label, .small { font-size: clamp(0.88rem, 1.8vw, 1rem); }
-
-    .wrap{
-      width:100%;
-      max-width:920px;
-      background:var(--card);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:20px;
-      overflow:hidden;
+    body {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
     }
 
-    header{
-      display:flex;
-      gap:18px;
-      align-items:center;
-      margin-bottom:14px;
+    .card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
-    .logo-plate, .icon-wrap {
-      width: clamp(64px, 12vw, 120px);
-      height: auto;
-      border-radius: 18px;
-      padding: 10px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      background: linear-gradient(180deg,#fff,#fbfbff);
-      box-shadow: 0 8px 24px rgba(16,24,40,0.06);
-      overflow:hidden;
+    .header img {
+      width: 140px;
+      margin-bottom: 10px;
     }
-    .logo-plate img, .icon-wrap img { width:70%; height:auto; display:block; }
 
-    .title{ display:flex; flex-direction:column; }
-    .church{ font-weight:700; letter-spacing:0.4px; font-size:1.15rem; color:#111827 }
-
-    .meta{ display:flex; gap:12px; margin:14px 0 18px; flex-wrap:wrap; align-items:center; }
-    .meta .field{ display:flex; flex-direction:column; gap:6px; min-width:140px; }
-    .meta label{ font-size:0.78rem; color:var(--muted); font-weight:600 }
-    .meta input{ padding:8px 10px; border-radius:10px; border:1px solid #e6e7ea; background:var(--control-bg); font-size:0.95rem; }
-
-    .controls{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:12px; }
-    .group{ display:flex; gap:8px; padding:6px; border-radius:10px; align-items:center; }
-
-    .btn, .select, .color-swatch { border:none; background:#fff; padding:8px 10px; border-radius:10px; font-weight:600; cursor:pointer; box-shadow:0 1px 0 rgba(0,0,0,0.03); transition:transform .12s ease, box-shadow .12s ease; font-size:0.92rem; }
-    .icon-btn{ display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:10px; background:var(--control-bg); border:1px solid #e6e7ea; cursor:pointer; font-weight:700; color:#111827; }
-    .color-swatch{ width:36px; height:36px; padding:0; border-radius:8px; border:1px solid rgba(0,0,0,0.06); cursor:pointer; }
-
-    .editor{ margin-top:8px; background:#fff; border-radius:12px; padding:18px; min-height:52vh; max-height:65vh; overflow:auto; border:1px solid #eef0f3; line-height:1.6; font-size:16px; color:#111827; }
-    .editor[contenteditable="true"]:focus{ outline:2px solid rgba(0,122,255,0.12); outline-offset:2px }
-
-    .toolbar-row{ display:flex; justify-content:space-between; gap:12px; align-items:center; margin-bottom:8px; flex-wrap:wrap }
-    .right-actions{ display:flex; gap:8px; align-items:center }
-    .small{ font-size:0.85rem; color:var(--muted) }
-
-    @media (max-width:720px){
-      .meta{ flex-direction:column; align-items:stretch }
-      .controls{ gap:6px }
-      .editor{ min-height:48vh }
-      header{ justify-content:center; text-align:center; flex-direction:column }
-      .logo-plate img{ margin-bottom:6px }
+    .church-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
     }
+
+    a.btn {
+      display: block;
+      margin: 10px 0;
+      padding: 14px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      color: white;
+    }
+
+    .give { background: #00c244; }
+    .notes { background: #2575fc; }
+    .sermons { background: #6a11cb; }
+    .events { background: #444; }
+    .projects { background: #333; }
+    .website { background: #111; }
+    .social { background: #520fbf; }
   </style>
 </head>
+
 <body>
-  <div class="wrap" role="main" aria-label="CMR Notes">
-    <header>
-      <div class="logo-plate" aria-hidden="false">
-        <img src="logo.svg" alt="CMR Logo">
-      </div>
-      <div class="title">
-        <div class="church">Centre Missionnaire La Restauration</div>
-      </div>
-    </header>
-
-    <div class="meta" aria-hidden="false">
-      <div class="field">
-        <label for="note-date">Date</label>
-        <input id="note-date" type="text" readonly>
-      </div>
-
-      <div class="field">
-        <label for="note-theme">Theme</label>
-        <input id="note-theme" type="text" placeholder="Enter theme or sermon title">
-      </div>
-
-      <div class="field">
-        <label for="note-preacher">Preacher</label>
-        <input id="note-preacher" type="text" placeholder="Preacher name">
-      </div>
-
-      <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
-        <button id="new-note" class="btn" title="Insert template">New Note</button>
-      </div>
+  <div class="card">
+    <div class="header">
+      <img src="logo.png" alt="CMR Logo">
+      <div class="church-name">Centre Missionnaire La Restauration</div>
     </div>
 
-    <div class="toolbar-row">
-      <div class="controls" role="toolbar" aria-label="Formatting controls">
-        <div class="group" aria-hidden="false">
-          <button class="icon-btn" data-cmd="bold" title="Bold"><strong>B</strong></button>
-          <button class="icon-btn" data-cmd="italic" title="Italic"><em>I</em></button>
-          <button class="icon-btn" data-cmd="underline" title="Underline"><span style="text-decoration:underline">U</span></button>
-          <button class="icon-btn" data-cmd="strikeThrough" title="Strike"><span style="text-decoration:line-through">S</span></button>
-        </div>
+    <p>Welcome to the CMR Hub</p>
 
-        <div class="group">
-          <div class="select">
-            <label class="small" for="font-family">Font</label>
-            <select id="font-family" title="Choose font family">
-              <option value="Roboto, system-ui, -apple-system, 'Segoe UI', Arial">Roboto</option>
-              <option value="Georgia, serif">Georgia</option>
-              <option value="'Courier Prime', monospace">Courier Prime</option>
-              <option value="'Times New Roman', Times, serif">Times New Roman</option>
-              <option value="'Segoe UI', system-ui, -apple-system, Arial">Segoe UI</option>
-            </select>
-          </div>
-
-          <div class="select">
-            <label class="small" for="font-size">Size</label>
-            <input id="font-size" type="number" min="12" max="36" value="16" style="width:72px; padding:8px; border-radius:8px; border:1px solid #e6e7ea; background:var(--control-bg)">
-          </div>
-        </div>
-
-        <div class="group" aria-hidden="false">
-          <label class="small" style="margin-right:6px">Highlight</label>
-          <button class="color-swatch" data-hl="#fff59d" style="background:#fff59d" title="Yellow highlight"></button>
-          <button class="color-swatch" data-hl="#ffd6d6" style="background:#ffd6d6" title="Red highlight"></button>
-          <button class="color-swatch" data-hl="#cfe8ff" style="background:#cfe8ff" title="Blue highlight"></button>
-          <button class="color-swatch" data-hl="#e9d5ff" style="background:#e9d5ff" title="Purple highlight"></button>
-          <button class="color-swatch" data-hl="#d1f7d6" style="background:#d1f7d6" title="Green highlight"></button>
-        </div>
-
-        <div class="group" aria-hidden="false">
-          <label class="small" style="margin-right:6px">Text</label>
-          <button class="color-swatch" data-color="#111827" style="background:#111827" title="Black text"></button>
-          <button class="color-swatch" data-color="#0b5cff" style="background:#0b5cff" title="Blue text"></button>
-          <button class="color-swatch" data-color="#c62828" style="background:#c62828" title="Red text"></button>
-          <button class="color-swatch" data-color="#f59e0b" style="background:#f59e0b" title="Orange text"></button>
-          <button class="color-swatch" data-color="#6b21a8" style="background:#6b21a8" title="Purple text"></button>
-        </div>
-
-        <div class="group">
-          <label class="small" style="margin-right:6px">BG</label>
-          <button id="bg-white" class="btn" title="White background">White</button>
-          <button id="bg-black" class="btn" title="Black background">Black</button>
-        </div>
-      </div>
-
-      <div class="right-actions">
-        <div class="small" style="margin-right:6px">Preview</div>
-        <button id="download-html" class="btn">Download HTML</button>
-        <button id="download-txt" class="btn">Download TXT</button>
-        <button id="email-note" class="btn">Send to Email</button>
-      </div>
-    </div>
-
-    <div id="editor" class="editor" contenteditable="true" spellcheck="true" aria-label="Note editor"></div>
+    <a class="btn give" href="https://paypal.com/send?phone=16823812259">Give</a>
+    <a class="btn notes" href="notes.html">Take Notes</a>
+    <a class="btn sermons" href="https://www.youtube.com/@CentreMissionnaireRestauration/streams">Sermons</a>
+    <a class="btn events" href="https://yourchurchsite.com/events">Events</a>
+    <a class="btn projects" href="connect.html">Connect With Us</a>
+    <a class="btn website" href="https://cmrestauration.org">Visit Website</a>
+    <a class="btn social" href="https://linktr.ee/YOURCHURCH">Follow Us</a>
+    
   </div>
-
-  <script>
-    // Helpers
-    const $ = s => document.querySelector(s);
-    const $$ = s => Array.from(document.querySelectorAll(s));
-
-    const editor = $('#editor');
-    const dateInput = $('#note-date');
-    const themeInput = $('#note-theme');
-    const preacherInput = $('#note-preacher');
-    const fontFamily = $('#font-family');
-    const fontSize = $('#font-size');
-    const newNoteBtn = $('#new-note');
-
-    // Date
-    function formatDate(d){ return d.toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' }); }
-    dateInput.value = formatDate(new Date());
-
-    function escapeHtml(str){ return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s])); }
-
-  function insertTemplate(){
-  const template = `
-    <h2 style="margin:8px 0 6px; font-size:1.15rem;">Notes</h2>
-    <div><p style="margin:0 0 8px;">Write your sermon notes here…</p></div>
-    <div style="height:12px"></div>
-  `;
-  editor.innerHTML = template;
-  applyEditorStyles();
-  placeCaretAtEnd(editor);
-  saveToLocal();
-}
-
-
-    function placeCaretAtEnd(el){
-      el.focus();
-      if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
-        const range = document.createRange();
-        range.selectNodeContents(el);
-        range.collapse(false);
-        const sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-      }
-    }
-
-    function exec(cmd, value = null){ document.execCommand(cmd, false, value); editor.focus(); }
-
-    $$('[data-cmd]').forEach(btn => btn.addEventListener('click', () => exec(btn.getAttribute('data-cmd'))));
-    fontFamily.addEventListener('change', () => { editor.style.fontFamily = fontFamily.value; placeCaretAtEnd(editor); saveToLocal(); });
-    fontSize.addEventListener('change', () => {
-      const size = parseInt(fontSize.value, 10) || 16;
-      if (window.getSelection && window.getSelection().toString().length > 0) {
-        exec('fontSize', 7);
-        const spans = editor.querySelectorAll('font[size="7"]');
-        spans.forEach(s => {
-          const span = document.createElement('span');
-          span.style.fontSize = size + 'px';
-          span.innerHTML = s.innerHTML;
-          s.parentNode.replaceChild(span, s);
-        });
-      } else {
-        editor.style.fontSize = size + 'px';
-      }
-      placeCaretAtEnd(editor);
-      saveToLocal();
-    });
-
-    $$('[data-hl]').forEach(btn => btn.addEventListener('click', () => exec('hiliteColor', btn.getAttribute('data-hl'))));
-    $$('[data-color]').forEach(btn => btn.addEventListener('click', () => exec('foreColor', btn.getAttribute('data-color'))));
-
-    $('#bg-white').addEventListener('click', () => { editor.style.background = '#ffffff'; editor.style.color = '#111827'; editor.style.borderColor = '#eef0f3'; saveToLocal(); });
-    $('#bg-black').addEventListener('click', () => { editor.style.background = '#0b1220'; editor.style.color = '#e6eef8'; editor.style.borderColor = '#0b1220'; saveToLocal(); });
-
-    newNoteBtn.addEventListener('click', insertTemplate);
-
-    function downloadFile(filename, content, mime){
-      const blob = new Blob([content], { type: mime });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(a.href);
-    }
-
-    $('#download-html').addEventListener('click', () => {
-      const html = `<!doctype html><html><head><meta charset="utf-8"><title>CMR Note</title></head><body>${editor.innerHTML}</body></html>`;
-      const filename = `CMR_Note_${dateInput.value.replace(/\s+/g,'_')}.html`;
-      downloadFile(filename, html, 'text/html;charset=utf-8');
-    });
-
-    $('#download-txt').addEventListener('click', () => {
-      const text = editor.innerText;
-      const filename = `CMR_Note_${dateInput.value.replace(/\s+/g,'_')}.txt`;
-      downloadFile(filename, text, 'text/plain;charset=utf-8');
-    });
-
-    $('#email-note').addEventListener('click', () => {
-      const subject = encodeURIComponent(`CMR Note — ${dateInput.value} — ${themeInput.value || ''}`);
-      const body = encodeURIComponent(editor.innerText);
-      window.location.href = `mailto:?subject=${subject}&body=${body}`;
-    });
-
-    // Auto-save to localStorage
-    const STORAGE_KEY = 'cmr_notes_v1';
-    function saveToLocal(){
-      const payload = {
-        date: dateInput.value,
-        theme: themeInput.value,
-        preacher: preacherInput.value,
-        html: editor.innerHTML,
-        fontFamily: fontFamily.value,
-        fontSize: fontSize.value,
-        bg: editor.style.background || '#ffffff',
-        color: editor.style.color || '#111827',
-        savedAt: new Date().toISOString()
-      };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-      showSavedIndicator();
-    }
-
-    function restoreFromLocal(){
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return false;
-        const p = JSON.parse(raw);
-        dateInput.value = p.date || dateInput.value;
-        themeInput.value = p.theme || '';
-        preacherInput.value = p.preacher || '';
-        editor.innerHTML = p.html || '';
-        fontFamily.value = p.fontFamily || fontFamily.value;
-        fontSize.value = p.fontSize || fontSize.value;
-        editor.style.fontFamily = fontFamily.value;
-        editor.style.fontSize = fontSize.value + 'px';
-        editor.style.background = p.bg || '#ffffff';
-        editor.style.color = p.color || '#111827';
-        return true;
-      } catch (e) { return false; }
-    }
-
-    let saveTimer;
-    editor.addEventListener('input', () => { clearTimeout(saveTimer); saveTimer = setTimeout(saveToLocal, 700); });
-    [themeInput, preacherInput, fontFamily, fontSize].forEach(el => el.addEventListener('input', () => saveToLocal()));
-
-    editor.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') { e.preventDefault(); exec('bold'); }
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'i') { e.preventDefault(); exec('italic'); }
-    });
-
-    document.execCommand('defaultParagraphSeparator', false, 'p');
-    if (!restoreFromLocal()) insertTemplate();
-    applyEditorStyles();
-
-    function applyEditorStyles(){ editor.style.fontFamily = fontFamily.value; editor.style.fontSize = fontSize.value + 'px'; }
-
-    // Small saved indicator
-    function showSavedIndicator(){
-      if (!document.getElementById('saved-ind')) {
-        const el = document.createElement('div');
-        el.id = 'saved-ind';
-        el.textContent = 'Saved';
-        el.style.position = 'fixed';
-        el.style.right = '18px';
-        el.style.bottom = '18px';
-        el.style.background = '#111827';
-        el.style.color = '#fff';
-        el.style.padding = '8px 12px';
-        el.style.borderRadius = '10px';
-        el.style.boxShadow = '0 8px 24px rgba(16,24,40,0.12)';
-        el.style.fontWeight = '700';
-        el.style.opacity = '0';
-        el.style.transition = 'opacity .18s ease';
-        document.body.appendChild(el);
-        requestAnimationFrame(()=> el.style.opacity = '1');
-        setTimeout(()=> { el.style.opacity = '0'; setTimeout(()=> el.remove(), 300); }, 1400);
-      }
-    }
-
-    window.addEventListener('beforeunload', saveToLocal);
-  </script>
 </body>
 </html>

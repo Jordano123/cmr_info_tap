@@ -1,0 +1,55 @@
+{
+  "items": [
+{
+  "id": "ann-1",
+  "title": "TO BONDELA ELONGO",
+  "title_fr": "TO BONDELA ELONGO",
+  "description": "A powerful two-day prayer gathering built around the theme <strong>Nothing Is Impossible to God</strong>.\nJoin us for a time of faith-filled prayer, unity, and expectation as we believe God for the impossible.",
+  "description_fr": "Un puissant rassemblement de prière sur deux jours, construit autour du thème <strong>Rien n’est impossible à Dieu</strong>.<br>Rejoignez-nous pour un temps de prière rempli de foi, d’unité et d’espérance.",
+  "date": "2026-04-25",
+  "thumbnail": "/TOBO.png",
+  "learnMoreUrl": "/events/service-times.html",
+  "learnMore_fr": "/fr/events/service-times.html",
+  "type": "Special Event",
+  "type_fr": "Événement Spécial",
+  "enabled": true,
+  "expireDate": "2026-12-31",
+  "extra": {
+    "location": "April 25-26 • Centre Missionnaire La Restauration",
+    "time": "Saturday 7:00 PM • Sunday 10:00 AM",
+    "time_fr": "Samedi 19h00 • Dimache 10h00",
+    "timeOnNewLine": true
+  }
+},
+    {
+      "id": "ann-2",
+      "title": "Community Food Drive",
+      "title_fr": "Collecte alimentaire communautaire",
+      "description": "Help us collect non-perishable food for local families. Drop-off at the church lobby through Feb 1.",
+      "description_fr": "Aidez-nous à collecter des denrées non périssables pour les familles locales. Déposez-les dans le hall de l'église jusqu'au 1er février.",
+      "date": "2026-01-18",
+      "thumbnail": "/step1.png",
+      "learnMoreUrl": "/events/food-drive.html",
+      "learnMore_fr": "/fr/events/food-drive.html",
+      "type": "outreach",
+      "enabled": true,
+      "expireDate": "2026-02-01",
+      "extra": { "location": "Church Lobby", "time": "All week" }
+    },
+    {
+      "id": "ann-3",
+      "title": "Volunteer Training Night",
+      "title_fr": "Soirée de formation des bénévoles",
+      "description": "New and returning volunteers: join our training night to learn roles and safety procedures.",
+      "description_fr": "Nouveaux et anciens bénévoles : rejoignez notre soirée de formation pour connaître les rôles et les procédures de sécurité.",
+      "date": "2026-01-20",
+      "thumbnail": "/images/announcements/volunteer-training.jpg",
+      "learnMoreUrl": "/events/volunteer-training.html",
+      "learnMore_fr": "/fr/events/volunteer-training.html",
+      "type": "training",
+      "enabled": false,
+      "expireDate": "2026-03-01",
+      "extra": { "location": "Room B2", "time": "7:00 PM" }
+    }
+  ]
+}

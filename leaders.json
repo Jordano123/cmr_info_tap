@@ -3,19 +3,25 @@
     {
       "id": "leader-john-doe",
       "name": "John Doe",
+      "name_fr": "Jean Doe",
       "role": "Senior Pastor",
+      "role_fr": "Pasteur principal",
       "photo": "/step.png"
     },
     {
       "id": "leader-jane-smith",
       "name": "Jane Smith",
+      "name_fr": "Jeanne Smith",
       "role": "Worship Leader",
+      "role_fr": "Responsable du culte",
       "photo": "/step.png"
     },
     {
       "id": "leader-mary-jones",
       "name": "Mary Jones",
+      "name_fr": "Marie Jones",
       "role": "Youth Director",
+      "role_fr": "Directrice jeunesse",
       "photo": "/step.png"
     }
   ]

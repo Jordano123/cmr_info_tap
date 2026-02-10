@@ -1,0 +1,37 @@
+{
+  "items": [
+    {
+      "id": "2026-02-14-pancake-breakfast",
+      "title": "Sunday Service",
+      "title_fr": "Culte du Dimanche",
+
+      "date": "2026-02-14",
+      "date_fr": "14-02-2026",
+
+      "startTime": "10:00",
+      "startTime_fr": "10h00",
+
+      "endTime": "10:00",
+      "endTime_fr": "10h00",
+
+      "location": "Centre Missionnaire La Restauration",
+      "location_fr": "Centre Missionnaire La Restauration",
+
+      "lat": 32.7555,
+      "lng": -97.3308,
+
+      "description": "You are invited! Join this Sunday for a moment of worship and prayer.",
+      "description_fr": "Vous êtes invités ! Rejoignez-nous ce Dimanche pour un moment de louange et de prière.",
+
+      "rsvpFormName": "rsvp-SundayService-2026-02-14",
+      "capacity": 120,
+
+      "thumbnail": "/step.png",
+
+      "tags": ["fundraiser", "community"],
+      "tags_fr": ["collecte de fonds", "communauté"],
+
+      "public": true
+    }
+  ]
+}

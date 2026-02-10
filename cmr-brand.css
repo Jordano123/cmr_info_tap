@@ -1,0 +1,476 @@
+:root{
+  --cmr-accent: #73b3cf;
+  --cmr-main : #1f3a5f;
+  --cmr-maroon: #800000;
+  --cmr-gold: #b4822b;
+  --cmr-accent-10: rgba(115,179,207,0.10);
+  --cmr-accent-06: rgba(115,179,207,0.06);
+  --cmr-maroon-06: rgba(128,0,0,0.06);
+  --cmr-gold-06: rgba(180,130,43,0.06);
+  --card-bg: #ffffff;
+  --page-bg: #f7fafc;
+  --radius: 10px;
+  --shadow-weak: 0 6px 18px rgba(15,23,42,0.06);
+  --shadow-accent: 0 10px 30px rgba(115,179,207,0.06);
+}
+
+/* Safety and layout helpers */
+html,body { max-width:100%; overflow-x:hidden; box-sizing:border-box; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+*,*::before,*::after { box-sizing:inherit; }
+img,video { max-width:100%; height:auto; display:block; }
+
+/* Subtle background gradient overlay (non-intrusive) */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background: linear-gradient(120deg, rgba(115,179,207,0.06) 0%, rgba(180,130,43,0.03) 45%, rgba(128,0,0,0.02) 100%);
+  mix-blend-mode: overlay;
+  z-index:0;
+}
+.wrap, .card { position:relative; z-index:1; }
+
+/* Card and container */
+.card{
+  background: var(--card-bg, #0f172a);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow-weak);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: box-shadow .12s ease, transform .12s ease;
+}
+
+/* Accent left edge for selected cards */
+.card[data-accent="true"]{
+  border-left:4px solid var(--cmr-accent);
+  box-shadow: var(--shadow-accent);
+}
+
+/* Hub icon and small accents */
+.hub-icon{ background: #1f3a5f; color:#fff; display:flex; align-items:center; justify-content:center; border-radius:8px; }
+
+.announce-theme::before{
+  content:"";
+  display:inline-block;
+  width:6px;
+  height:6px;
+  border-radius:2px;
+  background:var(--cmr-gold);
+  margin-right:8px;
+  vertical-align:middle;
+  opacity:.95;
+}
+
+/* Buttons */
+.btn-primary{
+  background: var(--cmr-main);
+  color:#fff;
+  border:1px solid rgba(115,179,207,0.18);
+  padding:10px 12px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 6px 18px rgba(115,179,207,0.06);
+  font-family: "Inter", sans-serif;
+}
+.btn-primary:hover{background-color: var(--cmr-accent); color: white; transform:translateY(-2px); }
+
+/* Maroon primary (use sparingly for main CTAs) */
+.btn-maroon{
+  background: linear-gradient(90deg, var(--cmr-main), #5f0000);
+  color:#fff;
+  border:1px solid rgba(128,0,0,0.12);
+  padding:10px 12px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-family: "Inter", sans-serif;
+}
+.btn-maroon:hover{ box-shadow:0 8px 24px rgba(128,0,0,0.08); transform:translateY(-2px); }
+
+/* Gold micro accent */
+.hr-cmr{
+  height:1px;
+  background: linear-gradient(90deg, transparent, var(--cmr-accent-06), transparent);
+  margin:12px 0;
+}
+
+/* Language switcher safe placement */
+.lang-switcher{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:1200;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  transform:translateZ(0);
+  max-width:calc(100% - 28px);
+  font-family: "Inter", sans-serif;
+}
+.lang-btn{
+  background:#fff;
+  border:1px solid rgba(15,23,42,0.04);
+  padding:8px 10px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+  color:#111827;
+  min-width:44px;
+  text-align:center;
+  font-family: "Inter", sans-serif;
+}
+.lang-btn:hover{background-color: red; color: white;}
+
+/* Utility */
+.text-muted{ color: #6b7280; font-size:13px; }
+.small{ font-size:13px; }
+
+/* Responsive tweaks */
+@media (max-width:980px){
+  .card{ padding:16px; }
+}
+@media (max-width:420px){
+  .wrap{ padding:12px; }
+  .card{ padding:12px; }
+  .lang-switcher{ top:10px; right:10px; }
+}
+
+/* ---------- Temporary hide for Serve card (reversible) ---------- */
+#serveCard {
+  display: none !important; /* change to block or remove to show again */
+}
+
+/* ---------- More stylish Serve card (Apple-like polish) ---------- */
+.serve-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,250,0.98));
+  border: 1px solid rgba(15,23,42,0.04);
+  box-shadow: 0 10px 30px rgba(15,23,42,0.06);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.serve-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(15,23,42,0.08); }
+
+/* Serve header styling */
+.serve-card .serve-header { gap: 10px; align-items: flex-start; }
+.serve-card .serve-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+}
+.serve-card .serve-sub {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Serve groups as pill cards */
+.serve-card .serve-group {
+  background: linear-gradient(90deg, rgba(115,179,207,0.04), rgba(180,130,43,0.02));
+  border-radius: 10px;
+  padding: 10px 12px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  border:1px solid rgba(115,179,207,0.04);
+}
+.serve-card .serve-group .serve-title { font-weight:700; color: #111827; }
+.serve-card .serve-item { color:#111827; font-size:14px; margin-left:6px; }
+
+/* CTA inside serve card */
+.serve-card .serve-cta {
+  display:flex;
+  gap:8px;
+  margin-top:6px;
+}
+.serve-card .btn-serve {
+  background: linear-gradient(90deg, var(--cmr-accent), #4c9bd6);
+  color:#fff;
+  padding:8px 12px;
+  border-radius:10px;
+  font-weight:700;
+  border:0;
+}
+
+/* ---------- Announcement thumbnail crop and consistent height ---------- */
+.announcement .thumb {
+  width:100%;
+  height:160px;
+  object-fit:cover;
+  border-radius:8px;
+  background:#e6eef9;
+  display:block;
+}
+
+/* Blue accent line for highlighted announcement */
+.announcement[data-accent="true"] {
+  border-left:4px solid var(--cmr-accent);
+  padding-left:12px; /* keep content aligned */
+  box-shadow: 0 8px 24px rgba(115,179,207,0.04);
+}
+
+/* Give button: blue background, white icon, white labels */
+#giveBtn.hub-button {
+  background: #191617;
+  color: #ffffff;
+  border-color: rgba(0,0,0,0.04);
+}
+
+#giveBtn.hub-button .hub-icon {
+  background: #1f3a5f;
+  color: #ffffff;
+}
+
+#giveBtn.hub-button .hub-label,
+#giveBtn.hub-button .hub-sub {
+  color: #ffffff;
+}
+#giveBtn.hub-button .hub-icon svg { stroke: currentColor; fill: none; }
+
+/* Latest Sermon heading: Playfair Display */
+#latestSermonHeading {
+  font-family: "Playfair Display", serif !important;
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: inherit;
+}
+/* Increase logo size */
+.code-logo-box img {
+  width: 900px;
+  height: auto;
+}
+
+/* Reduce space between logo and title */
+.logo-stack {
+  gap: 15px;
+}
+/* Target only the Start reading button */
+.readTodayBtn {
+  background: #1f3a5f;
+  color: #ffffff;
+  border:1px solid rgba(115,179,207,0.18);
+  padding:10px 12px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 6px 18px rgba(115,179,207,0.06);
+  font-family: "Inter", sans-serif;
+}
+
+/* Hover / focus state */
+.readTodayBtn:hover{
+  background: #ffffff;
+  color: #1f3a5f;
+  transform:translateY(-2px); 
+}
+
+/* Upcoming event card: blue background and adjusted text colors */
+#upcomingEventCard .card {
+  background: #1f3a5f;
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* Ensure muted text remains readable on blue */
+#upcomingEventCard .card .small-muted {
+  color: rgba(255,255,255,0.85);
+  font-family: "Inter", sans-serif;
+}
+
+/* Title weight and color */
+#upcomingEventCard .card > div[style*="font-weight:700"] {
+  color: #ffffff;
+  font-family: "Playfair Display", serif;
+}
+
+/* Add-to-Google button: purple */
+#upcomingEventCard .card .btn.add-google {
+  background: #73b3cf;
+  color: white;
+  border: 1px solid transparent;
+}
+
+/* Keep the ghost button visible on blue background */
+#upcomingEventCard .card .btn.btn-ghost {
+  color: #191617;
+  border-color: rgba(255,255,255,0.12);
+}
+
+/* Make links inside the card inherit readable color */
+#upcomingEventCard .card a {
+  text-decoration: none;
+}
+
+/* Single Get involved button under leaders */
+.get-involved-global {
+  background: #1f3a5f;
+  color: #ffffff;
+  border: 1px solid transparent;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 600;
+  transition: background .15s ease, color .15s ease, box-shadow .12s ease;
+}
+
+.get-involved-global:hover,
+.get-involved-global:focus {
+  background: #ffffff;
+  color: #73b3cf;
+  border-color: #1f3a5f;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(15,118,110,0.06);
+  font-family: "Inter", sans-serif;
+}
+/* Center the single Get involved button under leaders */
+#leadersActionWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12px;
+}
+
+#leadersActionWrapper .get-involved-global {
+  display: inline-block;
+}
+
+/* Leaders heading uses Playfair Display */
+#leadersHeading {
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  color: inherit;
+  text-transform: none;
+}
+
+/* Leader cards: name and role use Inter */
+.leader-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 12px;
+}
+
+.leader-card > div {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Name styling */
+.leader-card .leader-name {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-top: 8px;
+  color: inherit;
+}
+
+/* Role/description styling */
+.leader-card .leader-role {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 0.9rem;
+  color: var(--muted-color, #6b7280);
+  margin-top: 4px;
+}
+
+/* Keep images consistent */
+.leader-card img {
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Prayer card typography and colors */
+#prayerCard {
+  padding: 12px;
+}
+
+/* Title: Playfair Display */
+#prayerCard #prayerHeading {
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin: 0 0 8px 0;
+  color: inherit;
+}
+
+/* Description: Inter and specific color */
+#prayerCard .prayer-meta {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #191617;
+  font-weight: 400;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+/* Button: maroon background and white text */
+#prayerCard .prayer-btn,
+#prayerCard .prayer-btn.btn {
+  background: #800000;
+  color: #ffffff;
+  border: 1px solid transparent;
+  padding: 0.45rem 0.8rem;
+  border-radius: 6px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, box-shadow .12s ease;
+}
+
+/* Announcements heading uses Playfair Display */
+#announcementsTitle {
+  font-family: "Playfair Display", serif;
+  line-height: 1.15;
+  color: #1f3a5f;
+}
+
+/* Contact / footer title uses Playfair Display */
+#contactHeading,
+#contactCard h3,
+.footer-contact-heading {
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin: 0 0 8px 0;
+  color: inherit;
+  line-height: 1.15;
+}
+
+/* Watch Live banner */
+#watchLiveBanner {
+  position: fixed;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg,#8b0000,#b22222);
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  z-index: 9999;
+  max-width: 92%;
+}
+
+#watchLiveBanner .watch-live-inner { display:flex; gap:10px; align-items:center; justify-content:center; }
+#watchLiveBanner .watch-live-btn {
+  background: #ffffff;
+  color: #b22222;
+  padding: 6px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight:600;
+}
+#watchLiveBanner .btn-ghost { background:transparent; color:#fff; border:none; padding:6px; }
+
+#contactCard .contact-meta, #contactCard .visit-addr, #contactCard .meta-title, #contactCard .contact-meta > div { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; color: #191617; font-weight: 400; font-size: 13px; }
+@media (max-width: 420px) {
+  .code-logo-box img { width: 120px; }
+}

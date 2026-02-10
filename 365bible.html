@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>365 Bible — CMR</title>
+  <link rel="stylesheet" href="365bible.css" />
+</head>
+<body>
+  <header class="page-header">
+    <div class="container header-inner">
+      <a class="logo" href="/index.html" aria-label="CMR home">
+        <img id="headerLogo" src="/cmr-hub-img/365Bible.svg" alt="CMR logo">
+      </a>
+      <div class="header-actions">
+        <a class="btn btn-jump" id="jumpToday">Jump to today's reading</a>
+        <button class="btn btn-share" id="sharePlan">Share</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-main container" id="pageMain">
+    <!-- Hero card: title + image -->
+    <section class="hero-card">
+      <div class="hero-copy">
+        <h1 class="hero-title">A year, a rhythm, God’s word</h1>
+        <p class="lead">The 365 Bible is a reading plan designed to help you engage with Scripture daily without pressure, without guilt, and without falling behind. Whether you start on January 1st or today, you are welcome here.</p>
+      </div>
+
+      <div class="hero-media">
+        <img id="heroVisual" src="/TOBO.png" alt="Verse art or theme image">
+      </div>
+    </section>
+
+    <!-- Why / How -->
+    <!-- <section class="explain">
+      <div class="container">
+        <h2>Why 365?</h2>
+        <p>Reading the Bible in a year isn't about finishing a plan; it's about forming a habit. When we return to God's word daily, even in small portions, we begin to recognize his voice, his character, and his promise in our everyday lives.</p>
+
+        <ul class="bullets">
+          <li>Daily short readings that fit busy schedules</li>
+          <li>No guilt if you miss a day — pick up where you are</li>
+          <li>Designed to build a sustainable rhythm</li>
+        </ul>
+
+        <h3>How to use this plan</h3>
+        <p>Choose a month, then tap a day to see that day's reading. Use the "Jump to today's reading" button to go straight to today's entry. Share the plan with friends using the Share button.</p>
+      </div>
+    </section> -->
+
+    <!-- Schedule -->
+    <section class="schedule" id="scheduleSection">
+      <div class="container schedule-inner">
+        <aside class="months" id="monthsList" aria-label="Months"></aside>
+
+        <div class="month-panel">
+          <div class="month-header">
+            <h3 id="monthTitle">Month</h3>
+            <div class="month-controls">
+              <button id="prevMonth" class="small-btn">Prev</button>
+              <button id="nextMonth" class="small-btn">Next</button>
+            </div>
+          </div>
+
+          <div class="days-grid" id="daysGrid" aria-live="polite"></div>
+
+          <div class="reading-detail" id="readingDetail" aria-live="polite">
+            <h4 id="readingTitle">Select a day</h4>
+            <p id="readingText">Tap a date to see the reading for that day.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="365bible.js"></script>
+</body>
+</html>

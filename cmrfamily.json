@@ -1,0 +1,93 @@
+{
+  "sections": [
+    {
+      "id": "leaders",
+      "title": "Leaders",
+      "description": "The preaching family preach the Lord's words, shepherd the congregation, and provide spiritual oversight.",
+      "members": [
+        {"name":"Pastor John Doe","role":"Lead Pastor","photo":"/cmr-hub-img/messi.jpg"},
+        {"name":"Pastor Mary Smith","role":"Associate Pastor","photo":"/images/people/mary.jpg"},
+        {"name":"Elder Paul Brown","role":"Elder","photo":"/images/people/paul.jpg"},
+        {"name":"Elder Grace Lee","role":"Elder","photo":"/images/people/grace.jpg"},
+        {"name":"Rev. Samuel King","role":"Youth Pastor","photo":"/images/people/samuel.jpg"},
+        {"name":"Rev. Anna White","role":"Women's Ministry","photo":"/images/people/anna.jpg"},
+        {"name":"Rev. David Green","role":"Outreach Pastor","photo":"/images/people/david.jpg"}
+      ]
+    },
+    {
+      "id": "media",
+      "title": "Media / Production",
+      "description": "The media family capture and stream our gatherings, ensuring quality audio and video for the church and online audience.",
+      "members": [
+        {"name":"Alex Turner","role":"Camera Operator","photo":"/images/people/alex.jpg"},
+        {"name":"Rita Gomez","role":"Camera Switcher","photo":"/images/people/rita.jpg"},
+        {"name":"Chris Nolan","role":"Sound Engineer","photo":"/images/people/chris.jpg"},
+        {"name":"Maya Patel","role":"Lighting Tech","photo":"/images/people/maya.jpg"},
+        {"name":"Omar Ali","role":"Producer","photo":"/images/people/omar.jpg"},
+        {"name":"Lina Park","role":"Editor","photo":"/images/people/lina.jpg"},
+        {"name":"Ben Carter","role":"Graphics","photo":"/images/people/ben.jpg"}
+      ]
+    },
+    {
+      "id": "worship",
+      "title": "Worship / Band",
+      "description": "The worship family lead the congregation in song, creating space for encounter and response.",
+      "members": [
+        {"name":"Sarah Hill","role":"Lead Singer","photo":"/images/people/sarah.jpg"},
+        {"name":"Tom Rivers","role":"Guitar","photo":"/images/people/tom.jpg"},
+        {"name":"Lydia Park","role":"Bass Guitar","photo":"/images/people/lydia.jpg"},
+        {"name":"Ethan Cole","role":"Drums","photo":"/images/people/ethan.jpg"},
+        {"name":"Nina Rose","role":"Keys","photo":"/images/people/nina.jpg"},
+        {"name":"Mark Lee","role":"Backing Vocals","photo":"/images/people/mark.jpg"},
+        {"name":"Jill Brown","role":"Backing Vocals","photo":"/images/people/jill.jpg"},
+        {"name":"Aaron Fox","role":"Acoustic Guitar","photo":"/images/people/aaron.jpg"},
+        {"name":"Megan Cruz","role":"Percussion","photo":"/images/people/megan.jpg"},
+        {"name":"Sam Ortiz","role":"Electric Guitar","photo":"/images/people/sam.jpg"},
+        {"name":"Rachael Kim","role":"Vocalist","photo":"/images/people/rachael.jpg"},
+        {"name":"Leo Park","role":"Sound Tech","photo":"/images/people/leo.jpg"}
+      ]
+    },
+    {
+      "id": "kids",
+      "title": "Little Lights / Kids Ministry",
+      "description": "The Little Lights family teach the next generation about God, Jesus, and how to live in faith.",
+      "members": [
+        {"name":"Hannah Joy","role":"Kids Pastor","photo":"/images/people/hannah.jpg"},
+        {"name":"Peter Miles","role":"Teacher","photo":"/images/people/peter.jpg"},
+        {"name":"Sofia Lane","role":"Assistant","photo":"/images/people/sofia.jpg"},
+        {"name":"Noah Reed","role":"Volunteer","photo":"/images/people/noah.jpg"},
+        {"name":"Olivia Hart","role":"Volunteer","photo":"/images/people/olivia.jpg"},
+        {"name":"Lucas Gray","role":"Coordinator","photo":"/images/people/lucas.jpg"},
+        {"name":"Maya Stone","role":"Helper","photo":"/images/people/maya.jpg"}
+      ]
+    },
+    {
+      "id": "outreach",
+      "title": "Outreach",
+      "description": "The outreach family serves our city and neighbors through practical help, events, and community partnerships.",
+      "members": [
+        {"name":"Grace Ford","role":"Outreach Lead","photo":"/images/people/gracef.jpg"},
+        {"name":"Victor Shaw","role":"Community Worker","photo":"/images/people/victor.jpg"},
+        {"name":"Rosa Diaz","role":"Volunteer Coordinator","photo":"/images/people/rosa.jpg"},
+        {"name":"Ibrahim Noor","role":"Logistics","photo":"/images/people/ibrahim.jpg"},
+        {"name":"Tina Park","role":"Events","photo":"/images/people/tina.jpg"},
+        {"name":"Joel Kim","role":"Partnerships","photo":"/images/people/joel.jpg"},
+        {"name":"Marta Silva","role":"Care Team","photo":"/images/people/marta.jpg"}
+      ]
+    },
+    {
+      "id": "admin",
+      "title": "Administration",
+      "description": "The administration family keep the church running — finance, operations, and communications.",
+      "members": [
+        {"name":"Evelyn Ross","role":"Office Manager","photo":"/images/people/evelyn.jpg"},
+        {"name":"Pauline Ng","role":"Finance","photo":"/images/people/pauline.jpg"},
+        {"name":"George Hill","role":"Operations","photo":"/images/people/george.jpg"},
+        {"name":"Samantha Yu","role":"Communications","photo":"/images/people/samantha.jpg"},
+        {"name":"Daniel Park","role":"Facilities","photo":"/images/people/daniel.jpg"},
+        {"name":"Ruth Allen","role":"HR","photo":"/images/people/ruth.jpg"},
+        {"name":"Kevin Long","role":"IT","photo":"/images/people/kevin.jpg"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CMR — Family</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="cmrfamily.css" />
+</head>
+<body>
+  <!-- Language switcher (fixed, top-right) -->
+  <div id="langSwitcher" class="lang-switcher" role="group" aria-label="Language switcher">
+    <button class="lang-btn" data-lang="en" aria-pressed="true">EN</button>
+    <button class="lang-btn" data-lang="fr" aria-pressed="false">FR</button>
+  </div>
+
+  <main class="page-main container" id="pageMain">
+    <!-- Hero: logo (replaces title) + autoplay video + two-column texts + top Join button under text -->
+     
+    <section class="family-hero" aria-labelledby="familyTitle">
+      <!-- Logo in place of the title -->
+      <div class="family-hero-logo">
+        <img src="/cmr-hub-img/365Bible.svg" alt="CMR logo" class="family-logo-hero">
+      </div>
+
+      <div class="hero-media-wrap">
+        <!-- Video: autoplay, muted, loop, playsinline -->
+        <video id="familyHeroVideo" class="family-hero-video" autoplay muted loop playsinline>
+          <source src="/cmr-hub-video/IMG_9970.MOV" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="hero-texts" role="region" aria-label="Intro">
+        <div class="hero-left">
+          <h2 id="familyTitle" class="hero-left-title" data-i18n="family.meetTitle">Meet Family</h2>
+          <p class="hero-left-lead" data-i18n="family.lead">
+            Our Team is made up of everyday people who love following Jesus and helping others follow him. Interested in joining us? Meet with us or submit an application below.
+          </p>
+        </div>
+
+        <div class="hero-right hero-right--dark">
+          <p class="hero-right-paragraph" data-i18n="family.rightParagraph">
+            The CMR team is led by a family of people with different backgrounds, experience, and passion. We are honored to be in the role we are in, and we have a lot of fun, but our primary focus is to equip you with a life of purpose in God's family on God's mission.
+          </p>
+          <p class="hero-right-cta" data-i18n="family.getToKnow">Get to know us as you scroll down. Interested in joining us? Meet with us or submit an application below.</p>
+
+          <!-- Top Join button (scrolls to bottom join) -->
+          <div class="family-cta">
+            <button id="joinTop" class="btn btn-join" data-i18n="family.joinTop">Join the Family</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sections container (rendered from JSON). -->
+    <section id="sectionsContainer" class="family-sections" aria-live="polite"></section>
+
+    <!-- Bottom Join CTA (anchor target for top Join) -->
+    <div class="join-area" id="joinAnchor">
+      <button id="joinBottom" class="btn btn-join large" data-i18n="family.joinBottom">Join the Family</button>
+    </div>
+
+    <!-- Modal: Get Involved / Application (Netlify form) -->
+    <div id="modalOverlay" class="modal-overlay" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+        <h2 id="modalTitle" data-i18n="modal.title">Get Involved</h2>
+        <p id="modalIntro" data-i18n="modal.intro">Interested in joining this team? Fill the short form below and we'll be in touch.</p>
+
+        <!-- Visible form (Netlify) -->
+        <form id="applyForm" class="apply-form" name="cmr-family-application" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" netlify>
+          <input type="hidden" name="form-name" value="cmr-family-application" />
+          <div style="display:none">
+            <label>Don’t fill this out if you're human: <input name="bot-field" /></label>
+          </div>
+
+          <label>
+            <span data-i18n="form.name">Full name</span>
+            <input type="text" name="name" id="appName" required />
+          </label>
+
+          <label>
+            <span data-i18n="form.email">Email</span>
+            <input type="email" name="email" id="appEmail" required />
+          </label>
+
+          <label>
+            <span data-i18n="form.phone">Phone (optional)</span>
+            <input type="tel" name="phone" id="appPhone" />
+          </label>
+
+          <label>
+            <span data-i18n="form.team">Which team are you interested in?</span>
+            <select id="appTeam" name="team" required></select>
+          </label>
+
+          <label>
+            <span data-i18n="form.note">Short note</span>
+            <textarea id="appNote" name="note" rows="4" placeholder="" data-i18n-placeholder="form.notePlaceholder"></textarea>
+          </label>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-join" data-i18n="form.submit">Submit Application</button>
+            <button type="button" class="btn btn-ghost" id="modalCancel" data-i18n="form.cancel">Cancel</button>
+          </div>
+
+          <div id="formMessage" class="form-message" aria-live="polite"></div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Hidden static form for Netlify build-time detection -->
+    <form name="cmr-family-application" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="cmr-family-application" />
+      <input name="bot-field" />
+      <input name="name" />
+      <input name="email" />
+      <input name="phone" />
+      <input name="team" />
+      <textarea name="note"></textarea>
+    </form>
+
+    <!-- Footer -->
+    <footer class="site-footer" role="contentinfo">
+      <div data-i18n="footer.copyright">© <span id="currentYear"></span> Centre Missionnaire La Restauration. All rights reserved.</div>
+      <div style="margin-top:6px; color:var(--muted); font-size:12px;" data-i18n="footer.design">Designed for the CMR community.</div>
+    </footer>
+  </main>
+
+  <script src="cmrfamily.js"></script>
+</body>
+</html>
